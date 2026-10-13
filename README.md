@@ -48,7 +48,7 @@
 | 美國財政部 | 殖利率曲線 |
 | CBOE | VIX、VIX9D、VIX3M、VIX6M |
 | CNN | 恐懼貪婪指數 |
-| Yahoo | S&P 500 長歷史（一次性回補，用 Actions 的 backfill.yml） |
+| Yahoo | S&P 500 長歷史（1928 年起日線；Yahoo 擋完整瀏覽器 UA，程式用簡短的 `Mozilla/5.0`） |
 | 證交所 | 加權指數（2000 起）、個股與 ETF、三大法人、融資融券、類股指數、本益比、月營收、ETF 預估淨值 |
 | 期交所 | 三大法人台指期未平倉 |
 
@@ -70,9 +70,8 @@ Claude 排程任務（台北 07:15、16:15）→ brief.py 摘要 + 查新聞 →
 1. 建立公開倉庫 `morningbell`，推到 `main`。
 2. Settings → Pages：Deploy from a branch，`main`、`/ (root)`。
 3. Settings → Actions → General → Workflow permissions：Read and write。
-4. Actions → **Backfill history** 手動執行一次（預設 `SPX_LONG`，補 S&P 500 從 1927 年起的長歷史）。
-5. 依 [docs/CRON_JOB.md](docs/CRON_JOB.md) 設 cron-job.org。
-6. 在 Claude Code 建每日排程任務，指示見 [docs/CLAUDE_DAILY.md](docs/CLAUDE_DAILY.md)。
+4. 依 [docs/CRON_JOB.md](docs/CRON_JOB.md) 設 cron-job.org。
+5. 在 Claude Code 建每日排程任務，指示見 [docs/CLAUDE_DAILY.md](docs/CLAUDE_DAILY.md)。
 
 ## 本機開發
 

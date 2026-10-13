@@ -457,7 +457,7 @@
     var tbl = '<p class="say">' + esc(b.name) + '（' + b.from.slice(0, 4) + '–' + b.to.slice(0, 4) + '）：跌到 −10% 的 ' + (t[1] || {}).n + ' 次裡，一年後上漲的比例是 <b>' + fmt.n((t[1] || {}).f1y_pos, 0) + '%</b>，一年報酬中位數 ' + fmt.pct((t[1] || {}).f1y_med, 1) + '；但觸及之後通常還會再跌（中位數 ' + fmt.pct((t[1] || {}).more_med, 1) + '），所以才要分批。</p>' +
       '<div class="tbl-wrap"><table class="tbl heat wide"><thead><tr><th>觸及</th><th class="num">次數</th><th class="num">一年後中位數</th><th class="num">一年後上漲比例</th><th class="num">一年後最差</th><th class="num">三年後中位數</th><th class="num">之後再跌（中位）</th><th class="num">之後再跌（最深）</th></tr></thead><tbody>' +
       t.map(function (x) { return '<tr><td><b>' + x.dd + '%</b></td><td class="num">' + x.n + '</td>' + heat(x.f1y_med, 30) + '<td class="num">' + (x.f1y_pos == null ? '—' : x.f1y_pos + '%') + '</td>' + heat(x.f1y_min, 40) + heat(x.f3y_med, 60) + heat(x.more_med, 30) + heat(x.more_min, 50) + '</tr>'; }).join('') +
-      '</tbody></table></div><p class="note">報酬只算價格、不含股息；過去不代表未來。樣本少的階（次數 < 5）參考價值低。' + (b.key === 'SPX' ? 'S&P 500 長歷史還在補（目前只有 10 年）。' : '') + '</p>';
+      '</tbody></table></div><p class="note">報酬只算價格、不含股息；過去不代表未來。樣本少的階（次數 < 5）參考價值低。' + (b.key === 'SPX' ? 'S&P 500 長歷史暫時沒取得，這裡只有 10 年。' : '') + '</p>';
     var last = t[1] && t[1].events || [];
     if (last.length) tbl += '<div class="tbl-wrap"><table class="tbl heat"><thead><tr><th>最近幾次觸及 −10%</th><th class="num">六個月後</th><th class="num">一年後</th><th class="num">之後再跌</th><th class="num">幾天收復高點</th></tr></thead><tbody>' + last.slice(-6).reverse().map(function (e) { return '<tr><td class="num" style="text-align:left">' + e.d + '</td>' + heat(e.f6m, 20) + heat(e.f1y, 30) + heat(e.more, 30) + '<td class="num">' + (e.rec_days == null ? '尚未' : e.rec_days + ' 天') + '</td></tr>'; }).join('') + '</tbody></table></div>';
     return tbl;
@@ -647,7 +647,7 @@
       '<p><b>發刊</b>：晨刊（美股收盤後，台北約 07:00）以 S&P 500 為頭版；午後刊（台股收盤、法人數據公布後，台北約 16:00）以加權指數為頭版。</p>' +
       '<p><b>顏色</b>：採台灣慣例，紅色是漲、綠色是跌。</p></div>') +
       panel('span-12', '資料來源', '全部免費、不需金鑰', '<div class="tbl-wrap"><table class="tbl"><thead><tr><th>來源</th><th>用在哪裡</th><th>更新</th></tr></thead><tbody>' + src.map(function (s) { return '<tr><td><b>' + s[0] + '</b></td><td>' + s[1] + '</td><td>' + s[2] + '</td></tr>'; }).join('') + '</tbody></table></div>') +
-      panel('span-12', '限制', '', '<div class="prose"><p>報酬只算價格，不含股息（高股息 ETF 的實際報酬會比圖上高）。0050 在 2025-06-18 一拆四，之前的價格已除以 4。美股個股的「距高點」只看近 10 年。S&P 500 的回測在長歷史補齊前只有 10 年。輪動象限是本站自算的簡化版，和商業軟體的數值不同。台積電 ADR 溢價的匯率來自 FRED，會晚幾天。</p><p>本站僅供研究參考，不構成任何投資建議；投資前請自行判斷並承擔風險。</p></div>') + '</div>';
+      panel('span-12', '限制', '', '<div class="prose"><p>報酬只算價格，不含股息（高股息 ETF 的實際報酬會比圖上高）。0050 在 2025-06-18 一拆四，之前的價格已除以 4。美股個股與 ETF 的「距高點」只看近 10 年；S&P 500 指數回測用 Yahoo 1928 年起的日線。輪動象限是本站自算的簡化版，和商業軟體的數值不同。台積電 ADR 溢價的匯率來自 FRED，會晚幾天。</p><p>本站僅供研究參考，不構成任何投資建議；投資前請自行判斷並承擔風險。</p></div>') + '</div>';
   };
 
   /* ---------------- 版面切換（沿用破曉） ---------------- */
