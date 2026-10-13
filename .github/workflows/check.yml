@@ -1,0 +1,35 @@
+name: Site checks
+
+# 2026-10-13：網站程式有改動就檢查（語法 + 用無頭瀏覽器渲染每一版），避免像「er is not defined」這種錯誤直接上線。
+# 資料管線每天只改 data/，不觸發這裡。
+on:
+  push:
+    branches: [main]
+    paths: ["assets/**", "index.html", "pipeline/**", "tests/**", ".github/workflows/check.yml"]
+  pull_request:
+  workflow_dispatch: {}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Syntax
+        run: |
+          node --check assets/app.js
+          python3 -m py_compile pipeline/*.py
+          python3 -c "import json,glob;[json.load(open(f)) for f in glob.glob('data/*.json')+['pipeline/universe.json']]"
+      - name: Render every section (desktop / mobile)
+        run: |
+          npm i --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+          python3 -m http.server 8765 >/dev/null 2>&1 &
+          sleep 1
+          node tests/smoke.js
