@@ -14,7 +14,10 @@ const BASE = process.env.BASE || 'http://localhost:8765/';
     for (const id of ids) {
       await p.evaluate(i => { location.hash = i.replace('pg-', ''); }, id); await p.waitForTimeout(800);
       const sw = await p.evaluate(() => document.documentElement.scrollWidth);
-      if (sw > w + 1) { console.log(`✗ ${w}px ${id}: 橫向溢出 ${sw}px`); fail++; }
+      if (sw > w + 1) {
+        const who = await p.evaluate(([i, W]) => [...document.querySelectorAll('#' + i + ' *')].filter(e => e.getBoundingClientRect().right > W + 1 && !e.closest('.tbl-wrap') && ![...e.children].some(c => c.getBoundingClientRect().right > W + 1)).slice(0, 5).map(e => e.tagName + '.' + (e.className.baseVal ?? e.className) + '「' + (e.textContent || '').trim().slice(0, 24) + '」→' + Math.round(e.getBoundingClientRect().right)), [id, w]);
+        console.log(`✗ ${w}px ${id}: 橫向溢出 ${sw}px：${who.join('；')}`); fail++;
+      }
     }
     const bad = await p.$$eval('#view .err', es => es.map(e => (e.closest('.pg') || {}).id + '：' + e.textContent.slice(0, 80)));
     bad.forEach(t => { console.log(`✗ ${w}px ${t}`); fail++; });
