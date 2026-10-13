@@ -587,7 +587,7 @@
 
   /* ---------------- 台股籌碼 ---------------- */
   function twTable(keys, etf) {
-    return '<div class="tbl-wrap"><table class="tbl heat wide"><thead><tr><th>代號</th><th class="num">收盤</th><th class="num">今日</th><th class="num">1 個月</th><th class="num">今年</th><th class="num">距高點</th>' +
+    return '<div class="tbl-wrap"><table class="tbl heat wide"><colgroup><col style="width:22%"></colgroup><thead><tr><th>代號</th><th class="num">收盤</th><th class="num">今日</th><th class="num">1 個月</th><th class="num">今年</th><th class="num">距高點</th>' +
       (etf ? '<th class="num">折溢價</th><th class="num">淨值</th>' : '<th class="num">本益比</th><th class="num">殖利率</th><th class="num">月營收年增</th>') + '<th>52 週位置</th></tr></thead><tbody>' +
       keys.filter(Q).map(function (k) { var q = Q(k), rv = q.rev || {}, nv = q.nav || {};
         return '<tr><td><b>' + code(k) + '</b> <span class="note">' + esc(q.name) + '</span></td><td class="num">' + px(q.c) + '</td>' + heat(q.chg_pct, 4, 2) + heat(q.r1m, 12) + heat(q.ytd, 40) + heat(q.dd_ath, 30) +

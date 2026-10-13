@@ -56,7 +56,7 @@ if not a.skip_tw:
         def f(s=s, u=u):
             n = 0
             for ym in yms:
-                rows = S.taiex_month(ym) if s == 'TAIEX' else S.tw_stock_month(s, ym)
+                rows = S.taiex_month(ym) if s == 'TAIEX' else S.tpex_month(s, ym) if u.get('otc') else S.tw_stock_month(s, ym)
                 for d, k in u.get('split') or []:
                     for r in rows:
                         if r[0] < d: r[1:5] = [None if v is None else v / k for v in r[1:5]]

@@ -157,6 +157,12 @@ def tw_stock_month(code, ym):   # ym = '20260901'
     return [[roc(r[0]), num(r[3]), num(r[4]), num(r[5]), num(r[6]), num(r[1])] for r in j.get('data') or []]
 
 
+def tpex_month(code, ym):   # 櫃買中心上櫃（債券 ETF 如 00679B）；成交量單位為張
+    j = get(f'https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code={code}&date={ym[:4]}/{ym[4:6]}/01&response=json')
+    tb = (j.get('tables') or [{}])[0]
+    return [[roc(r[0]), num(r[3]), num(r[4]), num(r[5]), num(r[6]), None if num(r[1]) is None else num(r[1]) * 1000] for r in tb.get('data') or []]
+
+
 def taiex_month(ym):
     j = twse('TAIEX/MI_5MINS_HIST', date=ym)
     if j.get('stat') != 'OK': return []

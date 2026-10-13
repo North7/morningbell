@@ -75,7 +75,7 @@ for u in U['tw']:
     for ym in months(since):
         if ym in have and ym != cur_m: continue
         try:
-            rows = S.taiex_month(ym) if s == 'TAIEX' else split_adj(S.tw_stock_month(s, ym), u.get('split'))
+            rows = S.taiex_month(ym) if s == 'TAIEX' else S.tpex_month(s, ym) if u.get('otc') else split_adj(S.tw_stock_month(s, ym), u.get('split'))
             if rows: n = S.merge_hist(key, rows)
         except Exception as e: log('FAIL tw', s, ym, e)
     log('tw', s, n)

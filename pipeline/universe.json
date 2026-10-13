@@ -48,7 +48,7 @@
     {"sym": "00919",  "name": "群益台灣精選高息", "kind": "etf", "group": "高股息"},
     {"sym": "00929",  "name": "復華台灣科技優息", "kind": "etf", "group": "高股息"},
     {"sym": "00713",  "name": "元大台灣高息低波", "kind": "etf", "group": "高股息"},
-    {"sym": "00679B", "name": "元大美債20年",   "kind": "etf", "group": "債券"},
+    {"sym": "00679B", "name": "元大美債20年",   "kind": "etf", "group": "債券", "otc": true},
     {"sym": "2330", "name": "台積電", "kind": "stock", "group": "半導體"},
     {"sym": "2454", "name": "聯發科", "kind": "stock", "group": "半導體"},
     {"sym": "3711", "name": "日月光投控", "kind": "stock", "group": "半導體"},
