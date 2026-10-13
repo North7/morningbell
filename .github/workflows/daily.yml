@@ -1,0 +1,50 @@
+name: Daily data
+
+on:
+  schedule:
+    # 晨刊：美股收盤後（夏令 UTC 20:00、冬令 21:00 收盤）→ UTC 21:40（台北 05:40）；22:20 備援
+    - cron: "40 21 * * 1-5"
+    - cron: "20 22 * * 1-5"
+    # 午後刊：台股收盤、三大法人公布後 → UTC 07:40（台北 15:40）；08:20 備援
+    - cron: "40 7 * * 1-5"
+    - cron: "20 8 * * 1-5"
+    # 融資融券晚上才公布 → UTC 13:40（台北 21:40）補抓
+    - cron: "40 13 * * 1-5"
+  workflow_dispatch: {}
+  # GitHub 自己的排程常晚好幾小時（破曉 2026-10 實測），建議用 cron-job.org 呼叫 repository_dispatch（event_type: daily-data），設定見 docs/CRON_JOB.md
+  repository_dispatch:
+    types: [daily-data]
+  # Claude 每日任務發現資料還沒更新時，把時間寫進 .github/run-daily 並推送，會立刻觸發
+  push:
+    branches: [main]
+    paths: [".github/run-daily"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-data
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Update history and snapshots
+        run: python3 pipeline/update.py
+      - name: Build latest.json
+        run: python3 pipeline/build.py
+      - name: Commit
+        run: |
+          git config user.name "morningbell-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data pipeline/snap.json
+          if git diff --cached --quiet; then echo "沒有變化"; exit 0; fi
+          d=$(python3 -c "import json;m=json.load(open('data/latest.json'))['meta'];print(m['bar_date'], m['edition'])")
+          git commit -m "data: $d"
+          git pull --rebase origin main && git push

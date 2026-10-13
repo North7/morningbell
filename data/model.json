@@ -1,0 +1,25 @@
+{
+  "_note": "加碼框架參數（範例，非投資建議）。只在每月檢討時改；改了要在 README 變更紀錄寫原因。",
+  "ladder": [
+    {"dd": -5,  "add": 10},
+    {"dd": -10, "add": 15},
+    {"dd": -15, "add": 20},
+    {"dd": -20, "add": 25},
+    {"dd": -30, "add": 30}
+  ],
+  "ladder_note": "以「100% ＝ 預留的加碼資金」計，與定期定額分開。回撤＝收盤價距歷史最高收盤；每一階在同一段回撤裡只執行一次，創新高後重置。",
+  "accel": {"vix": 30, "note": "VIX 收盤 ≥ 30（恐慌）時，下一階可以提前執行。"},
+  "trend": {"note": "跌破 200 日均線只是提醒「趨勢轉弱、回撤可能拉長」，不改變階梯。"},
+  "regime": [
+    {"max_dd": -5,  "label": "接近高點", "tone": "up"},
+    {"max_dd": -10, "label": "回檔",     "tone": "warn"},
+    {"max_dd": -20, "label": "修正",     "tone": "down"},
+    {"max_dd": -100, "label": "熊市",    "tone": "down"}
+  ],
+  "holdings": ["SPY", "QQQ", "GOOGL", "TW_0050"],
+  "backtest": [
+    {"key": "SPX_LONG", "name": "S&P 500", "fallback": "SPX"},
+    {"key": "NDX_LONG", "name": "那斯達克 100"},
+    {"key": "TW_TAIEX", "name": "台股加權指數"}
+  ]
+}

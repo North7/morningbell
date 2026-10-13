@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>晨鐘 Morningbell</title>
+<meta name="description" content="晨鐘 Morningbell：給長期投資人的美股、台股日報。兩市收盤、要聞解讀、回撤與加碼位置、宏觀、情緒、板塊輪動與台股籌碼。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="晨鐘 Morningbell">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:title" content="晨鐘 Morningbell · 美股・台股日報">
+<meta property="og:description" content="每天兩刊：美股收盤後的晨刊、台股收盤後的午後刊。看懂市場在發生什麼、現在在什麼位置、回檔時怎麼分批加碼。">
+<meta property="og:url" content="https://north7.github.io/morningbell/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@songpu717">
+<meta name="theme-color" content="#F2F0EA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0C0C0D" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+TC:wght@900&display=swap">
+<link rel="stylesheet" href="assets/app.css?v=1">
+</head>
+<body>
+<div class="app">
+  <aside class="rail">
+    <a class="brand" href="#overview" aria-label="晨鐘 Morningbell 頭版">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M18 44V30a14 14 0 0 1 28 0v14" fill="none" stroke="var(--red)" stroke-width="5"/><path d="M10 46h44" stroke="var(--ink)" stroke-width="5"/><circle cx="32" cy="53" r="4" fill="var(--ink)"/></svg>
+      <span class="wordmark"><b>MORNINGBELL</b><span>晨鐘</span></span>
+    </a>
+    <nav class="nav" id="nav" aria-label="版面"></nav>
+    <div class="rail-foot">
+      <div class="edition"><span class="k">本期</span><span class="v" id="ed-date">—</span><span class="live"><i></i><span id="ed-gen">每天兩刊</span></span></div>
+      <a class="follow" href="https://north7.github.io/daybreak/" target="_blank" rel="noopener"><span class="k">姊妹刊</span><b>破曉 Daybreak</b><span class="arr" aria-hidden="true">↗</span></a>
+      <div class="theme-toggle" id="theme" role="group" aria-label="版本"><button type="button" data-t="light" aria-pressed="true">日刊</button><button type="button" data-t="dark" aria-pressed="false">夜刊</button></div>
+    </div>
+  </aside>
+  <div class="stage">
+    <header class="top">
+      <div class="crumb"><small id="crumb-k">今天的市場</small><h1 id="crumb-t">頭版</h1></div><div class="m-prefs" id="m-prefs"><button type="button" id="m-theme" aria-label="切換日刊／夜刊"></button></div><div class="clock" aria-live="off">下一期 <b id="nxt">T−--:--:--</b></div>
+      <div class="ticker"><span class="chip flare" id="tk-stance"><i></i>—</span><span class="px" id="tk-px">—</span><span class="chip" id="tk-chg">—</span><span class="asof" id="tk-asof"></span><button type="button" class="fs-btn" id="fs" aria-label="全螢幕"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>全螢幕</button></div>
+    </header>
+    <main id="view" tabindex="-1"><p class="err">載入中…</p></main>
+    <footer class="foot"><span>© 晨鐘 Morningbell</span><span>僅供研究參考，非投資建議</span><span class="hint-kb">按 1–9 切換版面</span><span class="hint-sw">左右滑動切換版面</span></footer>
+  </div>
+</div>
+<div id="tip" class="tip" role="tooltip" hidden></div>
+<div class="wipe" id="wipe" aria-hidden="true"></div>
+<script src="assets/app.js?v=1"></script>
+</body>
+</html>
