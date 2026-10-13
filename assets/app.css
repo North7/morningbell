@@ -630,3 +630,7 @@ input[type="range"]::-moz-range-thumb { width: 4px; height: 26px; background: va
 /* 回測切換按鈕在手機上換行，不撐出右緣 */
 .panel-h { flex-wrap: wrap; row-gap: 6px; }
 .panel-h .seg { flex-wrap: wrap; }
+@media (max-width: 860px) {
+  .panel-h .seg { margin-left: 0; flex-basis: 100%; max-width: 100%; }
+  .panel-h .seg button { flex: 1 1 auto; }
+}
