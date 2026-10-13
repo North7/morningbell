@@ -634,3 +634,6 @@ input[type="range"]::-moz-range-thumb { width: 4px; height: 26px; background: va
   .panel-h .seg { margin-left: 0; flex-basis: 100%; max-width: 100%; }
   .panel-h .seg button { flex: 1 1 auto; }
 }
+/* 2026-10-13：格線裡的面板不讓內部寬表格（.tbl.wide 最小 640px）的最小寬度撐開，表格在 .tbl-wrap 裡自己橫捲 */
+.grid > *, .panel, .panel > div { min-width: 0; }
+.tbl-wrap { max-width: 100%; }
