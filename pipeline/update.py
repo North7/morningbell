@@ -39,7 +39,7 @@ if not a.skip_us:
             return S.merge_hist(key, rows, head=('d', 'o', 'h', 'l', 'c', 'v') if len(rows[0]) == 6 else ('d', 'v'))
         run('fred ' + sid, f)
     # S&P 500 長歷史（Yahoo）：取得到就順便補上最近一個月
-    run('yahoo ^GSPC', lambda: S.merge_hist('SPX_LONG', S.yahoo('^GSPC', '1mo')))
+    run('yahoo ^GSPC', lambda: S.merge_hist('SPX_LONG', S.yahoo('^GSPC', 40)))
     # CNN 恐懼貪婪（常擋機器人；失敗就顯示本日未取得）
     def fng():
         j = S.get('https://production.dataviz.cnn.io/index/fearandgreed/graphdata', timeout=20)

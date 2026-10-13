@@ -9,7 +9,7 @@ UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML,
 
 def get(url, data=None, timeout=40, raw=False, enc='utf-8', ua=True, http1=False):
     # FRED 會擋偽裝成瀏覽器的請求（實測帶 Chrome UA 會逾時），所以 ua=False 用 curl 預設
-    cmd = ['curl', '-sSL', '--max-time', str(timeout)] + (['-A', UA, '-H', 'Accept: application/json, text/plain, */*', '-H', 'Accept-Language: zh-TW,zh;q=0.9,en;q=0.8'] if ua else [])
+    cmd = ['curl', '-sSL', '--max-time', str(timeout)] + (['-A', ua] if isinstance(ua, str) else []) + (['-A', UA, '-H', 'Accept: application/json, text/plain, */*', '-H', 'Accept-Language: zh-TW,zh;q=0.9,en;q=0.8'] if ua is True else [])
     if http1: cmd.append('--http1.1')   # Nasdaq 的 HTTP/2 偶爾中途斷線
     if data: cmd += ['-X', 'POST', '--data', data]
     r = subprocess.run(cmd + [url], capture_output=True)
@@ -124,10 +124,12 @@ def fred(sid):
     return rows
 
 
-# ---------- Yahoo（只用在一次性回補 S&P 500 長歷史；本機常被 429 擋，GitHub Actions 上通常可以） ----------
-def yahoo(sym, rng='max'):
+# ---------- Yahoo：S&P 500 長歷史（1927 起） ----------
+def yahoo(sym, days=None):
+    """Yahoo 會擋完整的瀏覽器 UA（429），用簡短的 Mozilla/5.0 才行；range=max 會自動變成季線，所以改用起訖時間。"""
     import urllib.parse
-    j = get(f'https://query2.finance.yahoo.com/v8/finance/chart/{urllib.parse.quote(sym)}?range={rng}&interval=1d&events=split')
+    p1 = -1325635200 if days is None else int(time.time()) - days * 86400   # 1928-01-01 起
+    j = get(f'https://query1.finance.yahoo.com/v8/finance/chart/{urllib.parse.quote(sym)}?period1={p1}&period2={int(time.time()) + 86400}&interval=1d', ua='Mozilla/5.0', timeout=60)
     r = j['chart']['result'][0]; q = r['indicators']['quote'][0]
     ymd = lambda ts: dt.datetime.fromtimestamp(ts, dt.timezone.utc).strftime('%Y-%m-%d')
     return [[ymd(t), q['open'][i], q['high'][i], q['low'][i], q['close'][i], q['volume'][i]] for i, t in enumerate(r['timestamp']) if q['close'][i] is not None]
@@ -196,10 +198,12 @@ def tw_sectors(day):   # 類股指數收盤
     return [[d, r[0], num(r[1])] for r in tb.get('data') or [] if r[0].endswith('類指數') and num(r[1])]
 
 
-# ---------- Yahoo（只用在一次性回補 S&P 500 長歷史；本機常被 429 擋，GitHub Actions 上通常可以） ----------
-def yahoo(sym, rng='max'):
+# ---------- Yahoo：S&P 500 長歷史（1927 起） ----------
+def yahoo(sym, days=None):
+    """Yahoo 會擋完整的瀏覽器 UA（429），用簡短的 Mozilla/5.0 才行；range=max 會自動變成季線，所以改用起訖時間。"""
     import urllib.parse
-    j = get(f'https://query2.finance.yahoo.com/v8/finance/chart/{urllib.parse.quote(sym)}?range={rng}&interval=1d&events=split')
+    p1 = -1325635200 if days is None else int(time.time()) - days * 86400   # 1928-01-01 起
+    j = get(f'https://query1.finance.yahoo.com/v8/finance/chart/{urllib.parse.quote(sym)}?period1={p1}&period2={int(time.time()) + 86400}&interval=1d', ua='Mozilla/5.0', timeout=60)
     r = j['chart']['result'][0]; q = r['indicators']['quote'][0]
     ymd = lambda ts: dt.datetime.fromtimestamp(ts, dt.timezone.utc).strftime('%Y-%m-%d')
     return [[ymd(t), q['open'][i], q['high'][i], q['low'][i], q['close'][i], q['volume'][i]] for i, t in enumerate(r['timestamp']) if q['close'][i] is not None]
