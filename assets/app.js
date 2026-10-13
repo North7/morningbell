@@ -321,7 +321,7 @@
     return it.map(function (x) { return '<span class="tape-item">' + x[0] + ' <b>' + x[1] + '</b>' + (x[2] ? '<i class="' + cls(x[3]) + '">' + esc(x[2]) + '</i>' : '') + '</span>'; }).join('');
   }
   function healthHtml() {
-    var h = D.health || [], late = h.filter(function (x) { return !x.d || (dnOf(D.meta.bar_date) - dnOf(x.d)) > 5; }), er = D.errors || [];
+    var h = D.health || [], late = h.filter(function (x) { return !x.d || (dnOf(D.meta.bar_date) - dnOf(x.d)) > (/FRED/.test(x.name) ? 14 : 5); })   // FRED 的匯率、美元指數本來就晚一週左右, er = D.errors || [];
     return '<details class="health' + (late.length ? ' warn' : '') + '"><summary>資料狀態：' + (late.length ? late.length + ' 個來源延遲或未取得' : '全部來源正常') + ' · 產出 ' + (D.meta.generated_utc || '').slice(0, 16).replace('T', ' ') + ' UTC</summary>' +
       '<div class="tbl-wrap"><table class="tbl"><tbody>' + h.map(function (x) { return '<tr><td>' + esc(x.name) + '</td><td class="num">' + (x.d || '本日未取得') + '</td></tr>'; }).join('') + '</tbody></table></div>' +
       (er.length ? '<ul class="note">' + er.slice(0, 8).map(function (e) { return '<li>' + esc(e) + '</li>'; }).join('') + '</ul>' : '') + '</details>';
