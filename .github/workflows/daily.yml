@@ -35,6 +35,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Pipeline functions exist
+        run: python3 tests/pipeline_check.py
       - name: Update history and snapshots
         run: python3 pipeline/update.py
       - name: Build latest.json

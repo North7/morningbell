@@ -146,6 +146,70 @@ def yahoo(sym, days=None):
     return rows
 
 
+# ---------- 證交所（有流量限制：每 5 秒最多約 3 次，所以每次請求間隔 2.2 秒） ----------
+_last = [0.0]
+
+
+def twse(path, **q):
+    wait = 2.2 - (time.time() - _last[0])
+    if wait > 0: time.sleep(wait)
+    qs = '&'.join(f'{k}={v}' for k, v in q.items())
+    for k in range(3):
+        _last[0] = time.time()
+        try:
+            j = get(f'https://www.twse.com.tw/rwd/zh/{path}?{qs}&response=json')
+            return j
+        except Exception:
+            if k == 2: raise
+            time.sleep(20 * (k + 1))
+
+
+def tw_stock_month(code, ym):   # ym = '20260901'
+    j = twse('afterTrading/STOCK_DAY', date=ym, stockNo=code)
+    if j.get('stat') != 'OK': return []
+    return [[roc(r[0]), num(r[3]), num(r[4]), num(r[5]), num(r[6]), num(r[1])] for r in j.get('data') or []]
+
+
+def tpex_month(code, ym):   # 櫃買中心上櫃（債券 ETF 如 00679B）；成交量單位為張
+    j = get(f'https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code={code}&date={ym[:4]}/{ym[4:6]}/01&response=json')
+    tb = (j.get('tables') or [{}])[0]
+    return [[roc(r[0]), num(r[3]), num(r[4]), num(r[5]), num(r[6]), None if num(r[1]) is None else num(r[1]) * 1000] for r in tb.get('data') or []]
+
+
+def taiex_month(ym):
+    j = twse('TAIEX/MI_5MINS_HIST', date=ym)
+    if j.get('stat') != 'OK': return []
+    return [[roc(r[0]), num(r[1]), num(r[2]), num(r[3]), num(r[4]), None] for r in j.get('data') or []]
+
+
+def tw_inst(day):   # 三大法人買賣金額（億元）
+    j = twse('fund/BFI82U', type='day', dayDate=day)
+    if j.get('stat') != 'OK': return None
+    m = {r[0]: num(r[3]) for r in j['data']}
+    e = lambda v: None if v is None else round(v / 1e8, 2)
+    dealer = (m.get('自營商(自行買賣)') or 0) + (m.get('自營商(避險)') or 0)
+    foreign = (m.get('外資及陸資(不含外資自營商)') or 0) + (m.get('外資自營商') or 0)
+    return [f'{day[:4]}-{day[4:6]}-{day[6:]}', e(foreign), e(m.get('投信')), e(dealer), e(m.get('合計'))]
+
+
+def tw_margin(day):   # 融資餘額（億元）、融券餘額（張）
+    j = twse('marginTrading/MI_MARGN', date=day, selectType='MS')
+    tb = (j.get('tables') or [{}])[0]
+    if j.get('stat') != 'OK' or not tb.get('data'): return None
+    m = {r[0]: r for r in tb['data']}
+    amt = num(m.get('融資金額(仟元)', [None] * 6)[5]); short = num(m.get('融券(交易單位)', [None] * 6)[5])
+    return [f'{day[:4]}-{day[4:6]}-{day[6:]}', None if amt is None else round(amt / 1e5, 2), short]
+
+
+def tw_sectors(day):   # 類股指數收盤
+    j = twse('afterTrading/MI_INDEX', date=day, type='IND')
+    if j.get('stat') != 'OK': return None
+    tb = (j.get('tables') or [{}])[0]
+    d = f'{day[:4]}-{day[4:6]}-{day[6:]}'
+    return [[d, r[0], num(r[1])] for r in tb.get('data') or [] if r[0].endswith('類指數') and num(r[1])]
+
+
+# ---------- Yahoo：S&P 500 長歷史（1927 起） ----------
 # ---------- 鉅亨網：共同基金淨值、基本資料、前十大持股 ----------
 CNYES = 'https://fund.api.cnyes.com/fund/api/v1/funds/'
 

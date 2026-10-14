@@ -25,6 +25,7 @@ jobs:
         run: |
           node --check assets/app.js
           python3 -m py_compile pipeline/*.py
+          python3 tests/pipeline_check.py
           python3 -c "import json,glob;[json.load(open(f)) for f in glob.glob('data/*.json')+['pipeline/universe.json']]"
       - name: Render every section (desktop / mobile)
         run: |
