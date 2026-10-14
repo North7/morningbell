@@ -374,6 +374,27 @@ for i, a in enumerate(focus):
         hb.update({norm(h['name']): h for h in ((b.get('hold') or {}).get('top') or [])})
         common = [(ha[n]['name'], min(ha[n]['w'], hb[n]['w'])) for n in ha if n in hb]
         if common: ov.append({'a': a['key'], 'b': b['key'], 'n': len(common), 'w': r2(sum(w for _, w in common), 1), 'names': [c[0] for c in sorted(common, key=lambda x: -x[1])]})
+# 規則讀值：同一套公開規則套在每一檔上（加碼框架＋200 日線乖離＋RSI），不是個別的買賣建議
+HT = M.get('heat', {}); TG = {h['key']: h for h in D['position']['targets']}
+for x in focus:
+    q = Q[x['key']]; h = TG.get(x['key']) or {}; dev, rsi_, dd = q.get('dev200'), q.get('rsi'), q.get('dd_ath')
+    sig = []
+    hit = h.get('hit') or []
+    if hit and dd is not None and dd <= max(hit): sig.append({'k': 'zone', 'tone': 'pos', 'label': '加碼區', 'say': f"距高點 {dd:.1f}%，位於第 1 階（{M['ladder'][0]['dd']}%）之下；這段回撤（{h.get('ath_d')} 高點起）已觸發 {len(hit)} 階、最深 {h.get('ep_low')}%"})
+    elif h.get('next') and h['next']['dist'] is not None and h['next']['dist'] > -HT.get('near_tier', 2):
+        sig.append({'k': 'near', 'tone': 'warn', 'label': '接近加碼階', 'say': f"再跌 {abs(h['next']['dist']):.1f}% 到 {h['next']['dd']}% 階（{h['next']['px']}）"})
+    if dev is not None and dev >= HT.get('hot_dev200', 30): sig.append({'k': 'hot', 'tone': 'neg', 'label': '過熱', 'say': f"高於 200 日線 {dev:.1f}%（≥ {HT.get('hot_dev200')}%）"})
+    elif dev is not None and dev >= HT.get('warm_dev200', 20): sig.append({'k': 'warm', 'tone': 'warn', 'label': '偏熱', 'say': f"高於 200 日線 {dev:.1f}%（≥ {HT.get('warm_dev200')}%）"})
+    if rsi_ is not None and rsi_ >= HT.get('rsi_hot', 70): sig.append({'k': 'rsi', 'tone': 'warn', 'label': '短線超買', 'say': f"RSI {rsi_:.0f}（≥ {HT.get('rsi_hot')}）"})
+    if dev is not None and dev < 0: sig.append({'k': 'below', 'tone': 'warn', 'label': '跌破長期均線', 'say': f"低於 200 日線 {abs(dev):.1f}%" + ('，均線仍上升' if q.get('sma200_up') else '，均線已走平或下降')})
+    if not sig: sig.append({'k': 'neutral', 'tone': 'neu', 'label': '中性', 'say': f"距高點 {dd:.1f}%、高於 200 日線 {dev:.1f}%，沒有觸發任何規則" if dd is not None and dev is not None else '沒有觸發任何規則'})
+    sma = q.get('sma200')
+    lv = [{'k': 'tier', 'label': f"加碼 {t['dd']}% 階", 'px': t['px'], 'hit': t['dd'] in hit} for t in (h.get('levels') or [])]
+    if sma: lv += [{'k': 'sma', 'label': '200 日線', 'px': r2(sma)}, {'k': 'warm', 'label': f"偏熱線（200 日線 +{HT.get('warm_dev200')}%）", 'px': r2(sma * (1 + HT.get('warm_dev200', 20) / 100))}, {'k': 'hot', 'label': f"過熱線（200 日線 +{HT.get('hot_dev200')}%）", 'px': r2(sma * (1 + HT.get('hot_dev200', 30) / 100))}]
+    lv += [{'k': 'hi', 'label': '52 週高點', 'px': q.get('hi52')}, {'k': 'lo', 'label': '52 週低點', 'px': q.get('lo52')}, {'k': 'ath', 'label': f"歷史高點（{q.get('ath_d')}）", 'px': q.get('ath')}]
+    x['rule'] = {'state': sig[0], 'signals': sig, 'levels': sorted([l for l in lv if l['px']], key=lambda l: -l['px']), 'next': h.get('next'), 'hit': hit, 'ep_low': h.get('ep_low'), 'rsi': rsi_, 'dev200': dev, 'c': q.get('c')}
+D['heat_note'] = HT.get('note')
+
 D['focus'] = {'ids': [x['key'] for x in focus], 'items': focus, 'corr': cm, 'overlap': sorted(ov, key=lambda x: -x['w'])}
 
 # ---------- 資料狀態 ----------

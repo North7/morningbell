@@ -637,3 +637,15 @@ input[type="range"]::-moz-range-thumb { width: 4px; height: 26px; background: va
 /* 2026-10-13：格線裡的面板不讓內部寬表格（.tbl.wide 最小 640px）的最小寬度撐開，表格在 .tbl-wrap 裡自己橫捲 */
 .grid > *, .panel, .panel > div { min-width: 0; }
 .tbl-wrap { max-width: 100%; }
+/* 重點追蹤：每檔的判讀、規則讀值、相關消息、關鍵價位（2026-10-14） */
+.rule-box, .fx-news { margin: 10px 0; padding: 10px 12px; border: 1px solid var(--line); }
+.rule-box .lbl, .fx-news .lbl { display: block; font-size: 12px; color: var(--red-ink); margin-bottom: 6px; }
+.rule-box .sg { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px; align-items: baseline; font-size: 13px; color: var(--ink-2); padding: 2px 0; }
+.fx-pts { margin: 6px 0 0; padding-left: 18px; font-size: 13px; color: var(--ink-2); }
+.fx-news .it { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 8px; padding: 6px 0; border-top: 1px solid var(--line); font-size: 13px; }
+.fx-news .it:first-of-type { border-top: 0; }
+.fx-news .d { font-family: var(--f-mono); color: var(--ink-3); font-size: 12px; }
+.fx-news .note { margin-left: 6px; }
+.fx-news p { margin: 3px 0 0; color: var(--ink-2); line-height: 1.6; }
+.tbl.lv td { padding: 5px 10px 5px 0; font-size: 12.5px; }
+.tbl.lv tr.hl td { background: var(--flare-dim); }

@@ -78,5 +78,12 @@
       "name": "台股加權指數"
     }
   ],
-  "_note_focus": "targets＝加碼框架套用的追蹤標的（與 universe.json 的 focus 相同）"
+  "_note_focus": "targets＝加碼框架套用的追蹤標的（與 universe.json 的 focus 相同）",
+  "heat": {
+    "warm_dev200": 20,
+    "hot_dev200": 30,
+    "rsi_hot": 70,
+    "near_tier": 2,
+    "note": "偏熱／過熱只是提醒「價格離長期均線很遠、追高的風險變大」，可以當作檢視比重或暫停加碼的參考，不是賣出訊號。加碼區是加碼框架的規則讀值，不是買進建議。"
+  }
 }
