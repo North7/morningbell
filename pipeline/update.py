@@ -26,10 +26,19 @@ def run(name, fn):
 
 if not a.skip_us:
     frm = (today - dt.timedelta(days=21)).isoformat()
+    # 美東今天還沒收盤（16:20 前）就不收當天那根：Nasdaq 的指數在盤中會回傳當天的半成品 K 線（2026-10-13 實測）
+    from zoneinfo import ZoneInfo
+    ny = dt.datetime.now(ZoneInfo('America/New_York'))
+    open_day = ny.date().isoformat() if ny.weekday() < 5 and (ny.hour, ny.minute) < (16, 20) else None
+    done = lambda rows: [r for r in rows if r[0] != open_day]
     for u in U['us']:
-        run('nasdaq ' + u['sym'], lambda u=u: S.merge_hist(u['sym'], S.nasdaq(u['sym'], u['src'], frm)))
+        run('nasdaq ' + u['sym'], lambda u=u: S.merge_hist(u['sym'], done(S.nasdaq(u['sym'], u['src'], frm))))
     for s in U['vix']:
-        run('cboe ' + s, lambda s=s: S.merge_hist('CBOE_' + s, S.cboe(s)))
+        run('cboe ' + s, lambda s=s: S.merge_hist('CBOE_' + s, done(S.cboe(s))))
+    # Nasdaq 與 CBOE 要隔天才有當天收盤，收盤後用 Yahoo 補上最近幾天（同一天以 Yahoo 為準）
+    YF = {'NDX': '^NDX', 'COMP': '^IXIC', 'SOX': '^SOX'}
+    for key, yf in [(u['sym'], YF.get(u['sym'], u['sym'].replace('.', '-'))) for u in U['us']] + [('SPX', '^GSPC')] + [('CBOE_' + s, '^' + s) for s in U['vix']]:
+        run('yahoo ' + yf, lambda key=key, yf=yf: S.merge_hist(key, done(S.yahoo(yf, 10))))
     run('treasury', lambda: S.merge_hist('UST', S.treasury(today.year), head=['d'] + S.UST_COLS))
     for sid in list(U['fred']) + ['SP500', 'NASDAQ100']:
         key = {'SP500': 'SPX', 'NASDAQ100': 'NDX_LONG'}.get(sid, 'FRED_' + sid)
@@ -38,8 +47,8 @@ if not a.skip_us:
             if key in ('SPX', 'NDX_LONG'): rows = [[d, None, None, None, v, None] for d, v in rows]
             return S.merge_hist(key, rows, head=('d', 'o', 'h', 'l', 'c', 'v') if len(rows[0]) == 6 else ('d', 'v'))
         run('fred ' + sid, f)
-    # S&P 500 長歷史（Yahoo）：取得到就順便補上最近一個月
-    run('yahoo ^GSPC', lambda: S.merge_hist('SPX_LONG', S.yahoo('^GSPC', 40)))
+    # S&P 500 長歷史：和 SPX 同一份 Yahoo 資料
+    run('yahoo ^GSPC long', lambda: S.merge_hist('SPX_LONG', done(S.yahoo('^GSPC', 40))))
     # CNN 恐懼貪婪（常擋機器人；失敗就顯示本日未取得）
     def fng():
         j = S.get('https://production.dataviz.cnn.io/index/fearandgreed/graphdata', timeout=20)
