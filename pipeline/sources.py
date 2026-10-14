@@ -146,6 +146,48 @@ def yahoo(sym, days=None):
     return rows
 
 
+# ---------- 鉅亨網：共同基金淨值、基本資料、前十大持股 ----------
+CNYES = 'https://fund.api.cnyes.com/fund/api/v1/funds/'
+
+
+def _tpe(ts):   # 鉅亨網的時間戳是台北時間午夜（UTC 前一天 16:00），要用台北時區轉日期
+    return dt.datetime.fromtimestamp(ts, dt.timezone(dt.timedelta(hours=8))).strftime('%Y-%m-%d')
+
+
+def _cid(cid):
+    import urllib.parse
+    return urllib.parse.quote(cid, safe='')
+
+
+def cnyes_nav(cid, pages=1, since=None):
+    """每頁 10 筆、由新到舊；since（'YYYY-MM-DD'）會一直往前翻到那天為止。"""
+    rows = []
+    for pg in range(1, 1000):
+        j = get(f'{CNYES}{_cid(cid)}/nav?format=table&page={pg}')
+        it = j.get('items') or {}; data = it.get('data') or []
+        rows += [[_tpe(x['tradeDate']), None, None, None, x['nav'], None] for x in data if x.get('nav')]
+        if not data or pg >= (it.get('last_page') or 0): break
+        if since is None and pg >= pages: break
+        if since is not None and rows and rows[-1][0] < since: break
+        time.sleep(0.25)
+    if not rows: raise RuntimeError(f'cnyes {cid} 沒有淨值')
+    return sorted(rows)
+
+
+def cnyes_info(cid):
+    it = get(f'{CNYES}{_cid(cid)}').get('items') or {}
+    ts = lambda k: _tpe(it[k]) if it.get(k) else None
+    return {'fee': it.get('managementFee'), 'aum': it.get('netAsset'), 'aum_d': ts('netAssetDate'), 'ccy': it.get('classCurrency'), 'ccy_name': it.get('classCurrencyName'),
+            'cat': it.get('categoryAbbr'), 'since': ts('inceptionDate'), 'r1y': it.get('return1Year'), 'stars': it.get('starRating'), 'name_en': it.get('displayName')}
+
+
+def cnyes_holdings(cid):
+    it = get(f'{CNYES}{_cid(cid)}/holdings').get('items') or {}
+    d = it.get('portfolioDate')
+    return {'d': _tpe(d) if d else None,
+            'top': [{'name': x.get('name'), 'en': x.get('id'), 'w': round(x.get('value') or 0, 2), 'sector': x.get('sector'), 'country': x.get('country')} for x in it.get('data') or []]}
+
+
 # ---------- 證交所 OpenAPI（一次拿全市場） ----------
 def tw_valuation():   # 本益比、殖利率、股價淨值比（個股，不含 ETF）
     j = get('https://openapi.twse.com.tw/v1/exchangeReport/BWIBBU_ALL')

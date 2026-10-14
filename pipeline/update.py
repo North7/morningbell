@@ -56,6 +56,14 @@ if not a.skip_us:
         snap['fng'] = {'score': round(fg['score'], 1), 'rating': fg['rating'], 'd': fg['timestamp'][:10], 'prev_week': fg.get('previous_1_week'), 'prev_month': fg.get('previous_1_month'), 'hist': hist[-260:]}
     run('cnn fear&greed', fng)
 
+# 共同基金（鉅亨網）：最近 30 筆淨值、基本資料、前十大持股。境外基金淨值通常晚一到兩天公布
+snap.setdefault('funds', {})
+for f in U.get('funds', []):
+    run('cnyes ' + f['key'], lambda f=f: S.merge_hist(f['key'], S.cnyes_nav(f['id'], pages=3)))
+    def meta(f=f):
+        snap['funds'][f['key']] = {'info': S.cnyes_info(f['id']), 'hold': S.cnyes_holdings(f['id'])}
+    run('cnyes 資料 ' + f['key'], meta)
+
 if not a.skip_tw:
     yms = [f'{today.year}{today.month:02d}01']
     if today.day <= 7:

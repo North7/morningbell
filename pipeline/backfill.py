@@ -42,6 +42,12 @@ if not a.skip_us:
             try: S.merge_hist('UST', S.treasury(y), head=['d'] + S.UST_COLS); log('ust', y)
             except Exception as e: log('FAIL ust', y, e)
 
+# 共同基金（鉅亨網）：2020 年起的淨值
+for f in U.get('funds', []):
+    if not want(f['key']): continue
+    try: log('fund', f['key'], S.merge_hist(f['key'], S.cnyes_nav(f['id'], since='2020-01-01')))
+    except Exception as e: log('FAIL fund', f['key'], e)
+
 if a.skip_tw: sys.exit(0)
 
 

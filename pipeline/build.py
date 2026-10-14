@@ -162,8 +162,10 @@ D = {'meta': {}, 'quotes': {}, 'errors': [], 'model': {k: M[k] for k in ('ladder
 Q = D['quotes']
 for u in U['us']: Q[u['sym']] = stats(u['sym'], dict(u, mkt='us'))
 for u in U['tw']: Q['TW_' + u['sym']] = stats('TW_' + u['sym'], u)
+FUNDS = {f['key']: f for f in U.get('funds', [])}
+for k, f in FUNDS.items(): Q[k] = stats(k, {'name': f['name'], 'kind': 'fund'})
 for k, q in Q.items():
-    if q: q['mkt'] = 'tw' if k.startswith('TW_') else 'us'; q['regime'] = regime(q['dd_ath'])
+    if q: q['mkt'] = 'tw' if k.startswith('TW_') else 'fund' if k.startswith('FUND_') else 'us'; q['regime'] = regime(q['dd_ath'])
 Q['SPX'] = stats('SPX', {'name': 'S&P 500 指數', 'kind': 'index'})
 if Q['SPX']: Q['SPX']['mkt'] = 'us'; Q['SPX']['regime'] = regime(Q['SPX']['dd_ath'] if Q['SPX']['hist_from'] < '2017' else None)
 
@@ -179,11 +181,11 @@ D['meta'] = {'generated_utc': now.isoformat(timespec='seconds'), 'us_date': us_d
 D['charts'] = {k: hist_pts(k) for k in ('SPX', 'SPY', 'QQQ', 'GOOGL', 'TW_TAIEX', 'TW_0050', 'SOX')}
 D['charts']['rows20'] = {k: [[r[0][5:].replace('-', '/'), r[1], r[2], r[3], r[4]] for r in S.read_hist(k)[-20:]] for k in ('SPY', 'TW_TAIEX')}
 
-# ---------- 加碼框架：持倉位置 ----------
+# ---------- 加碼框架：追蹤標的的位置 ----------
 tiers = [t['dd'] for t in M['ladder']]
 vix_now = (closes('CBOE_VIX') or [(None, None)])[-1][1]
 hold = []
-for k in M['holdings']:
+for k in M['targets']:
     q = Q.get(k)
     if not q: continue
     cl = closes(k); eps, cur = episodes(cl)
@@ -195,7 +197,7 @@ for k in M['holdings']:
                  'levels': [{'dd': t['dd'], 'add': t['add'], 'px': r2(q['ath'] * (1 + t['dd'] / 100))} for t in M['ladder']],
                  'sma200': q['sma200'], 'dev200': q['dev200'], 'rsi': q['rsi'], 'regime': q['regime'], 'hist_from': q['hist_from'],
                  'uw': underwater(cl)[-760:]})
-D['position'] = {'holdings': hold, 'vix': r2(vix_now), 'accel_on': bool(vix_now and vix_now >= M['accel']['vix'])}
+D['position'] = {'targets': hold, 'vix': r2(vix_now), 'accel_on': bool(vix_now and vix_now >= M['accel']['vix'])}
 
 bt = []
 for b in M['backtest']:
@@ -318,13 +320,69 @@ if fx and tsm and t2330:
     if prem: tw['adr'] = {'hist': prem[-260:], 'v': prem[-1][1], 'fx': last_fx, 'fx_d': fxd[-1] if fxd else None}
 D['taiwan'] = tw
 
+# ---------- 重點追蹤：本刊追蹤標的（指數 ETF 與基金），不代表任何人持有 ----------
+def wk_ret(key, weeks=53):
+    o = {}
+    for d, c in closes(key):
+        y, w, _ = dt.date.fromisoformat(d).isocalendar(); o[(y, w)] = c
+    ks = sorted(o)[-(weeks + 1):]
+    return {ks[i]: math.log(o[ks[i]] / o[ks[i - 1]]) for i in range(1, len(ks))}
+
+
+def corr(a, b):
+    c = [k for k in a if k in b]
+    if len(c) < 20: return None
+    x = [a[k] for k in c]; y = [b[k] for k in c]; mx, my = st.mean(x), st.mean(y)
+    den = math.sqrt(sum((p - mx) ** 2 for p in x) * sum((q - my) ** 2 for q in y))
+    return r2(sum((p - mx) * (q - my) for p, q in zip(x, y)) / den) if den else None
+
+
+def risk(key, days=756):
+    cl = closes(key)[-days:]
+    if len(cl) < 60: return {}
+    v = [c for _, c in cl]; pk = v[0]; mdd = 0
+    for c in v: pk = max(pk, c); mdd = min(mdd, c / pk - 1)
+    rets = [math.log(v[i] / v[i - 1]) for i in range(max(1, len(v) - 252), len(v))]
+    yrs = (dt.date.fromisoformat(cl[-1][0]) - dt.date.fromisoformat(cl[0][0])).days / 365.25
+    return {'vol1y': r2(st.stdev(rets) * math.sqrt(252) * 100, 1), 'mdd3y': r2(mdd * 100, 1), 'cagr3y': r2(((v[-1] / v[0]) ** (1 / yrs) - 1) * 100, 1) if yrs >= 2.9 else None}
+
+
+import re
+def norm(n):   # 前十大持股名稱正規化，用來比對重疊（英文去掉公司字尾）
+    n = (n or '').upper().replace('*', '')
+    n = re.sub(r'[.,]|\b(INC|CORP|CORPORATION|CO|LTD|LIMITED|ORD|PLC|HOLDINGS?|GROUP|THE)\b|-?\s*CL(ASS)?\s*[AB]\b|-\s*CLASS A', ' ', n)
+    return ' '.join(n.split())
+
+
+FDESC = U.get('focus_desc', {})
+sf = snap.get('funds') or {}
+focus = []
+for k in U.get('focus', []):
+    q = Q.get(k)
+    if not q: continue
+    f = FUNDS.get(k, {}); meta = (sf.get(k) or {})
+    focus.append({'key': k, 'name': f.get('name') or q.get('name'), 'full': f.get('full') or q.get('name'), 'region': f.get('region'), 'style': f.get('style'),
+                  'desc': f.get('desc') or FDESC.get(k), 'type': 'fund' if f else 'etf', 'ccy': f.get('ccy') or ('TWD' if k.startswith('TW_') else 'USD'),
+                  'info': meta.get('info'), 'hold': meta.get('hold'), 'risk': risk(k), 'hist': hist_pts(k, 400)})
+W = {x['key']: wk_ret(x['key']) for x in focus}
+cm = [[corr(W[a['key']], W[b['key']]) for b in focus] for a in focus]
+ov = []
+for i, a in enumerate(focus):
+    for b in focus[i + 1:]:
+        ha = {norm(h['en'] or h['name']): h for h in ((a.get('hold') or {}).get('top') or [])}
+        hb = {norm(h['en'] or h['name']): h for h in ((b.get('hold') or {}).get('top') or [])}
+        hb.update({norm(h['name']): h for h in ((b.get('hold') or {}).get('top') or [])})
+        common = [(ha[n]['name'], min(ha[n]['w'], hb[n]['w'])) for n in ha if n in hb]
+        if common: ov.append({'a': a['key'], 'b': b['key'], 'n': len(common), 'w': r2(sum(w for _, w in common), 1), 'names': [c[0] for c in sorted(common, key=lambda x: -x[1])]})
+D['focus'] = {'ids': [x['key'] for x in focus], 'items': focus, 'corr': cm, 'overlap': sorted(ov, key=lambda x: -x['w'])}
+
 # ---------- 資料狀態 ----------
 def last_d(key, keyn=1):
     r = S.read_hist(key, keyn); return r[-1][0] if r else None
 health = [['美股（Nasdaq）', last_d('SPY')], ['S&P 500 指數（FRED）', last_d('SPX')], ['VIX（CBOE）', last_d('CBOE_VIX')], ['美債殖利率（財政部）', last_d('UST')],
           ['高收益債利差（FRED）', last_d('FRED_BAMLH0A0HYM2')], ['美元兌台幣（FRED）', last_d('FRED_DEXTAUS')], ['台股（證交所）', last_d('TW_TAIEX')],
           ['三大法人', last_d('TW_INST')], ['融資餘額', last_d('TW_MARGIN')], ['外資台指期（期交所）', last_d('TW_FUT')], ['類股指數', last_d('TW_SECT', 2)],
-          ['恐懼貪婪（CNN）', (snap.get('fng') or {}).get('d')]]
+          ['恐懼貪婪（CNN）', (snap.get('fng') or {}).get('d')], ['基金淨值（鉅亨網）', min([last_d(k) for k in FUNDS] or [None])]]
 D['health'] = [{'name': n, 'd': d} for n, d in health]
 D['errors'] = errors
 json.dump(D, open(os.path.join(ROOT, 'data', 'latest.json'), 'w'), ensure_ascii=False, separators=(',', ':'))

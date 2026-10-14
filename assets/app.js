@@ -211,7 +211,9 @@
   var pc = function (v, d) { return '<span class="' + cls(v) + '">' + fmt.pct(v, d == null ? 2 : d) + '</span>'; };
   var px = function (v) { return v == null ? '—' : fmt.n(v, v >= 1000 ? 0 : v >= 10 ? 2 : 3); };
   var nm = function (k) { var q = Q(k); return q && q.name || k.replace('TW_', ''); };
-  var code = function (k) { return k.replace('TW_', ''); };
+  var code = function (k) { return k.indexOf('FUND_') === 0 ? ((Q(k) || {}).name || k) : k.replace('TW_', ''); };
+  var SHORT = { SPY: 'S&P 500', QQQ: 'QQQ', TW_0050: '0050', FUND_FJV: '日本價值', FUND_NBTJ: '台日雙星', FUND_ABIT: '國際科技', FUND_ABUS: '精選美國', FUND_AZTT: '台灣科技', FUND_CTHD: '台灣高股息' };
+  var short = function (k) { return SHORT[k] || code(k); };
   var EDN = function () { return D.meta.edition === 'tw' ? '午後刊' : '晨刊'; };
   var mdOf = function (s) { return s ? fmt.md(s) : '—'; };
   function spk(v, w, h) {
@@ -331,7 +333,7 @@
     return '<table class="qt"><tbody>' + keys.filter(Q).map(function (k) { var q = Q(k); return '<tr><td class="n"><b>' + esc(code(k) === k ? k : code(k)) + '</b>' + esc(q.name) + '</td><td class="v">' + px(q.c) + '</td><td class="c">' + pc(q.chg_pct) + '</td><td class="s">' + spk(q.spark.slice(-30)) + '</td></tr>'; }).join('') + '</tbody></table>';
   }
   function holdCards() {
-    var hs = (D.position || {}).holdings || [];
+    var hs = (D.position || {}).targets || [];
     return '<div class="holds">' + hs.map(function (h, i) {
       var q = Q(h.key), nx = h.next;
       return '<div class="hold"><span class="k"><b>' + esc(code(h.key)) + '</b>' + esc(h.name) + '</span>' +
@@ -357,6 +359,7 @@
   var ROUTES = [
     ['overview', '頭版', '今天的市場'],
     ['news', '消息', '新聞與解讀'],
+    ['focus', '重點追蹤', '九檔指數 ETF 與基金'],
     ['position', '加碼框架', '回撤與加碼位置'],
     ['macro', '宏觀', '利率、美元與信用'],
     ['sentiment', '情緒', '恐慌、貪婪與寬度'],
@@ -389,7 +392,7 @@
     return front + '<div class="tape" aria-label="今日數據帶"><div class="tape-track">' + tapeItems() + tapeItems() + '</div></div>' + healthHtml() +
       '<div class="sec-h"><h2>兩市收盤</h2><span class="en">The Close</span><hr></div>' + board +
       newsBlock + plan +
-      '<div class="sec-h"><h2>我的持倉位置</h2><span class="en">Holdings</span><hr><a href="#position">加碼框架 →</a></div>' + holdCards() +
+      '<div class="sec-h"><h2>重點追蹤</h2><span class="en">Focus List</span><hr><a href="#focus">九檔完整分析 →</a></div>' + focusTable(true) +
       '<div class="sec-h"><h2>今日數據</h2><span class="en">The Numbers</span><hr></div>' + kp +
       '<div class="grid">' + interpPanel([['VIX', fmt.n((s.vix || {}).v, 2)].concat(rdVix((s.vix || {}).v) || []), ['恐懼貪婪', s.fng ? fmt.n(s.fng.score, 0) : '—'].concat(rdFng(s.fng) || []), ['S&P 500 回撤', fmt.pct((Q('SPY') || {}).dd_ath, 1)].concat(rdDd(Q('SPY'), 'S&P 500 ') || []), ['加權指數回撤', fmt.pct((Q('TW_TAIEX') || {}).dd_ath, 1)].concat(rdDd(Q('TW_TAIEX'), '加權指數') || []), ['10 年期殖利率', fmt.n(ml.y10, 2) + '%'].concat(rdY10(ml) || []), ['外資', tw.inst_sum ? fmt.n(tw.inst_sum.f5, 0) + ' 億' : '—'].concat(rdInst(tw.inst_sum) || [])]) +
       panel('span-6', 'S&P 500 近一年', 'FRED · 200 日均線', '<div class="chart" id="c-ov-spx"></div>') +
@@ -404,7 +407,6 @@
     bindMega();
     pxChart('#c-ov-spx', Q('SPX') ? 'SPX' : 'SPY', 'S&P 500'); pxChart('#c-ov-tw', 'TW_TAIEX', '加權指數');
     var tiers = (D.model || {}).ladder ? D.model.ladder.map(function (t) { return t.dd; }) : [-5, -10, -15, -20, -30];
-    ((D.position || {}).holdings || []).forEach(function (h, i) { mount($('#uw-' + i), function (el) { drawUw(el, h.uw.slice(-500), tiers); }); });
   };
 
   V.news = function () {
@@ -424,6 +426,74 @@
     $('#nf').addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; this.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', x === b); }); draw(b.getAttribute('data-c')); });
   };
 
+  /* ---------------- 重點追蹤：本刊長期追蹤的九檔指數 ETF 與基金（只呈現標的本身的數據） ---------------- */
+  function FI() { return (D.focus || {}).items || []; }
+  function focusTable(mini) {
+    var it = FI(); if (!it.length) return '<p class="note">本日未取得。</p>';
+    return '<div class="tbl-wrap"><table class="tbl heat wide"><thead><tr><th>標的</th>' + (mini ? '' : '<th>類型</th>') + '<th class="num">價格／淨值</th><th class="num">日期</th><th class="num">今日</th><th class="num">1 個月</th><th class="num">今年</th><th class="num">1 年</th>' +
+      (mini ? '' : '<th class="num">3 年年化</th><th class="num">年化波動</th><th class="num">3 年最大回撤</th>') + '<th class="num">距高點</th><th>狀態</th></tr></thead><tbody>' +
+      it.map(function (x) { var q = Q(x.key) || {}, r = x.risk || {};
+        return '<tr><td><b>' + esc(short(x.key)) + '</b>' + (mini ? '' : '<br><span class="note">' + esc(x.full) + '</span>') + '</td>' + (mini ? '' : '<td><span class="note">' + esc(x.type === 'fund' ? '基金・' + (x.style || '') : 'ETF') + '<br>' + esc(x.region || '') + '</span></td>') +
+          '<td class="num">' + px(q.c) + '</td><td class="num">' + mdOf(q.d) + '</td>' + heat(q.chg_pct, 3, 2) + heat(q.r1m, 12) + heat(q.ytd, 60) + heat(q.r1y, 80) +
+          (mini ? '' : heat(r.cagr3y, 40) + '<td class="num">' + (r.vol1y == null ? '—' : fmt.n(r.vol1y, 1) + '%') + '</td>' + heat(r.mdd3y, 40)) + heat(q.dd_ath, 30) + '<td>' + regChip(q.regime) + '</td></tr>'; }).join('') +
+      '</tbody></table></div>' + (mini ? '<p class="note">本刊長期追蹤的指數 ETF 與基金；基金淨值通常晚一到兩天公布，日期欄是資料日。</p>' : '');
+  }
+  function corrHtml() {
+    var it = FI(), c = (D.focus || {}).corr || [];
+    if (!c.length) return '';
+    var cell = function (v, i, j) { if (v == null) return '<td class="h">—</td>'; if (i === j) return '<td class="h"><span>—</span></td>'; var a = Math.max(0, v) * 0.4; return '<td class="h"><span style="background:color-mix(in srgb,var(--red) ' + (a * 100).toFixed(0) + '%,transparent)">' + v.toFixed(2) + '</span></td>'; };
+    return '<div class="tbl-wrap"><table class="tbl heat wide"><thead><tr><th></th>' + it.map(function (x) { return '<th class="num">' + esc(short(x.key)) + '</th>'; }).join('') + '</tr></thead><tbody>' +
+      it.map(function (x, i) { return '<tr><td><b>' + esc(short(x.key)) + '</b></td>' + c[i].map(function (v, j) { return cell(v, i, j); }).join('') + '</tr>'; }).join('') + '</tbody></table></div>';
+  }
+  function overlapHtml() {
+    var o = (D.focus || {}).overlap || [];
+    if (!o.length) return '<p class="note">前十大持股沒有重疊。</p>';
+    return '<div class="tbl-wrap"><table class="tbl"><thead><tr><th>兩檔</th><th class="num">共同持股</th><th class="num">重疊權重</th><th>重疊的股票</th></tr></thead><tbody>' +
+      o.map(function (x) { return '<tr><td><b>' + esc(short(x.a)) + '</b> × <b>' + esc(short(x.b)) + '</b></td><td class="num">' + x.n + ' 檔</td><td class="num">' + fmt.n(x.w, 1) + '%</td><td>' + esc(x.names.join('、')) + '</td></tr>'; }).join('') + '</tbody></table></div>' +
+      '<p class="note">只比對各基金公布的前十大持股（日期見各檔），重疊權重＝共同持股在兩檔中較低的那個權重加總。ETF 沒有列入比對。</p>';
+  }
+  function focusCard(x, i) {
+    var q = Q(x.key) || {}, r = x.risk || {}, inf = x.info || {}, h = x.hold || {}, top = h.top || [];
+    var aum = inf.aum ? (inf.ccy === 'TWD' ? fmt.n(inf.aum / 1e8, 0) + ' 億台幣' : inf.ccy === 'USD' ? fmt.n(inf.aum / 1e8, 1) + ' 億美元' : '') : '';
+    var facts = [['類型', x.type === 'fund' ? '主動型基金' : '指數 ETF'], ['地區', x.region || '—'], ['風格', x.style || '—'], ['計價', inf.ccy_name || x.ccy], ['經理費', inf.fee != null ? inf.fee + '%' : '—'], ['規模', aum || '—'], ['成立', inf.since || '—']].filter(function (f) { return f[1] && f[1] !== '—'; });
+    var rows = top.map(function (t) { return { label: t.name.length > 14 ? t.name.slice(0, 14) + '…' : t.name, v: t.w, color: 'var(--s1)', right: fmt.n(t.w, 1) + '%', tip: '<div class="t">' + esc(t.name) + '</div><div class="r"><i style="background:var(--s1)"></i><span>' + esc((t.sector || '') + ' ' + (t.country || '')) + '</span><b>' + fmt.n(t.w, 2) + '%</b></div>' }; });
+    var top10 = top.reduce(function (s, t) { return s + t.w; }, 0);
+    var cty = {}; top.forEach(function (t) { cty[t.country || '其他'] = (cty[t.country || '其他'] || 0) + t.w; });
+    return panel('span-6', esc(short(x.key)) + ' <span class="note">' + esc(x.full) + '</span>', mdOf(q.d) + (x.type === 'fund' ? ' 淨值' : ' 收盤'),
+      '<p class="say">' + esc(x.desc || '') + '</p>' +
+      '<div class="kpis">' + kpi('今年', fmt.pct(q.ytd, 1), '1 年 ' + fmt.pct(q.r1y, 1), null, cls(q.ytd)) + kpi('距高點', fmt.pct(q.dd_ath, 1), fmt.md(q.ath_d) + ' 高點', null, cls(q.dd_ath)) + kpi('年化波動', r.vol1y == null ? '—' : fmt.n(r.vol1y, 1) + '%', '3 年最大回撤 ' + fmt.pct(r.mdd3y, 1)) + '</div>' +
+      '<div class="chart" id="c-fx-' + i + '"></div>' +
+      (facts.length ? '<p class="note">' + facts.map(function (f) { return f[0] + '：' + esc(f[1]); }).join('　') + '</p>' : '') +
+      (top.length ? '<h3 style="font-size:13px;margin:10px 0 4px">前十大持股（' + mdOf(h.d) + '，合計 ' + fmt.n(top10, 1) + '%；' + Object.keys(cty).sort(function (a, b) { return cty[b] - cty[a]; }).map(function (c) { return esc(c) + ' ' + fmt.n(cty[c], 0) + '%'; }).join('、') + '）</h3><div class="fx-top-' + i + '">' + ladderHtml(rows, { dense: true }) + '</div>' : ''));
+  }
+  function focusReads() {
+    var it = FI(); if (!it.length) return [];
+    var by = function (f) { return it.slice().filter(function (x) { return f(x) != null; }).sort(function (a, b) { return f(b) - f(a); }); };
+    var hot = by(function (x) { return (Q(x.key) || {}).ytd; })[0], vol = by(function (x) { return (x.risk || {}).vol1y; })[0], dd = by(function (x) { return -(Q(x.key) || {}).dd_ath; })[0], ext = by(function (x) { return (Q(x.key) || {}).dev200; })[0];
+    var o = ((D.focus || {}).overlap || [])[0], out = [];
+    if (hot) out.push(['今年最強', short(hot.key), short(hot.key) + ' 今年 ' + fmt.pct(Q(hot.key).ytd, 1) + '、一年 ' + fmt.pct(Q(hot.key).r1y, 1) + '；漲幅越大，回檔時的跌幅通常也越大。', 'warn']);
+    if (vol) out.push(['波動最大', short(vol.key), short(vol.key) + ' 年化波動 ' + fmt.n(vol.risk.vol1y, 1) + '%（S&P 500 約 ' + fmt.n(((it.filter(function (x) { return x.key === 'SPY'; })[0] || {}).risk || {}).vol1y, 1) + '%），三年最大回撤 ' + fmt.pct(vol.risk.mdd3y, 1) + '。', 'warn']);
+    if (ext && Q(ext.key).dev200 != null) out.push(['離長期均線最遠', short(ext.key), short(ext.key) + ' 高於 200 日均線 ' + fmt.pct(Q(ext.key).dev200, 1) + '；超過 20% 屬於漲多。', Q(ext.key).dev200 > 20 ? 'warn' : 'neu']);
+    if (dd) out.push(['回撤最深', short(dd.key), short(dd.key) + ' 距高點 ' + fmt.pct(Q(dd.key).dd_ath, 1) + '（' + Q(dd.key).regime.label + '）。', Q(dd.key).dd_ath < -10 ? 'pos' : 'neu']);
+    if (o) out.push(['持股重疊最高', short(o.a) + ' × ' + short(o.b), '前十大有 ' + o.n + ' 檔相同（' + o.names.slice(0, 4).join('、') + '），重疊權重 ' + fmt.n(o.w, 1) + '%；兩檔同時存在時，分散效果比看起來小。', 'warn']);
+    return out;
+  }
+  V.focus = function () {
+    return readBar('focus') + '<div class="grid">' +
+      panel('span-12', '九檔一覽', '價格與淨值：Nasdaq、證交所、鉅亨網 · 依當日資料自動計算', focusTable(false)) +
+      interpPanel(focusReads().map(function (r) { return [r[0], esc(r[1]), r[2], r[3]]; })) +
+      FI().map(focusCard).join('') +
+      panel('span-12', '彼此的連動', '近一年週報酬相關係數 · 1 代表同漲同跌，0 代表互不相關', corrHtml() + '<p class="note">相關係數越高，放在一起的分散效果越小。台股與美股平常相關不高，但遇到 AI、半導體這類共同題材修正時，會一起下跌。</p>') +
+      panel('span-12', '前十大持股重疊', '基金公布的前十大', overlapHtml()) + '</div>';
+  };
+  V.focus.after = function () {
+    FI().forEach(function (x, i) {
+      var q = Q(x.key) || {};
+      mount($('#c-fx-' + i), function (el) { lineChart(el, { h: 170, series: [{ name: short(x.key), data: x.hist, color: 'var(--s1)', area: true }], refs: q.sma200 ? [{ y: q.sma200, color: 'var(--ink-3)', label: '200 日線', below: true }] : [], tipFmt: px, yFmt: fmt.k, aria: x.name + ' 近一年' }); });
+      var tp = document.querySelector('.fx-top-' + i); if (tp) bindLadder(tp, ((x.hold || {}).top || []).map(function (t) { return { tip: '<div class="t">' + esc(t.name) + '</div><div class="r"><i style="background:var(--s1)"></i><span>' + esc((t.sector || '') + ' ' + (t.country || '')) + '</span><b>' + fmt.n(t.w, 2) + '%</b></div>' }; }));
+    });
+  };
+
   /* ---------------- 加碼框架 ---------------- */
   function ladderSvg(h) {
     var lv = h.levels, lo = Math.min(h.c, lv[lv.length - 1].px) * 0.97, hi = h.ath * 1.015, W = 1000, Ht = 130, ML = 16, MR = 16, pw = W - ML - MR, y = 64;
@@ -435,13 +505,13 @@
     return '<div class="runway"><svg viewBox="0 0 ' + W + ' ' + Ht + '" role="img" aria-label="' + esc(h.name) + ' 現價到各加碼階的距離">' + s + '</svg></div>';
   }
   V.position = function () {
-    var P = D.position || {}, M = D.model || {}, hs = P.holdings || [], bt = P.backtest || [];
+    var P = D.position || {}, M = D.model || {}, hs = P.targets || [], bt = P.backtest || [];
     var ladderTbl = '<div class="tbl-wrap"><table class="tbl"><thead><tr><th>階</th><th class="num">距歷史高點</th><th class="num">加碼（預留資金的 %）</th><th class="num">累計</th></tr></thead><tbody>' +
       (M.ladder || []).map(function (t, i, a) { var cum = a.slice(0, i + 1).reduce(function (s, x) { return s + x.add; }, 0); return '<tr><td>第 ' + (i + 1) + ' 階</td><td class="num">' + t.dd + '%</td><td class="num">' + t.add + '%</td><td class="num">' + cum + '%</td></tr>'; }).join('') + '</tbody></table></div>' +
       '<p class="note">' + esc(M.ladder_note || '') + ' ' + esc((M.accel || {}).note || '') + ' ' + esc((M.trend || {}).note || '') + '</p>' +
       '<p class="note">現在 VIX ' + fmt.n(P.vix, 2) + (P.accel_on ? '，<b>已達恐慌門檻，下一階可提前</b>' : '，未達恐慌門檻（' + (M.accel || {}).vix + '）') + '。這是範例框架、不是投資建議；比例請依自己的資金與風險承受度調整。</p>';
     var cards = hs.map(function (h, i) {
-      return panel('span-12', esc(code(h.key)) + ' ' + esc(h.name), '高點 ' + fmt.md(h.ath_d) + ' · 本段最低 ' + fmt.pct(h.ep_low, 1) + ' · 已觸發 ' + (h.hit.length ? h.hit.join('、') + '%' : '無') + '（累計 ' + h.used + '%）',
+      return panel('span-12', esc(short(h.key)) + (short(h.key) !== h.name ? ' <span class="note">' + esc(h.name) + '</span>' : ''), '高點 ' + fmt.md(h.ath_d) + ' · 本段最低 ' + fmt.pct(h.ep_low, 1) + ' · 已觸發 ' + (h.hit.length ? h.hit.join('、') + '%' : '無') + '（累計 ' + h.used + '%）',
         '<p class="say">距歷史高點 <b>' + fmt.pct(h.dd, 1) + '</b>，' + (h.next ? '跌到 ' + px(h.next.px) + '（' + fmt.pct(h.next.dist, 1) + '）觸發第 ' + ((M.ladder || []).map(function (t) { return t.dd; }).indexOf(h.next.dd) + 1) + ' 階，加碼預留資金的 ' + h.next.add + '%' : '所有階梯都已觸發') + '。' +
         (h.dev200 != null ? '價格' + (h.dev200 >= 0 ? '在 200 日均線之上 ' : '在 200 日均線之下 ') + fmt.pct(Math.abs(h.dev200), 1).replace('+', '') + '。' : '') + (h.hist_from > '2016' ? '（歷史資料從 ' + h.hist_from.slice(0, 4) + ' 年起）' : '') + '</p>' + ladderSvg(h) + '<div class="chart" id="c-uw-' + i + '"></div>');
     }).join('');
@@ -469,7 +539,7 @@
   }
   V.position.after = function () {
     var P = D.position || {}, M = D.model || {}, tiers = (M.ladder || []).map(function (t) { return t.dd; });
-    (P.holdings || []).forEach(function (h, i) {
+    (P.targets || []).forEach(function (h, i) {
       mount($('#c-uw-' + i), function (el) { lineChart(el, { h: 190, series: [{ name: '距高點', data: h.uw, color: 'var(--down)', area: true }], refs: tiers.map(function (t) { return { y: t, color: 'var(--ink-3)', label: t + '%', below: true }; }).filter(function (r) { return r.y >= Math.min.apply(null, h.uw.map(function (p) { return p[1]; })) - 6; }), y1: 0, yFmt: function (v) { return v.toFixed(0) + '%'; }, tipFmt: function (v) { return fmt.pct(v, 1); }, aria: h.name + ' 距高點回撤' }); });
     });
     var bt = P.backtest || [], sel = 0;
@@ -629,7 +699,7 @@
   /* ---------------- 觀察清單 ---------------- */
   function watchTable(keys) {
     return '<div class="tbl-wrap"><table class="tbl heat wide"><colgroup><col style="width:20%"><col style="width:10%"><col><col><col><col><col><col><col style="width:7%"><col style="width:12%"></colgroup><thead><tr><th>代號</th><th class="num">收盤</th><th class="num">今日</th><th class="num">1 個月</th><th class="num">今年</th><th class="num">距高點</th><th class="num">200 日線</th><th class="num">RSI</th><th>52 週</th><th>近 60 日</th></tr></thead><tbody>' +
-      keys.filter(Q).map(function (k) { var q = Q(k); return '<tr><td><b>' + code(k) + '</b> <span class="note">' + esc(q.name) + (q.hold ? ' · 持有' : '') + '</span></td><td class="num">' + px(q.c) + '</td>' + heat(q.chg_pct, 4, 2) + heat(q.r1m, 15) + heat(q.ytd, 50) + heat(q.dd_ath, 40) + heat(q.dev200, 25) + '<td class="num ' + (q.rsi >= 70 ? 'up' : q.rsi <= 30 ? 'down' : '') + '">' + fmt.n(q.rsi, 0) + '</td><td>' + p52(q) + '</td><td>' + spk(q.spark, 100, 24) + '</td></tr>'; }).join('') + '</tbody></table></div>';
+      keys.filter(Q).map(function (k) { var q = Q(k); return '<tr><td><b>' + code(k) + '</b> <span class="note">' + esc(q.name) +  + '</span></td><td class="num">' + px(q.c) + '</td>' + heat(q.chg_pct, 4, 2) + heat(q.r1m, 15) + heat(q.ytd, 50) + heat(q.dd_ath, 40) + heat(q.dev200, 25) + '<td class="num ' + (q.rsi >= 70 ? 'up' : q.rsi <= 30 ? 'down' : '') + '">' + fmt.n(q.rsi, 0) + '</td><td>' + p52(q) + '</td><td>' + spk(q.spark, 100, 24) + '</td></tr>'; }).join('') + '</tbody></table></div>';
   }
   V.watch = function () {
     var ks = Object.keys(D.quotes), grp = {};
@@ -642,7 +712,7 @@
   };
 
   V.method = function () {
-    var src = [['Nasdaq', '美股、ETF、那斯達克與費半指數日線（近 10 年）', '每日'], ['FRED（聖路易聯儲）', 'S&P 500 指數、那斯達克 100 長歷史、高收益債利差、實質利率、美元指數、美元兌台幣', '每日（部分晚 1–7 天）'], ['美國財政部', '殖利率曲線', '每日'], ['CBOE', 'VIX、VIX9D、VIX3M、VIX6M', '每日'], ['CNN', '恐懼貪婪指數', '每日（常擋自動抓取）'], ['臺灣證券交易所', '加權指數、個股與 ETF 日線、三大法人、融資融券、類股指數、本益比與殖利率、月營收、ETF 預估淨值', '每個交易日'], ['臺灣期貨交易所', '三大法人台指期未平倉', '每個交易日']];
+    var src = [['Nasdaq', '美股、ETF、那斯達克與費半指數日線（近 10 年）', '每日'], ['FRED（聖路易聯儲）', 'S&P 500 指數、那斯達克 100 長歷史、高收益債利差、實質利率、美元指數、美元兌台幣', '每日（部分晚 1–7 天）'], ['美國財政部', '殖利率曲線', '每日'], ['CBOE', 'VIX、VIX9D、VIX3M、VIX6M', '每日'], ['CNN', '恐懼貪婪指數', '每日（常擋自動抓取）'], ['臺灣證券交易所', '加權指數、個股與 ETF 日線、三大法人、融資融券、類股指數、本益比與殖利率、月營收、ETF 預估淨值', '每個交易日'], ['臺灣期貨交易所', '三大法人台指期未平倉', '每個交易日'], ['鉅亨網', '共同基金淨值、經理費、規模、前十大持股（重點追蹤版）', '每日（境外基金晚一到兩天）']];
     return '<div class="grid">' + panel('span-12', '這是什麼', '', '<div class="prose"><p>晨鐘是一份給長期投資人的美股、台股日報：看懂市場今天發生什麼、現在在什麼位置、資金往哪裡去，以及在回檔時依照事先寫好的規則分批加碼。它是破曉 Daybreak（比特幣日報）的姊妹刊。</p>' +
       '<p><b>原則</b>：數字由程式每天自動抓、自動算，取不到就顯示「本日未取得」，不推估、不沿用舊值。文字判讀由 Claude 每天讀數據後撰寫，只解釋數字、不改數字。加碼框架是範例參數，每月檢討才改。</p>' +
       '<p><b>發刊</b>：晨刊（美股收盤後，台北約 07:00）以 S&P 500 為頭版；午後刊（台股收盤、法人數據公布後，台北約 16:00）以加權指數為頭版。</p>' +

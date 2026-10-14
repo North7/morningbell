@@ -1014,55 +1014,55 @@
  },
  "errors": [],
  "ok": {
-  "nasdaq SPY": "2026-10-14T00:32:15+00:00",
-  "nasdaq VOO": "2026-10-14T00:32:17+00:00",
-  "nasdaq QQQ": "2026-10-14T00:32:19+00:00",
-  "nasdaq NDX": "2026-10-14T00:32:22+00:00",
-  "nasdaq COMP": "2026-10-14T00:32:24+00:00",
-  "nasdaq SOX": "2026-10-14T00:32:27+00:00",
-  "nasdaq DIA": "2026-10-14T00:32:31+00:00",
-  "nasdaq IWM": "2026-10-14T00:32:34+00:00",
-  "nasdaq RSP": "2026-10-14T00:32:35+00:00",
-  "nasdaq TLT": "2026-10-14T00:32:37+00:00",
-  "nasdaq GLD": "2026-10-14T00:32:38+00:00",
-  "nasdaq XLK": "2026-10-14T00:32:40+00:00",
-  "nasdaq XLC": "2026-10-14T00:32:43+00:00",
-  "nasdaq XLY": "2026-10-14T00:32:45+00:00",
-  "nasdaq XLF": "2026-10-14T00:32:46+00:00",
-  "nasdaq XLV": "2026-10-14T00:32:49+00:00",
-  "nasdaq XLI": "2026-10-14T00:32:52+00:00",
-  "nasdaq XLE": "2026-10-14T00:32:55+00:00",
-  "nasdaq XLP": "2026-10-14T00:32:57+00:00",
-  "nasdaq XLU": "2026-10-14T00:32:59+00:00",
-  "nasdaq XLB": "2026-10-14T00:33:00+00:00",
-  "nasdaq XLRE": "2026-10-14T00:33:02+00:00",
-  "nasdaq SMH": "2026-10-14T00:33:03+00:00",
-  "nasdaq IGV": "2026-10-14T00:33:05+00:00",
-  "nasdaq GOOGL": "2026-10-14T00:33:09+00:00",
-  "nasdaq NVDA": "2026-10-14T00:33:11+00:00",
-  "nasdaq MSFT": "2026-10-14T00:33:13+00:00",
-  "nasdaq AAPL": "2026-10-14T00:33:14+00:00",
-  "nasdaq AMZN": "2026-10-14T00:33:15+00:00",
-  "nasdaq META": "2026-10-14T00:33:18+00:00",
-  "nasdaq TSLA": "2026-10-14T00:33:21+00:00",
-  "nasdaq AVGO": "2026-10-14T00:33:24+00:00",
-  "nasdaq TSM": "2026-10-14T00:33:27+00:00",
-  "nasdaq AMD": "2026-10-14T00:33:29+00:00",
-  "nasdaq LLY": "2026-10-14T00:33:32+00:00",
-  "nasdaq JPM": "2026-10-14T00:33:35+00:00",
-  "nasdaq BRK.B": "2026-10-14T00:33:38+00:00",
-  "cboe VIX9D": "2026-10-14T00:33:38+00:00",
-  "cboe VIX": "2026-10-14T00:33:38+00:00",
-  "cboe VIX3M": "2026-10-14T00:33:39+00:00",
-  "cboe VIX6M": "2026-10-14T00:33:39+00:00",
-  "treasury": "2026-10-14T00:33:46+00:00",
-  "fred BAMLH0A0HYM2": "2026-10-14T00:33:46+00:00",
-  "fred DFII10": "2026-10-14T00:33:46+00:00",
-  "fred DTWEXBGS": "2026-10-14T00:33:46+00:00",
-  "fred DEXTAUS": "2026-10-14T00:33:46+00:00",
-  "fred SP500": "2026-10-14T00:33:47+00:00",
-  "fred NASDAQ100": "2026-10-14T00:33:47+00:00",
-  "cnn fear&greed": "2026-10-14T00:33:47+00:00",
+  "nasdaq SPY": "2026-10-14T01:32:25+00:00",
+  "nasdaq VOO": "2026-10-14T01:32:27+00:00",
+  "nasdaq QQQ": "2026-10-14T01:32:29+00:00",
+  "nasdaq NDX": "2026-10-14T01:32:31+00:00",
+  "nasdaq COMP": "2026-10-14T01:32:34+00:00",
+  "nasdaq SOX": "2026-10-14T01:32:37+00:00",
+  "nasdaq DIA": "2026-10-14T01:32:39+00:00",
+  "nasdaq IWM": "2026-10-14T01:32:42+00:00",
+  "nasdaq RSP": "2026-10-14T01:32:45+00:00",
+  "nasdaq TLT": "2026-10-14T01:32:46+00:00",
+  "nasdaq GLD": "2026-10-14T01:32:47+00:00",
+  "nasdaq XLK": "2026-10-14T01:32:49+00:00",
+  "nasdaq XLC": "2026-10-14T01:32:52+00:00",
+  "nasdaq XLY": "2026-10-14T01:32:54+00:00",
+  "nasdaq XLF": "2026-10-14T01:32:56+00:00",
+  "nasdaq XLV": "2026-10-14T01:32:57+00:00",
+  "nasdaq XLI": "2026-10-14T01:32:59+00:00",
+  "nasdaq XLE": "2026-10-14T01:33:00+00:00",
+  "nasdaq XLP": "2026-10-14T01:33:02+00:00",
+  "nasdaq XLU": "2026-10-14T01:33:03+00:00",
+  "nasdaq XLB": "2026-10-14T01:33:05+00:00",
+  "nasdaq XLRE": "2026-10-14T01:33:08+00:00",
+  "nasdaq SMH": "2026-10-14T01:33:10+00:00",
+  "nasdaq IGV": "2026-10-14T01:33:11+00:00",
+  "nasdaq GOOGL": "2026-10-14T01:33:12+00:00",
+  "nasdaq NVDA": "2026-10-14T01:33:14+00:00",
+  "nasdaq MSFT": "2026-10-14T01:33:17+00:00",
+  "nasdaq AAPL": "2026-10-14T01:33:18+00:00",
+  "nasdaq AMZN": "2026-10-14T01:33:19+00:00",
+  "nasdaq META": "2026-10-14T01:33:20+00:00",
+  "nasdaq TSLA": "2026-10-14T01:33:23+00:00",
+  "nasdaq AVGO": "2026-10-14T01:33:26+00:00",
+  "nasdaq TSM": "2026-10-14T01:33:27+00:00",
+  "nasdaq AMD": "2026-10-14T01:33:29+00:00",
+  "nasdaq LLY": "2026-10-14T01:33:30+00:00",
+  "nasdaq JPM": "2026-10-14T01:33:31+00:00",
+  "nasdaq BRK.B": "2026-10-14T01:33:32+00:00",
+  "cboe VIX9D": "2026-10-14T01:33:33+00:00",
+  "cboe VIX": "2026-10-14T01:33:34+00:00",
+  "cboe VIX3M": "2026-10-14T01:33:34+00:00",
+  "cboe VIX6M": "2026-10-14T01:33:35+00:00",
+  "treasury": "2026-10-14T01:33:46+00:00",
+  "fred BAMLH0A0HYM2": "2026-10-14T01:33:46+00:00",
+  "fred DFII10": "2026-10-14T01:33:46+00:00",
+  "fred DTWEXBGS": "2026-10-14T01:33:46+00:00",
+  "fred DEXTAUS": "2026-10-14T01:33:47+00:00",
+  "fred SP500": "2026-10-14T01:33:47+00:00",
+  "fred NASDAQ100": "2026-10-14T01:33:47+00:00",
+  "cnn fear&greed": "2026-10-14T01:33:49+00:00",
   "twse TAIEX": "2026-10-13T23:18:01+00:00",
   "twse 0050": "2026-10-13T23:18:02+00:00",
   "twse 006208": "2026-10-13T21:42:12+00:00",
@@ -1092,51 +1092,63 @@
   "twse 本益比": "2026-10-13T23:20:04+00:00",
   "twse 月營收": "2026-10-13T23:20:06+00:00",
   "twse ETF 淨值": "2026-10-13T23:20:08+00:00",
-  "yahoo ^GSPC": "2026-10-14T00:33:45+00:00",
-  "yahoo SPY": "2026-10-14T00:33:39+00:00",
-  "yahoo VOO": "2026-10-14T00:33:40+00:00",
-  "yahoo QQQ": "2026-10-14T00:33:40+00:00",
-  "yahoo ^NDX": "2026-10-14T00:33:40+00:00",
-  "yahoo ^IXIC": "2026-10-14T00:33:40+00:00",
-  "yahoo ^SOX": "2026-10-14T00:33:40+00:00",
-  "yahoo DIA": "2026-10-14T00:33:40+00:00",
-  "yahoo IWM": "2026-10-14T00:33:41+00:00",
-  "yahoo RSP": "2026-10-14T00:33:41+00:00",
-  "yahoo TLT": "2026-10-14T00:33:41+00:00",
-  "yahoo GLD": "2026-10-14T00:33:41+00:00",
-  "yahoo XLK": "2026-10-14T00:33:41+00:00",
-  "yahoo XLC": "2026-10-14T00:33:41+00:00",
-  "yahoo XLY": "2026-10-14T00:33:42+00:00",
-  "yahoo XLF": "2026-10-14T00:33:42+00:00",
-  "yahoo XLV": "2026-10-14T00:33:42+00:00",
-  "yahoo XLI": "2026-10-14T00:33:42+00:00",
-  "yahoo XLE": "2026-10-14T00:33:42+00:00",
-  "yahoo XLP": "2026-10-14T00:33:42+00:00",
-  "yahoo XLU": "2026-10-14T00:33:43+00:00",
-  "yahoo XLB": "2026-10-14T00:33:43+00:00",
-  "yahoo XLRE": "2026-10-14T00:33:43+00:00",
-  "yahoo SMH": "2026-10-14T00:33:43+00:00",
-  "yahoo IGV": "2026-10-14T00:33:43+00:00",
-  "yahoo GOOGL": "2026-10-14T00:33:43+00:00",
-  "yahoo NVDA": "2026-10-14T00:33:43+00:00",
-  "yahoo MSFT": "2026-10-14T00:33:43+00:00",
-  "yahoo AAPL": "2026-10-14T00:33:44+00:00",
-  "yahoo AMZN": "2026-10-14T00:33:44+00:00",
-  "yahoo META": "2026-10-14T00:33:44+00:00",
-  "yahoo TSLA": "2026-10-14T00:33:44+00:00",
-  "yahoo AVGO": "2026-10-14T00:33:44+00:00",
-  "yahoo TSM": "2026-10-14T00:33:44+00:00",
-  "yahoo AMD": "2026-10-14T00:33:44+00:00",
-  "yahoo LLY": "2026-10-14T00:33:45+00:00",
-  "yahoo JPM": "2026-10-14T00:33:45+00:00",
-  "yahoo BRK-B": "2026-10-14T00:33:45+00:00",
-  "yahoo ^VIX9D": "2026-10-14T00:33:45+00:00",
-  "yahoo ^VIX": "2026-10-14T00:33:45+00:00",
-  "yahoo ^VIX3M": "2026-10-14T00:33:45+00:00",
-  "yahoo ^VIX6M": "2026-10-14T00:33:46+00:00",
-  "yahoo ^GSPC long": "2026-10-14T00:33:47+00:00"
+  "yahoo ^GSPC": "2026-10-14T01:33:45+00:00",
+  "yahoo SPY": "2026-10-14T01:33:35+00:00",
+  "yahoo VOO": "2026-10-14T01:33:36+00:00",
+  "yahoo QQQ": "2026-10-14T01:33:36+00:00",
+  "yahoo ^NDX": "2026-10-14T01:33:36+00:00",
+  "yahoo ^IXIC": "2026-10-14T01:33:36+00:00",
+  "yahoo ^SOX": "2026-10-14T01:33:36+00:00",
+  "yahoo DIA": "2026-10-14T01:33:37+00:00",
+  "yahoo IWM": "2026-10-14T01:33:37+00:00",
+  "yahoo RSP": "2026-10-14T01:33:37+00:00",
+  "yahoo TLT": "2026-10-14T01:33:37+00:00",
+  "yahoo GLD": "2026-10-14T01:33:38+00:00",
+  "yahoo XLK": "2026-10-14T01:33:38+00:00",
+  "yahoo XLC": "2026-10-14T01:33:38+00:00",
+  "yahoo XLY": "2026-10-14T01:33:38+00:00",
+  "yahoo XLF": "2026-10-14T01:33:39+00:00",
+  "yahoo XLV": "2026-10-14T01:33:39+00:00",
+  "yahoo XLI": "2026-10-14T01:33:39+00:00",
+  "yahoo XLE": "2026-10-14T01:33:40+00:00",
+  "yahoo XLP": "2026-10-14T01:33:40+00:00",
+  "yahoo XLU": "2026-10-14T01:33:40+00:00",
+  "yahoo XLB": "2026-10-14T01:33:40+00:00",
+  "yahoo XLRE": "2026-10-14T01:33:41+00:00",
+  "yahoo SMH": "2026-10-14T01:33:41+00:00",
+  "yahoo IGV": "2026-10-14T01:33:41+00:00",
+  "yahoo GOOGL": "2026-10-14T01:33:41+00:00",
+  "yahoo NVDA": "2026-10-14T01:33:41+00:00",
+  "yahoo MSFT": "2026-10-14T01:33:43+00:00",
+  "yahoo AAPL": "2026-10-14T01:33:43+00:00",
+  "yahoo AMZN": "2026-10-14T01:33:43+00:00",
+  "yahoo META": "2026-10-14T01:33:43+00:00",
+  "yahoo TSLA": "2026-10-14T01:33:43+00:00",
+  "yahoo AVGO": "2026-10-14T01:33:43+00:00",
+  "yahoo TSM": "2026-10-14T01:33:44+00:00",
+  "yahoo AMD": "2026-10-14T01:33:44+00:00",
+  "yahoo LLY": "2026-10-14T01:33:44+00:00",
+  "yahoo JPM": "2026-10-14T01:33:44+00:00",
+  "yahoo BRK-B": "2026-10-14T01:33:44+00:00",
+  "yahoo ^VIX9D": "2026-10-14T01:33:45+00:00",
+  "yahoo ^VIX": "2026-10-14T01:33:45+00:00",
+  "yahoo ^VIX3M": "2026-10-14T01:33:45+00:00",
+  "yahoo ^VIX6M": "2026-10-14T01:33:45+00:00",
+  "yahoo ^GSPC long": "2026-10-14T01:33:48+00:00",
+  "cnyes FUND_FJV": "2026-10-14T01:33:50+00:00",
+  "cnyes 資料 FUND_FJV": "2026-10-14T01:33:52+00:00",
+  "cnyes FUND_NBTJ": "2026-10-14T01:33:53+00:00",
+  "cnyes 資料 FUND_NBTJ": "2026-10-14T01:33:53+00:00",
+  "cnyes FUND_ABIT": "2026-10-14T01:33:54+00:00",
+  "cnyes 資料 FUND_ABIT": "2026-10-14T01:33:54+00:00",
+  "cnyes FUND_ABUS": "2026-10-14T01:33:55+00:00",
+  "cnyes 資料 FUND_ABUS": "2026-10-14T01:33:55+00:00",
+  "cnyes FUND_AZTT": "2026-10-14T01:33:56+00:00",
+  "cnyes 資料 FUND_AZTT": "2026-10-14T01:33:56+00:00",
+  "cnyes FUND_CTHD": "2026-10-14T01:33:57+00:00",
+  "cnyes 資料 FUND_CTHD": "2026-10-14T01:33:58+00:00"
  },
- "updated_utc": "2026-10-14T00:33:47+00:00",
+ "updated_utc": "2026-10-14T01:33:58+00:00",
  "tw_val": {
   "2382": {
    "pe": 14.07,
@@ -1337,6 +1349,542 @@
    "nav": 64.52,
    "prem": -0.5,
    "d": "20261013"
+  }
+ },
+ "funds": {
+  "FUND_FJV": {
+   "info": {
+    "fee": 1.5,
+    "aum": 574721700809,
+    "aum_d": "2026-09-30",
+    "ccy": "USD",
+    "ccy_name": "美元",
+    "cat": "其他",
+    "since": "2014-01-10",
+    "r1y": 38.76069,
+    "stars": null,
+    "name_en": "Fidelity Funds - Japan Value Fund A-Acc-USD (hedged)"
+   },
+   "hold": {
+    "d": "2026-09-30",
+    "top": [
+     {
+      "name": "MIZUHO FINANCIAL GROUP",
+      "en": "Mizuho Financial Group Inc",
+      "w": 5.04,
+      "sector": "金融服務",
+      "country": "日本"
+     },
+     {
+      "name": "JAPAN POST BANK",
+      "en": "Japan Post Bank Co Ltd",
+      "w": 4.7,
+      "sector": "金融服務",
+      "country": "日本"
+     },
+     {
+      "name": "MITSUBISHI ELECTRIC ORD",
+      "en": "Mitsubishi Electric Corp",
+      "w": 4.04,
+      "sector": "工業",
+      "country": "日本"
+     },
+     {
+      "name": "MEBUKI FINANCIAL GROUP",
+      "en": "Mebuki Financial Group Inc",
+      "w": 3.78,
+      "sector": "金融服務",
+      "country": "日本"
+     },
+     {
+      "name": "MURATA MANUFACTURING",
+      "en": "Murata Manufacturing Co Ltd",
+      "w": 3.73,
+      "sector": "科技",
+      "country": "日本"
+     },
+     {
+      "name": "CITIZEN WATCH",
+      "en": "Citizen Watch Co Ltd",
+      "w": 3.48,
+      "sector": "周期性消費",
+      "country": "日本"
+     },
+     {
+      "name": "SUMITOMO MITSUI FINANCIAL GROUP",
+      "en": "Sumitomo Mitsui Financial Group Inc",
+      "w": 3.31,
+      "sector": "金融服務",
+      "country": "日本"
+     },
+     {
+      "name": "TOKYO KIRABOSHI FINANCIAL GROUP",
+      "en": "Tokyo Kiraboshi Financial Group Inc",
+      "w": 3.11,
+      "sector": "金融服務",
+      "country": "日本"
+     },
+     {
+      "name": "KINDEN (FORMERLY KINKI ELECTRIC CONSTRUCTION CO)",
+      "en": "Kinden Corp",
+      "w": 3.11,
+      "sector": "工業",
+      "country": "日本"
+     },
+     {
+      "name": "YOKOHAMA FINANCIAL GROUP",
+      "en": "Yokohama Financial Group Inc",
+      "w": 3.05,
+      "sector": "金融服務",
+      "country": "日本"
+     }
+    ]
+   }
+  },
+  "FUND_NBTJ": {
+   "info": {
+    "fee": 1.8,
+    "aum": 19447418140,
+    "aum_d": "2026-08-31",
+    "ccy": "TWD",
+    "ccy_name": "新台幣",
+    "cat": "股票-亞太",
+    "since": "2025-05-15",
+    "r1y": 52.6149,
+    "stars": null,
+    "name_en": "Neuberger Taipan Twin Stars Equity Fund TWD T ACC"
+   },
+   "hold": {
+    "d": "2026-06-30",
+    "top": [
+     {
+      "name": "國巨*",
+      "en": "Yageo Corp",
+      "w": 5.31,
+      "sector": "科技",
+      "country": "台灣"
+     },
+     {
+      "name": "聯發科",
+      "en": "MediaTek Inc",
+      "w": 2.6,
+      "sector": "科技",
+      "country": "台灣"
+     },
+     {
+      "name": "創意",
+      "en": "Global Unichip Corp",
+      "w": 2.41,
+      "sector": "科技",
+      "country": "台灣"
+     },
+     {
+      "name": "SUMITOMO REALTY",
+      "en": "Sumitomo Realty & Development Co Ltd",
+      "w": 2.35,
+      "sector": "工業",
+      "country": "日本"
+     },
+     {
+      "name": "NITERRA CO LTD",
+      "en": "Niterra Co Ltd",
+      "w": 2.33,
+      "sector": "周期性消費",
+      "country": "日本"
+     },
+     {
+      "name": "TOKIO MARINE HD",
+      "en": "Tokio Marine Holdings Inc",
+      "w": 2.26,
+      "sector": "金融服務",
+      "country": "日本"
+     },
+     {
+      "name": "YAMANASHI CHUO",
+      "en": "Yamanashi Chuo Bank Ltd",
+      "w": 2.21,
+      "sector": "金融服務",
+      "country": "日本"
+     },
+     {
+      "name": "MIZUHO FINANCIAL",
+      "en": "Mizuho Financial Group Inc",
+      "w": 2.13,
+      "sector": "金融服務",
+      "country": "日本"
+     },
+     {
+      "name": "KINDEN CORP",
+      "en": "Kinden Corp",
+      "w": 2.12,
+      "sector": "工業",
+      "country": "日本"
+     },
+     {
+      "name": "FANUC CORP",
+      "en": "Fanuc Corp",
+      "w": 2.1,
+      "sector": "工業",
+      "country": "日本"
+     }
+    ]
+   }
+  },
+  "FUND_ABIT": {
+   "info": {
+    "fee": 1.77,
+    "aum": 3648015799,
+    "aum_d": "2026-09-30",
+    "ccy": "USD",
+    "ccy_name": "美元",
+    "cat": "產業-科技",
+    "since": "1995-10-02",
+    "r1y": 45.19334,
+    "stars": 4,
+    "name_en": "AB SICAV I - International Technology Portfolio A Acc"
+   },
+   "hold": {
+    "d": "2026-09-30",
+    "top": [
+     {
+      "name": "Microsoft Corp.",
+      "en": "Microsoft Corp",
+      "w": 5.09,
+      "sector": "科技",
+      "country": "美國"
+     },
+     {
+      "name": "NVIDIA Corp.",
+      "en": "NVIDIA Corp",
+      "w": 4.99,
+      "sector": "科技",
+      "country": "美國"
+     },
+     {
+      "name": "Advanced Micro Devices, Inc.",
+      "en": "Advanced Micro Devices Inc",
+      "w": 3.53,
+      "sector": "科技",
+      "country": "美國"
+     },
+     {
+      "name": "Amazon.com, Inc.",
+      "en": "Amazon.com Inc",
+      "w": 3.18,
+      "sector": "周期性消費",
+      "country": "美國"
+     },
+     {
+      "name": "Alphabet, Inc. - Class A",
+      "en": "Alphabet Inc Class A",
+      "w": 2.81,
+      "sector": "電訊服務",
+      "country": "美國"
+     },
+     {
+      "name": "Broadcom, Inc.",
+      "en": "Broadcom Inc",
+      "w": 2.7,
+      "sector": "科技",
+      "country": "美國"
+     },
+     {
+      "name": "Meta Platforms, Inc. - Class A",
+      "en": "Meta Platforms Inc Class A",
+      "w": 2.66,
+      "sector": "電訊服務",
+      "country": "美國"
+     },
+     {
+      "name": "Micron Technology, Inc.",
+      "en": "Micron Technology Inc",
+      "w": 2.59,
+      "sector": "科技",
+      "country": "美國"
+     },
+     {
+      "name": "Taiwan Semiconductor Manufacturing Co., Ltd. (Sponsored ADR)",
+      "en": "Taiwan Semiconductor Manufacturing Co Ltd ADR",
+      "w": 2.57,
+      "sector": "科技",
+      "country": "台灣"
+     },
+     {
+      "name": "ASML Holding NV",
+      "en": "ASML Holding NV",
+      "w": 2.36,
+      "sector": "科技",
+      "country": "荷蘭"
+     }
+    ]
+   }
+  },
+  "FUND_ABUS": {
+   "info": {
+    "fee": 1.8,
+    "aum": 9425461864,
+    "aum_d": "2026-09-30",
+    "ccy": "USD",
+    "ccy_name": "美元",
+    "cat": "股票-美國大型",
+    "since": "2011-10-28",
+    "r1y": 17.344,
+    "stars": 3,
+    "name_en": "AB SICAV I - Select US Equity Portfolio A Acc"
+   },
+   "hold": {
+    "d": "2026-08-31",
+    "top": [
+     {
+      "name": "NVIDIA CORP",
+      "en": "NVIDIA Corp",
+      "w": 8.26,
+      "sector": "科技",
+      "country": "美國"
+     },
+     {
+      "name": "APPLE INC",
+      "en": "Apple Inc",
+      "w": 6.44,
+      "sector": "科技",
+      "country": "美國"
+     },
+     {
+      "name": "MICROSOFT CORP",
+      "en": "Microsoft Corp",
+      "w": 6.04,
+      "sector": "科技",
+      "country": "美國"
+     },
+     {
+      "name": "ALPHABET INC-CL A",
+      "en": "Alphabet Inc Class A",
+      "w": 5.69,
+      "sector": "電訊服務",
+      "country": "美國"
+     },
+     {
+      "name": "BERKSHIRE HATHAWAY INC-CL B",
+      "en": "Berkshire Hathaway Inc Class B",
+      "w": 4.11,
+      "sector": "金融服務",
+      "country": "美國"
+     },
+     {
+      "name": "AMAZON.COM INC",
+      "en": "Amazon.com Inc",
+      "w": 3.93,
+      "sector": "周期性消費",
+      "country": "美國"
+     },
+     {
+      "name": "VISA INC-CLASS A SHARES",
+      "en": "Visa Inc Class A",
+      "w": 3.01,
+      "sector": "金融服務",
+      "country": "美國"
+     },
+     {
+      "name": "BROADCOM INC",
+      "en": "Broadcom Inc",
+      "w": 2.66,
+      "sector": "科技",
+      "country": "美國"
+     },
+     {
+      "name": "MICRON TECHNOLOGY INC",
+      "en": "Micron Technology Inc",
+      "w": 2.27,
+      "sector": "科技",
+      "country": "美國"
+     },
+     {
+      "name": "META PLATFORMS INC-CLASS A",
+      "en": "Meta Platforms Inc Class A",
+      "w": 2.02,
+      "sector": "電訊服務",
+      "country": "美國"
+     }
+    ]
+   }
+  },
+  "FUND_AZTT": {
+   "info": {
+    "fee": 1.6,
+    "aum": 309049869531,
+    "aum_d": "2026-08-31",
+    "ccy": "TWD",
+    "ccy_name": "新台幣",
+    "cat": "產業-科技",
+    "since": "2001-04-03",
+    "r1y": 181.86639,
+    "stars": 5,
+    "name_en": "Allianz Global Investors Taiwan Technology Fund"
+   },
+   "hold": {
+    "d": "2026-06-30",
+    "top": [
+     {
+      "name": "華邦電",
+      "en": "Winbond Electronics Corp",
+      "w": 7.44,
+      "sector": "科技",
+      "country": "台灣"
+     },
+     {
+      "name": "旺矽",
+      "en": "MPI Corp",
+      "w": 7.32,
+      "sector": "科技",
+      "country": "台灣"
+     },
+     {
+      "name": "台積電",
+      "en": "Taiwan Semiconductor Manufacturing Co Ltd",
+      "w": 6.37,
+      "sector": "科技",
+      "country": "台灣"
+     },
+     {
+      "name": "國巨*",
+      "en": "Yageo Corp",
+      "w": 5.65,
+      "sector": "科技",
+      "country": "台灣"
+     },
+     {
+      "name": "台燿",
+      "en": "Taiwan Union Technology Corp",
+      "w": 5.38,
+      "sector": "科技",
+      "country": "台灣"
+     },
+     {
+      "name": "台光電",
+      "en": "Elite Material Co Ltd",
+      "w": 5.34,
+      "sector": "科技",
+      "country": "台灣"
+     },
+     {
+      "name": "穎崴",
+      "en": "WinWay Technology Co Ltd Ordinary Shares",
+      "w": 4.49,
+      "sector": "科技",
+      "country": "台灣"
+     },
+     {
+      "name": "創意",
+      "en": "Global Unichip Corp",
+      "w": 4.48,
+      "sector": "科技",
+      "country": "台灣"
+     },
+     {
+      "name": "聯電",
+      "en": "United Microelectronics Corp",
+      "w": 4.24,
+      "sector": "科技",
+      "country": "台灣"
+     },
+     {
+      "name": "奇鋐",
+      "en": "Asia Vital Components Co Ltd",
+      "w": 3.09,
+      "sector": "科技",
+      "country": "台灣"
+     }
+    ]
+   }
+  },
+  "FUND_CTHD": {
+   "info": {
+    "fee": 1.5,
+    "aum": 55908207892,
+    "aum_d": "2026-08-31",
+    "ccy": "TWD",
+    "ccy_name": "新台幣",
+    "cat": "股票-台灣",
+    "since": "2020-07-10",
+    "r1y": 126.11545,
+    "stars": 5,
+    "name_en": "Cathay High Dividend Taiwan Equity Fund A"
+   },
+   "hold": {
+    "d": "2026-06-30",
+    "top": [
+     {
+      "name": "台積電",
+      "en": "Taiwan Semiconductor Manufacturing Co Ltd",
+      "w": 8.13,
+      "sector": "科技",
+      "country": "台灣"
+     },
+     {
+      "name": "聯發科",
+      "en": "MediaTek Inc",
+      "w": 8.05,
+      "sector": "科技",
+      "country": "台灣"
+     },
+     {
+      "name": "台光電",
+      "en": "Elite Material Co Ltd",
+      "w": 7.36,
+      "sector": "科技",
+      "country": "台灣"
+     },
+     {
+      "name": "旺矽",
+      "en": "MPI Corp",
+      "w": 4.71,
+      "sector": "科技",
+      "country": "台灣"
+     },
+     {
+      "name": "國巨*",
+      "en": "Yageo Corp",
+      "w": 4.25,
+      "sector": "科技",
+      "country": "台灣"
+     },
+     {
+      "name": "致茂",
+      "en": "Chroma Ate Inc",
+      "w": 4.11,
+      "sector": "科技",
+      "country": "台灣"
+     },
+     {
+      "name": "台達電",
+      "en": "Delta Electronics Inc",
+      "w": 4.1,
+      "sector": "科技",
+      "country": "台灣"
+     },
+     {
+      "name": "欣興",
+      "en": "Unimicron Technology Corp",
+      "w": 3.73,
+      "sector": "科技",
+      "country": "台灣"
+     },
+     {
+      "name": "智邦",
+      "en": "Accton Technology Corp",
+      "w": 2.86,
+      "sector": "科技",
+      "country": "台灣"
+     },
+     {
+      "name": "聯電",
+      "en": "United Microelectronics Corp",
+      "w": 2.71,
+      "sector": "科技",
+      "country": "台灣"
+     }
+    ]
+   }
   }
  }
 }

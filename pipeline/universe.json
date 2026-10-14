@@ -1,73 +1,471 @@
 {
   "_note": "觀察清單。改這裡就好；新增代號後執行 python3 pipeline/backfill.py --only <代號> 回補歷史。split：[生效日, 倍數]，生效日前的價格會除以倍數。",
   "us": [
-    {"sym": "SPY",   "name": "S&P 500 ETF",       "src": "etf",   "kind": "index", "hold": true},
-    {"sym": "VOO",   "name": "Vanguard S&P 500",  "src": "etf",   "kind": "etf",   "hold": true},
-    {"sym": "QQQ",   "name": "那斯達克 100 ETF",   "src": "etf",   "kind": "index", "hold": true},
-    {"sym": "NDX",   "name": "那斯達克 100 指數",  "src": "index", "kind": "index"},
-    {"sym": "COMP",  "name": "那斯達克綜合指數",   "src": "index", "kind": "index"},
-    {"sym": "SOX",   "name": "費城半導體指數",     "src": "index", "kind": "index"},
-    {"sym": "DIA",   "name": "道瓊 ETF",          "src": "etf",   "kind": "index"},
-    {"sym": "IWM",   "name": "羅素 2000（小型股）", "src": "etf",   "kind": "index"},
-    {"sym": "RSP",   "name": "S&P 500 等權重",    "src": "etf",   "kind": "index"},
-    {"sym": "TLT",   "name": "20 年以上美債",      "src": "etf",   "kind": "macro"},
-    {"sym": "GLD",   "name": "黃金",              "src": "etf",   "kind": "macro"},
-    {"sym": "XLK",   "name": "科技",   "src": "etf", "kind": "sector"},
-    {"sym": "XLC",   "name": "通訊",   "src": "etf", "kind": "sector"},
-    {"sym": "XLY",   "name": "非必需消費", "src": "etf", "kind": "sector"},
-    {"sym": "XLF",   "name": "金融",   "src": "etf", "kind": "sector"},
-    {"sym": "XLV",   "name": "醫療",   "src": "etf", "kind": "sector"},
-    {"sym": "XLI",   "name": "工業",   "src": "etf", "kind": "sector"},
-    {"sym": "XLE",   "name": "能源",   "src": "etf", "kind": "sector"},
-    {"sym": "XLP",   "name": "必需消費", "src": "etf", "kind": "sector"},
-    {"sym": "XLU",   "name": "公用事業", "src": "etf", "kind": "sector"},
-    {"sym": "XLB",   "name": "原物料", "src": "etf", "kind": "sector"},
-    {"sym": "XLRE",  "name": "房地產", "src": "etf", "kind": "sector"},
-    {"sym": "SMH",   "name": "半導體", "src": "etf", "kind": "sector"},
-    {"sym": "IGV",   "name": "軟體",   "src": "etf", "kind": "sector"},
-    {"sym": "GOOGL", "name": "Alphabet",  "src": "stocks", "kind": "stock", "hold": true, "group": "七巨頭"},
-    {"sym": "NVDA",  "name": "輝達",       "src": "stocks", "kind": "stock", "group": "七巨頭"},
-    {"sym": "MSFT",  "name": "微軟",       "src": "stocks", "kind": "stock", "group": "七巨頭"},
-    {"sym": "AAPL",  "name": "蘋果",       "src": "stocks", "kind": "stock", "group": "七巨頭"},
-    {"sym": "AMZN",  "name": "亞馬遜",     "src": "stocks", "kind": "stock", "group": "七巨頭"},
-    {"sym": "META",  "name": "Meta",      "src": "stocks", "kind": "stock", "group": "七巨頭"},
-    {"sym": "TSLA",  "name": "特斯拉",     "src": "stocks", "kind": "stock", "group": "七巨頭"},
-    {"sym": "AVGO",  "name": "博通",       "src": "stocks", "kind": "stock", "group": "AI 半導體"},
-    {"sym": "TSM",   "name": "台積電 ADR", "src": "stocks", "kind": "stock", "group": "AI 半導體"},
-    {"sym": "AMD",   "name": "超微",       "src": "stocks", "kind": "stock", "group": "AI 半導體"},
-    {"sym": "LLY",   "name": "禮來",       "src": "stocks", "kind": "stock", "group": "其他權值"},
-    {"sym": "JPM",   "name": "摩根大通",   "src": "stocks", "kind": "stock", "group": "其他權值"},
-    {"sym": "BRK.B", "name": "波克夏",     "src": "stocks", "kind": "stock", "group": "其他權值"}
+    {
+      "sym": "SPY",
+      "name": "S&P 500 ETF",
+      "src": "etf",
+      "kind": "index"
+    },
+    {
+      "sym": "VOO",
+      "name": "Vanguard S&P 500",
+      "src": "etf",
+      "kind": "etf"
+    },
+    {
+      "sym": "QQQ",
+      "name": "那斯達克 100 ETF",
+      "src": "etf",
+      "kind": "index"
+    },
+    {
+      "sym": "NDX",
+      "name": "那斯達克 100 指數",
+      "src": "index",
+      "kind": "index"
+    },
+    {
+      "sym": "COMP",
+      "name": "那斯達克綜合指數",
+      "src": "index",
+      "kind": "index"
+    },
+    {
+      "sym": "SOX",
+      "name": "費城半導體指數",
+      "src": "index",
+      "kind": "index"
+    },
+    {
+      "sym": "DIA",
+      "name": "道瓊 ETF",
+      "src": "etf",
+      "kind": "index"
+    },
+    {
+      "sym": "IWM",
+      "name": "羅素 2000（小型股）",
+      "src": "etf",
+      "kind": "index"
+    },
+    {
+      "sym": "RSP",
+      "name": "S&P 500 等權重",
+      "src": "etf",
+      "kind": "index"
+    },
+    {
+      "sym": "TLT",
+      "name": "20 年以上美債",
+      "src": "etf",
+      "kind": "macro"
+    },
+    {
+      "sym": "GLD",
+      "name": "黃金",
+      "src": "etf",
+      "kind": "macro"
+    },
+    {
+      "sym": "XLK",
+      "name": "科技",
+      "src": "etf",
+      "kind": "sector"
+    },
+    {
+      "sym": "XLC",
+      "name": "通訊",
+      "src": "etf",
+      "kind": "sector"
+    },
+    {
+      "sym": "XLY",
+      "name": "非必需消費",
+      "src": "etf",
+      "kind": "sector"
+    },
+    {
+      "sym": "XLF",
+      "name": "金融",
+      "src": "etf",
+      "kind": "sector"
+    },
+    {
+      "sym": "XLV",
+      "name": "醫療",
+      "src": "etf",
+      "kind": "sector"
+    },
+    {
+      "sym": "XLI",
+      "name": "工業",
+      "src": "etf",
+      "kind": "sector"
+    },
+    {
+      "sym": "XLE",
+      "name": "能源",
+      "src": "etf",
+      "kind": "sector"
+    },
+    {
+      "sym": "XLP",
+      "name": "必需消費",
+      "src": "etf",
+      "kind": "sector"
+    },
+    {
+      "sym": "XLU",
+      "name": "公用事業",
+      "src": "etf",
+      "kind": "sector"
+    },
+    {
+      "sym": "XLB",
+      "name": "原物料",
+      "src": "etf",
+      "kind": "sector"
+    },
+    {
+      "sym": "XLRE",
+      "name": "房地產",
+      "src": "etf",
+      "kind": "sector"
+    },
+    {
+      "sym": "SMH",
+      "name": "半導體",
+      "src": "etf",
+      "kind": "sector"
+    },
+    {
+      "sym": "IGV",
+      "name": "軟體",
+      "src": "etf",
+      "kind": "sector"
+    },
+    {
+      "sym": "GOOGL",
+      "name": "Alphabet",
+      "src": "stocks",
+      "kind": "stock",
+      "group": "七巨頭"
+    },
+    {
+      "sym": "NVDA",
+      "name": "輝達",
+      "src": "stocks",
+      "kind": "stock",
+      "group": "七巨頭"
+    },
+    {
+      "sym": "MSFT",
+      "name": "微軟",
+      "src": "stocks",
+      "kind": "stock",
+      "group": "七巨頭"
+    },
+    {
+      "sym": "AAPL",
+      "name": "蘋果",
+      "src": "stocks",
+      "kind": "stock",
+      "group": "七巨頭"
+    },
+    {
+      "sym": "AMZN",
+      "name": "亞馬遜",
+      "src": "stocks",
+      "kind": "stock",
+      "group": "七巨頭"
+    },
+    {
+      "sym": "META",
+      "name": "Meta",
+      "src": "stocks",
+      "kind": "stock",
+      "group": "七巨頭"
+    },
+    {
+      "sym": "TSLA",
+      "name": "特斯拉",
+      "src": "stocks",
+      "kind": "stock",
+      "group": "七巨頭"
+    },
+    {
+      "sym": "AVGO",
+      "name": "博通",
+      "src": "stocks",
+      "kind": "stock",
+      "group": "AI 半導體"
+    },
+    {
+      "sym": "TSM",
+      "name": "台積電 ADR",
+      "src": "stocks",
+      "kind": "stock",
+      "group": "AI 半導體"
+    },
+    {
+      "sym": "AMD",
+      "name": "超微",
+      "src": "stocks",
+      "kind": "stock",
+      "group": "AI 半導體"
+    },
+    {
+      "sym": "LLY",
+      "name": "禮來",
+      "src": "stocks",
+      "kind": "stock",
+      "group": "其他權值"
+    },
+    {
+      "sym": "JPM",
+      "name": "摩根大通",
+      "src": "stocks",
+      "kind": "stock",
+      "group": "其他權值"
+    },
+    {
+      "sym": "BRK.B",
+      "name": "波克夏",
+      "src": "stocks",
+      "kind": "stock",
+      "group": "其他權值"
+    }
   ],
   "tw": [
-    {"sym": "TAIEX",  "name": "加權指數",       "kind": "index"},
-    {"sym": "0050",   "name": "元大台灣50",     "kind": "etf", "hold": true, "group": "市值型", "split": [["2025-06-18", 4]]},
-    {"sym": "006208", "name": "富邦台50",       "kind": "etf", "group": "市值型"},
-    {"sym": "0056",   "name": "元大高股息",     "kind": "etf", "group": "高股息"},
-    {"sym": "00878",  "name": "國泰永續高股息", "kind": "etf", "group": "高股息"},
-    {"sym": "00919",  "name": "群益台灣精選高息", "kind": "etf", "group": "高股息"},
-    {"sym": "00929",  "name": "復華台灣科技優息", "kind": "etf", "group": "高股息"},
-    {"sym": "00713",  "name": "元大台灣高息低波", "kind": "etf", "group": "高股息"},
-    {"sym": "00679B", "name": "元大美債20年",   "kind": "etf", "group": "債券", "otc": true},
-    {"sym": "2330", "name": "台積電", "kind": "stock", "group": "半導體"},
-    {"sym": "2454", "name": "聯發科", "kind": "stock", "group": "半導體"},
-    {"sym": "3711", "name": "日月光投控", "kind": "stock", "group": "半導體"},
-    {"sym": "2317", "name": "鴻海",   "kind": "stock", "group": "AI 伺服器"},
-    {"sym": "2382", "name": "廣達",   "kind": "stock", "group": "AI 伺服器"},
-    {"sym": "2308", "name": "台達電", "kind": "stock", "group": "AI 伺服器"},
-    {"sym": "2345", "name": "智邦",   "kind": "stock", "group": "AI 伺服器"},
-    {"sym": "3017", "name": "奇鋐",   "kind": "stock", "group": "AI 伺服器"},
-    {"sym": "2881", "name": "富邦金", "kind": "stock", "group": "金融"},
-    {"sym": "2882", "name": "國泰金", "kind": "stock", "group": "金融"},
-    {"sym": "2891", "name": "中信金", "kind": "stock", "group": "金融"},
-    {"sym": "2412", "name": "中華電", "kind": "stock", "group": "防禦"},
-    {"sym": "2603", "name": "長榮",   "kind": "stock", "group": "航運"}
+    {
+      "sym": "TAIEX",
+      "name": "加權指數",
+      "kind": "index"
+    },
+    {
+      "sym": "0050",
+      "name": "元大台灣50",
+      "kind": "etf",
+      "group": "市值型",
+      "split": [
+        [
+          "2025-06-18",
+          4
+        ]
+      ]
+    },
+    {
+      "sym": "006208",
+      "name": "富邦台50",
+      "kind": "etf",
+      "group": "市值型"
+    },
+    {
+      "sym": "0056",
+      "name": "元大高股息",
+      "kind": "etf",
+      "group": "高股息"
+    },
+    {
+      "sym": "00878",
+      "name": "國泰永續高股息",
+      "kind": "etf",
+      "group": "高股息"
+    },
+    {
+      "sym": "00919",
+      "name": "群益台灣精選高息",
+      "kind": "etf",
+      "group": "高股息"
+    },
+    {
+      "sym": "00929",
+      "name": "復華台灣科技優息",
+      "kind": "etf",
+      "group": "高股息"
+    },
+    {
+      "sym": "00713",
+      "name": "元大台灣高息低波",
+      "kind": "etf",
+      "group": "高股息"
+    },
+    {
+      "sym": "00679B",
+      "name": "元大美債20年",
+      "kind": "etf",
+      "group": "債券",
+      "otc": true
+    },
+    {
+      "sym": "2330",
+      "name": "台積電",
+      "kind": "stock",
+      "group": "半導體"
+    },
+    {
+      "sym": "2454",
+      "name": "聯發科",
+      "kind": "stock",
+      "group": "半導體"
+    },
+    {
+      "sym": "3711",
+      "name": "日月光投控",
+      "kind": "stock",
+      "group": "半導體"
+    },
+    {
+      "sym": "2317",
+      "name": "鴻海",
+      "kind": "stock",
+      "group": "AI 伺服器"
+    },
+    {
+      "sym": "2382",
+      "name": "廣達",
+      "kind": "stock",
+      "group": "AI 伺服器"
+    },
+    {
+      "sym": "2308",
+      "name": "台達電",
+      "kind": "stock",
+      "group": "AI 伺服器"
+    },
+    {
+      "sym": "2345",
+      "name": "智邦",
+      "kind": "stock",
+      "group": "AI 伺服器"
+    },
+    {
+      "sym": "3017",
+      "name": "奇鋐",
+      "kind": "stock",
+      "group": "AI 伺服器"
+    },
+    {
+      "sym": "2881",
+      "name": "富邦金",
+      "kind": "stock",
+      "group": "金融"
+    },
+    {
+      "sym": "2882",
+      "name": "國泰金",
+      "kind": "stock",
+      "group": "金融"
+    },
+    {
+      "sym": "2891",
+      "name": "中信金",
+      "kind": "stock",
+      "group": "金融"
+    },
+    {
+      "sym": "2412",
+      "name": "中華電",
+      "kind": "stock",
+      "group": "防禦"
+    },
+    {
+      "sym": "2603",
+      "name": "長榮",
+      "kind": "stock",
+      "group": "航運"
+    }
   ],
-  "vix": ["VIX9D", "VIX", "VIX3M", "VIX6M"],
+  "vix": [
+    "VIX9D",
+    "VIX",
+    "VIX3M",
+    "VIX6M"
+  ],
   "fred": {
     "BAMLH0A0HYM2": "高收益債利差",
     "DFII10": "10 年期實質利率",
     "DTWEXBGS": "美元指數（廣義）",
     "DEXTAUS": "美元兌新台幣"
+  },
+  "_note_focus": "重點追蹤：本刊長期追蹤的指數 ETF 與基金（網站上統一叫「本刊追蹤標的」，不代表任何人持有）。funds 的 id 是鉅亨網代號。",
+  "funds": [
+    {
+      "id": "B14,262",
+      "key": "FUND_FJV",
+      "name": "富達日本價值",
+      "full": "富達基金－日本價值基金（A股累計美元避險）",
+      "region": "日本",
+      "style": "價值型",
+      "ccy": "USD",
+      "desc": "投資被市場低估的日本公司，金融、工業比重較高；美元計價並避險日圓匯率，報酬主要來自日股本身與美日利差。"
+    },
+    {
+      "id": "A49171",
+      "key": "FUND_NBTJ",
+      "name": "路博邁台日雙星",
+      "full": "路博邁台日雙星股票基金（T累積・新臺幣）",
+      "region": "台灣＋日本",
+      "style": "中小型成長",
+      "ccy": "TWD",
+      "desc": "國內投信發行，投資台灣與日本企業（兩地合計不低於六成），偏重中小型的隱形冠軍；2025 年 5 月成立，歷史較短。"
+    },
+    {
+      "id": "B03,009",
+      "key": "FUND_ABIT",
+      "name": "聯博國際科技",
+      "full": "聯博－國際科技基金（A股美元）",
+      "region": "全球（美國為主）",
+      "style": "科技成長",
+      "ccy": "USD",
+      "desc": "全球科技股主動型基金，以美國大型科技、半導體與記憶體為主，持股比那斯達克 100 更集中在晶片供應鏈。"
+    },
+    {
+      "id": "B03,451",
+      "key": "FUND_ABUS",
+      "name": "聯博精選美國股票",
+      "full": "聯博－精選美國股票基金（A股美元）",
+      "region": "美國",
+      "style": "大型股核心",
+      "ccy": "USD",
+      "desc": "美國大型股主動型基金，前幾大持股與 S&P 500 高度重疊，另有波克夏、Visa 等非科技權值。"
+    },
+    {
+      "id": "A36004",
+      "key": "FUND_AZTT",
+      "name": "安聯台灣科技",
+      "full": "安聯台灣科技基金",
+      "region": "台灣",
+      "style": "科技成長",
+      "ccy": "TWD",
+      "desc": "台灣科技股主動型基金，重押 AI 伺服器與半導體供應鏈（探針卡、銅箔基板、載板、散熱、記憶體），波動遠高於大盤。"
+    },
+    {
+      "id": "A1Qq7oT",
+      "key": "FUND_CTHD",
+      "name": "國泰台灣高股息",
+      "full": "國泰台灣高股息基金（A不配息・新臺幣）",
+      "region": "台灣",
+      "style": "名為高股息、實為科技",
+      "ccy": "TWD",
+      "desc": "以台灣高股息指數為比較基準的主動型基金，但目前前幾大持股是台積電、聯發科、台光電等科技與 AI 供應鏈，性質接近科技基金。"
+    }
+  ],
+  "focus": [
+    "SPY",
+    "QQQ",
+    "TW_0050",
+    "FUND_FJV",
+    "FUND_NBTJ",
+    "FUND_ABIT",
+    "FUND_ABUS",
+    "FUND_AZTT",
+    "FUND_CTHD"
+  ],
+  "focus_desc": {
+    "SPY": "追蹤 S&P 500：美國 500 家大型公司，美股大盤的代表；費用率約 0.09%（VOO 0.03%）。",
+    "QQQ": "追蹤那斯達克 100：美國最大的 100 家非金融公司，科技占多數；費用率 0.20%。",
+    "TW_0050": "追蹤台灣 50 指數：台股市值前 50 大，台積電權重最高；2025-06 一拆四。"
   }
 }
