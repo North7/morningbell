@@ -445,19 +445,23 @@
   }
   function FN(k) { return N && N.focus_items && N.focus_items[k] || null; }
   function levelsHtml(x) {
-    var r = x.rule || {}, c = r.c, lv = r.levels || []; if (!lv.length || !c) return '';
+    var r = x.rule || {}, c = r.c, lv = (r.levels || []).slice(); if (!lv.length || !c) return '';
+    // 52 週高點與歷史高點常是同一價位，合併成一列
+    var ath = lv.filter(function (l) { return l.k === 'ath'; })[0], hi = lv.filter(function (l) { return l.k === 'hi'; })[0];
+    if (ath && hi && Math.abs(ath.px - hi.px) < 1e-6) { lv = lv.filter(function (l) { return l !== hi; }); ath = Object.assign({}, ath, { label: ath.label.replace('歷史高點', '歷史高點＝52 週高點') }); lv = lv.map(function (l) { return l.k === 'ath' ? ath : l; }); }
     var cur = '<tr class="hl"><td><b>現在</b></td><td class="num"><b>' + px(c) + '</b></td><td class="num">—</td></tr>', done = false, out = '';
     lv.forEach(function (l) { if (!done && l.px < c) { out += cur; done = true; } out += '<tr><td>' + esc(l.label) + (l.hit ? ' <span class="tn up">本段已觸發</span>' : '') + '</td><td class="num">' + px(l.px) + '</td><td class="num ' + cls((l.px / c - 1) * 100) + '">' + fmt.pct((l.px / c - 1) * 100, 1) + '</td></tr>'; });
     if (!done) out += cur;
-    return '<div class="tbl-wrap"><table class="tbl lv"><thead><tr><th>關鍵價位</th><th class="num">價格</th><th class="num">距現價</th></tr></thead><tbody>' + out + '</tbody></table></div>';
+    return '<table class="tbl lv"><tbody>' + out + '</tbody></table>';
   }
+  /* 每檔左欄：今日判讀 → 規則讀值 → 相關消息，三節同一種小標題樣式 */
+  function fsec(title, body, extra) { return body ? '<section class="fsec"><h4>' + title + (extra || '') + '</h4>' + body + '</section>' : ''; }
   function focusView(x) {
     var n = FN(x.key), r = x.rule || {}, sg = r.signals || [];
-    var rule = '<div class="rule-box"><b class="lbl">規則讀值</b>' + sg.map(function (g) { return '<div class="sg"><span class="tn ' + (TN[g.tone] || '') + '">' + esc(g.label) + '</span><span>' + esc(g.say) + '</span></div>'; }).join('') + '</div>';
-    var view = n ? '<div class="read-box"><b class="lbl">今日判讀' + (N.stale ? '（上一期）' : '') + '</b>' + (n.tag ? '<span class="tn ' + (TN[n.tone] || '') + '">' + esc(n.tag) + '</span> ' : '') + esc(n.view || '') +
-      (n.points && n.points.length ? '<ul class="fx-pts">' + n.points.map(function (p) { return '<li>' + esc(p) + '</li>'; }).join('') + '</ul>' : '') + '</div>' : '';
-    var news = n && n.news && n.news.length ? '<div class="fx-news"><b class="lbl">相關消息</b>' + n.news.map(function (m) { return '<div class="it"><span class="d">' + esc((m.date || '').slice(5).replace('-', '/')) + '</span><div><a href="' + esc(m.url) + '" target="_blank" rel="noopener">' + esc(m.title) + '</a><span class="note">' + esc(m.source || '') + '</span>' + (m.read ? '<p>' + esc(m.read) + '</p>' : '') + '</div></div>'; }).join('') + '</div>' : '';
-    return view + rule + news;
+    var view = n ? '<p class="fview">' + esc(n.view || '') + '</p>' + (n.points && n.points.length ? '<ul class="fpts">' + n.points.map(function (p) { return '<li>' + esc(p) + '</li>'; }).join('') + '</ul>' : '') : '<p class="note">本期沒有寫。</p>';
+    var rule = sg.map(function (g) { return '<div class="sg"><span class="tn ' + (TN[g.tone] || '') + '">' + esc(g.label) + '</span><span>' + esc(g.say) + '</span></div>'; }).join('');
+    var news = n && n.news && n.news.length ? n.news.map(function (m) { return '<div class="fnews"><span class="d">' + esc((m.date || '').slice(5).replace('-', '/')) + '</span><div><a href="' + esc(m.url) + '" target="_blank" rel="noopener">' + esc(m.title) + '</a> <span class="note">' + esc(m.source || '') + '</span>' + (m.read ? '<p>' + esc(m.read) + '</p>' : '') + '</div></div>'; }).join('') : '';
+    return fsec('今日判讀', view, N && N.stale ? '<small>上一期</small>' : '') + fsec('規則讀值', rule, '<small>依公開規則自動計算</small>') + fsec('相關消息', news);
   }
   function corrHtml() {
     var it = FI(), c = (D.focus || {}).corr || [];
@@ -473,19 +477,24 @@
       o.map(function (x) { return '<tr><td><b>' + esc(short(x.a)) + '</b> × <b>' + esc(short(x.b)) + '</b></td><td class="num">' + x.n + ' 檔</td><td class="num">' + fmt.n(x.w, 1) + '%</td><td>' + esc(x.names.join('、')) + '</td></tr>'; }).join('') + '</tbody></table></div>' +
       '<p class="note">只比對各基金公布的前十大持股（日期見各檔），重疊權重＝共同持股在兩檔中較低的那個權重加總。ETF 沒有列入比對。</p>';
   }
+  /* 一檔一張卡：卡頭（名稱・狀態・價格）→ 數字列 → 左欄分析／右欄數據 */
   function focusCard(x, i) {
-    var q = Q(x.key) || {}, r = x.risk || {}, inf = x.info || {}, h = x.hold || {}, top = h.top || [];
+    var q = Q(x.key) || {}, r = x.risk || {}, inf = x.info || {}, h = x.hold || {}, top = h.top || [], n = FN(x.key), st = (x.rule || {}).state || {};
     var aum = inf.aum ? (inf.ccy === 'TWD' ? fmt.n(inf.aum / 1e8, 0) + ' 億台幣' : inf.ccy === 'USD' ? fmt.n(inf.aum / 1e8, 1) + ' 億美元' : '') : '';
-    var facts = [['類型', x.type === 'fund' ? '主動型基金' : '指數 ETF'], ['地區', x.region || '—'], ['風格', x.style || '—'], ['計價', inf.ccy_name || x.ccy], ['經理費', inf.fee != null ? inf.fee + '%' : '—'], ['規模', aum || '—'], ['成立', inf.since || '—']].filter(function (f) { return f[1] && f[1] !== '—'; });
-    var rows = top.map(function (t) { return { label: t.name.length > 14 ? t.name.slice(0, 14) + '…' : t.name, v: t.w, color: 'var(--s1)', right: fmt.n(t.w, 1) + '%', tip: '<div class="t">' + esc(t.name) + '</div><div class="r"><i style="background:var(--s1)"></i><span>' + esc((t.sector || '') + ' ' + (t.country || '')) + '</span><b>' + fmt.n(t.w, 2) + '%</b></div>' }; });
-    var top10 = top.reduce(function (s, t) { return s + t.w; }, 0);
-    var cty = {}; top.forEach(function (t) { cty[t.country || '其他'] = (cty[t.country || '其他'] || 0) + t.w; });
-    return panel('span-6', esc(short(x.key)) + ' <span class="note">' + esc(x.full) + '</span>', mdOf(q.d) + (x.type === 'fund' ? ' 淨值' : ' 收盤'),
-      '<p class="note">' + esc(x.desc || '') + '</p>' + focusView(x) +
-      '<div class="kpis">' + kpi('今年', fmt.pct(q.ytd, 1), '1 年 ' + fmt.pct(q.r1y, 1), null, cls(q.ytd)) + kpi('距高點', fmt.pct(q.dd_ath, 1), fmt.md(q.ath_d) + ' 高點', null, cls(q.dd_ath)) + kpi('年化波動', r.vol1y == null ? '—' : fmt.n(r.vol1y, 1) + '%', '3 年最大回撤 ' + fmt.pct(r.mdd3y, 1)) + '</div>' +
-      '<div class="chart" id="c-fx-' + i + '"></div>' + levelsHtml(x) +
-      (facts.length ? '<p class="note">' + facts.map(function (f) { return f[0] + '：' + esc(f[1]); }).join('　') + '</p>' : '') +
-      (top.length ? '<h3 style="font-size:13px;margin:10px 0 4px">前十大持股（' + mdOf(h.d) + '，合計 ' + fmt.n(top10, 1) + '%；' + Object.keys(cty).sort(function (a, b) { return cty[b] - cty[a]; }).map(function (c) { return esc(c) + ' ' + fmt.n(cty[c], 0) + '%'; }).join('、') + '）</h3><div class="fx-top-' + i + '">' + ladderHtml(rows, { dense: true }) + '</div>' : ''));
+    var facts = [['計價', inf.ccy_name || x.ccy], ['經理費', inf.fee != null ? inf.fee + '%' : ''], ['規模', aum], ['成立', inf.since || '']].filter(function (f) { return f[1]; });
+    var tags = [x.type === 'fund' ? '主動型基金' : '指數 ETF', x.region, x.style].filter(Boolean);
+    var rows = top.map(function (t) { return { label: t.name.length > 14 ? t.name.slice(0, 14) + '…' : t.name, v: t.w, color: 'var(--s1)', right: fmt.n(t.w, 1) + '%' }; });
+    var top10 = top.reduce(function (s, t) { return s + t.w; }, 0), cty = {};
+    top.forEach(function (t) { cty[t.country || '其他'] = (cty[t.country || '其他'] || 0) + t.w; });
+    var stat = function (k, v, c) { return '<div><span>' + k + '</span><b class="' + (c || '') + '">' + v + '</b></div>'; };
+    var head = '<header class="fcard-h"><span class="fno">' + ('0' + (i + 1)).slice(-2) + '</span><div class="fname"><h3>' + esc(short(x.key)) + '</h3><p>' + esc(x.full) + '</p><div class="ftags">' + tags.map(function (t) { return '<span>' + esc(t) + '</span>'; }).join('') + '</div></div>' +
+      '<div class="fstate">' + (n && n.tag ? '<span class="tn ' + (TN[n.tone] || '') + '">' + esc(n.tag) + '</span>' : ruleChips(x, true)) + '</div>' +
+      '<div class="fpx"><b>' + px(q.c) + '</b><span class="' + cls(q.chg_pct) + '">' + fmt.pct(q.chg_pct, 2) + '</span><small>' + mdOf(q.d) + (x.type === 'fund' ? ' 淨值' : ' 收盤') + '</small></div></header>';
+    var stats = '<div class="fstats">' + stat('今年', fmt.pct(q.ytd, 1), cls(q.ytd)) + stat('1 年', fmt.pct(q.r1y, 1), cls(q.r1y)) + stat('距高點', fmt.pct(q.dd_ath, 1), cls(q.dd_ath)) + stat('高於 200 日線', fmt.pct(q.dev200, 1)) + stat('年化波動', r.vol1y == null ? '—' : fmt.n(r.vol1y, 1) + '%') + stat('3 年最大回撤', fmt.pct(r.mdd3y, 1), 'down') + '</div>';
+    var right = fsec('近一年走勢', '<div class="chart" id="c-fx-' + i + '"></div>', '<small>虛線：200 日線</small>') + fsec('關鍵價位', levelsHtml(x)) +
+      (top.length ? fsec('前十大持股', '<div class="fx-top-' + i + '">' + ladderHtml(rows, { dense: true }) + '</div>', '<small>' + mdOf(h.d) + ' · 合計 ' + fmt.n(top10, 1) + '% · ' + Object.keys(cty).sort(function (a, b) { return cty[b] - cty[a]; }).slice(0, 3).map(function (c) { return esc(c) + ' ' + fmt.n(cty[c], 0) + '%'; }).join('、') + '</small>') : '');
+    return '<article class="fcard" id="fx-' + x.key + '">' + head + stats + '<p class="fdesc">' + esc(x.desc || '') + (facts.length ? '<span class="note">' + facts.map(function (f) { return f[0] + ' ' + esc(f[1]); }).join(' · ') + '</span>' : '') + '</p>' +
+      '<div class="fcard-b"><div class="fcol">' + focusView(x) + '</div><div class="fcol">' + right + '</div></div></article>';
   }
   function focusReads() {
     var it = FI(); if (!it.length) return [];
@@ -503,11 +512,14 @@
     return readBar('focus') + '<div class="grid">' +
       panel('span-12', '九檔一覽', '價格與淨值：Nasdaq、證交所、鉅亨網 · 依當日資料自動計算', focusTable(false) + '<p class="note">規則讀值：同一套公開規則套在每一檔上——加碼區與接近加碼階來自加碼框架（距歷史高點 −5%、−10%、−15%、−20%、−30%）；偏熱／過熱看價格高於 200 日線的幅度（20%／30%）；短線超買看 RSI ≥ 70。' + esc(D.heat_note || '') + '</p>') +
       interpPanel(focusReads().map(function (r) { return [r[0], esc(r[1]), r[2], r[3]]; })) +
+      '<nav class="fnav" aria-label="跳到某一檔">' + FI().map(function (x) { var st = (x.rule || {}).state || {}; return '<button type="button" data-k="' + x.key + '"><i class="' + (TN[st.tone] || '') + '"></i>' + esc(short(x.key)) + '</button>'; }).join('') + '</nav>' +
       FI().map(focusCard).join('') +
       panel('span-12', '彼此的連動', '近一年週報酬相關係數 · 1 代表同漲同跌，0 代表互不相關', corrHtml() + '<p class="note">相關係數越高，放在一起的分散效果越小。台股與美股平常相關不高，但遇到 AI、半導體這類共同題材修正時，會一起下跌。</p>') +
       panel('span-12', '前十大持股重疊', '基金公布的前十大', overlapHtml()) + '</div>';
   };
   V.focus.after = function () {
+    var nv = document.querySelector('#pg-focus .fnav');
+    if (nv) nv.addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; var el = document.getElementById('fx-' + b.getAttribute('data-k')); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - stickyH() - 12, behavior: reduced ? 'auto' : 'smooth' }); });
     FI().forEach(function (x, i) {
       var q = Q(x.key) || {};
       mount($('#c-fx-' + i), function (el) { lineChart(el, { h: 170, series: [{ name: short(x.key), data: x.hist, color: 'var(--s1)', area: true }], refs: q.sma200 ? [{ y: q.sma200, color: 'var(--ink-3)', label: '200 日線', below: true }] : [], tipFmt: px, yFmt: fmt.k, aria: x.name + ' 近一年' }); });

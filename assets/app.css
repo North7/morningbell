@@ -649,3 +649,52 @@ input[type="range"]::-moz-range-thumb { width: 4px; height: 26px; background: va
 .fx-news p { margin: 3px 0 0; color: var(--ink-2); line-height: 1.6; }
 .tbl.lv td { padding: 5px 10px 5px 0; font-size: 12.5px; }
 .tbl.lv tr.hl td { background: var(--flare-dim); }
+/* 重點追蹤卡片（2026-10-14 改版）：一檔一張卡，卡頭粗線＋淡底，內容分左欄分析、右欄數據，各節同一種小標題 */
+.fnav { grid-column: span 12; display: flex; flex-wrap: wrap; gap: 6px; }
+.fnav button { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border: 1px solid var(--line); background: var(--deck); color: var(--ink); font-size: 13px; font-weight: 700; cursor: pointer; }
+.fnav button:hover { border-color: var(--ink); }
+.fnav i { width: 8px; height: 8px; border-radius: 50%; background: var(--ink-3); }
+.fnav i.up { background: var(--up); } .fnav i.down { background: var(--down); } .fnav i.warn { background: var(--warn); }
+.fcard { grid-column: span 12; background: var(--deck); border: 1px solid var(--line); border-top: 5px solid var(--ink); padding: 0 22px 20px; scroll-margin-top: 90px; }
+.fcard + .fcard { margin-top: 8px; }
+.fcard-h { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; gap: 4px 18px; align-items: center; padding: 16px 0 14px; border-bottom: 1px solid var(--line); }
+.fno { font-family: var(--f-cond); font-stretch: 62%; font-weight: 900; font-size: 44px; line-height: .9; color: var(--red); }
+.fname h3 { margin: 0; font-family: var(--f-cjk-display); font-size: 24px; font-weight: 900; line-height: 1.15; }
+.fname p { margin: 2px 0 6px; font-size: 12.5px; color: var(--ink-3); }
+.ftags { display: flex; flex-wrap: wrap; gap: 4px; }
+.ftags span { font-size: 11px; padding: 0 6px; border: 1px solid var(--line); color: var(--ink-2); }
+.fstate .tn { font-size: 12.5px; padding: 2px 8px; }
+.fpx { display: grid; justify-items: end; line-height: 1.15; }
+.fpx b { font-family: var(--f-mono); font-size: 22px; font-weight: 700; }
+.fpx span { font-family: var(--f-mono); font-size: 13px; font-weight: 700; }
+.fpx small { font-size: 11px; color: var(--ink-3); }
+.fstats { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); border-bottom: 1px solid var(--line); }
+.fstats div { display: grid; gap: 1px; padding: 10px 12px 10px 0; }
+.fstats div + div { padding-left: 12px; border-left: 1px solid var(--line); }
+.fstats span { font-size: 11px; color: var(--ink-3); }
+.fstats b { font-family: var(--f-mono); font-size: 16px; font-weight: 700; }
+.fdesc { margin: 12px 0 0; font-size: 13px; color: var(--ink-2); line-height: 1.7; }
+.fdesc .note { display: block; margin-top: 2px; }
+.fcard-b { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 0 32px; }
+.fsec { margin-top: 16px; padding-top: 10px; border-top: 2px solid var(--ink); }
+.fsec h4 { display: flex; align-items: baseline; gap: 8px; margin: 0 0 8px; font-size: 13px; font-weight: 900; letter-spacing: .04em; }
+.fsec h4 small { font-weight: 400; font-size: 11px; color: var(--ink-3); letter-spacing: 0; }
+.fview { margin: 0; font-size: 15px; line-height: 1.7; }
+.fpts { margin: 8px 0 0; padding-left: 18px; font-size: 13.5px; color: var(--ink-2); line-height: 1.7; }
+.fsec .sg { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; align-items: baseline; font-size: 13px; color: var(--ink-2); padding: 3px 0; }
+.fnews { display: grid; grid-template-columns: 42px minmax(0, 1fr); gap: 8px; padding: 7px 0; font-size: 13px; }
+.fnews + .fnews { border-top: 1px dashed var(--line); }
+.fnews .d { font-family: var(--f-mono); color: var(--ink-3); font-size: 12px; }
+.fnews a { font-weight: 700; }
+.fnews p { margin: 3px 0 0; color: var(--ink-2); line-height: 1.6; }
+.fcard .chart { margin: 0; }
+.fcard .tbl.lv { font-size: 12.5px; }
+.fcard .tbl.lv td { padding: 4px 8px 4px 0; }
+@media (max-width: 1180px) { .fcard-b { grid-template-columns: minmax(0, 1fr); } .fstats { grid-template-columns: repeat(3, minmax(0, 1fr)); } .fstats div:nth-child(4) { padding-left: 0; border-left: 0; } }
+@media (max-width: 560px) {
+  .fcard { padding: 0 14px 16px; }
+  .fcard-h { grid-template-columns: auto minmax(0, 1fr); }
+  .fstate { grid-column: 1 / -1; } .fpx { grid-column: 1 / -1; justify-items: start; grid-auto-flow: column; justify-content: start; gap: 10px; align-items: baseline; }
+  .fstats { grid-template-columns: repeat(2, minmax(0, 1fr)); } .fstats div:nth-child(odd) { padding-left: 0; border-left: 0; } .fstats div:nth-child(even) { padding-left: 12px; border-left: 1px solid var(--line); }
+  .fno { font-size: 34px; } .fname h3 { font-size: 20px; }
+}
