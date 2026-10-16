@@ -361,7 +361,7 @@ for k in U.get('focus', []):
     q = Q.get(k)
     if not q: continue
     f = FUNDS.get(k, {}); meta = (sf.get(k) or {})
-    focus.append({'key': k, 'name': f.get('name') or q.get('name'), 'full': f.get('full') or q.get('name'), 'region': f.get('region'), 'style': f.get('style'),
+    focus.append({'key': k, 'code': f.get('isin') or k.replace('TW_', ''), 'name': f.get('name') or q.get('name'), 'full': f.get('full') or q.get('name'), 'region': f.get('region'), 'style': f.get('style'),
                   'desc': f.get('desc') or FDESC.get(k), 'type': 'fund' if f else 'etf', 'ccy': f.get('ccy') or ('TWD' if k.startswith('TW_') else 'USD'),
                   'info': meta.get('info'), 'hold': meta.get('hold'), 'risk': risk(k), 'hist': hist_pts(k, 400)})
 W = {x['key']: wk_ret(x['key']) for x in focus}

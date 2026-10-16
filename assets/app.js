@@ -354,6 +354,41 @@
     el.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="近三年距高點的回撤">' + s + '</svg>';
   }
 
+  /* ---------------- 代號：文字裡第一次提到的股票、ETF、基金，自動補上代號（台股代號、美股代碼、基金 ISIN） ---------------- */
+  var EXTRA = { '台積電 ADR': 'TSM', '台積電ADR': 'TSM', '旺矽': '6223', '台光電': '2383', '欣興': '3037', '國巨': '2327', '華邦電': '2344', '創意': '3443', '台燿': '6274', '致茂': '2360', '緯穎': '6669', '信驊': '5274', '川湖': '2059', '聯電': '2303', '南電': '8046', '金像電': '2368', '世芯': '3661', '鴻勁': '7769', '穎崴': '6515', '台塑': '1301', '南亞': '1303', '台化': '1326', '大立光': '3008',
+    '美光': 'MU', '英特爾': 'INTC', '高盛': 'GS', '富國銀行': 'WFC', 'Sandisk': 'SNDK', 'SanDisk': 'SNDK', 'SK 海力士': '000660.KS', 'Salesforce': 'CRM', '嬌生': 'JNJ',
+    '瑞穗': '8411.T', '三菱 UFJ': '8306.T', '三菱UFJ': '8306.T', '日本郵政銀行': '7182.T', '三菱電機': '6503.T', '村田製作所': '6981.T', '西鐵城': '7762.T', 'Mebuki 金融': '7167.T', '住友不動產': '8830.T', '日本特殊陶業': '5334.T' };
+  var CODE_RE = null, CODES = {};
+  function buildCodes() {
+    Object.keys(D.quotes || {}).forEach(function (k) { var q = D.quotes[k]; if (!q || !q.name || q.kind === 'sector' || k === 'TW_TAIEX') return;
+      if (k.indexOf('TW_') === 0) CODES[q.name] = k.slice(3); else if (q.kind === 'stock' && /[^A-Za-z .]/.test(q.name)) CODES[q.name] = k; });
+    FI().forEach(function (x) { if (x.type === 'fund') { CODES[x.name] = x.code; CODES[x.full] = x.code; } });
+    Object.keys(EXTRA).forEach(function (n) { if (!CODES[n]) CODES[n] = EXTRA[n]; });
+    var names = Object.keys(CODES).filter(function (n) { return n.length >= 2; }).sort(function (a, b) { return b.length - a.length; });
+    CODE_RE = new RegExp('(' + names.map(function (n) { return n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }).join('|') + ')(?![（(A-Za-z0-9])', 'g');
+  }
+  var CODE_SEL = '.dek p, .watch .n, .read, .news-lead, .news-item, .news-card, .acts, .deltas, .fview, .fpts, .fnews, .fsec .sg, .interp .d, .fdesc';
+  function annotateCodes(root) {
+    if (!CODE_RE) buildCodes();
+    root.querySelectorAll(CODE_SEL).forEach(function (box) {
+      if (box.getAttribute('data-coded')) return; box.setAttribute('data-coded', '1');   // 同一塊只標一次
+      var seen = {}, w = document.createTreeWalker(box, NodeFilter.SHOW_TEXT), nodes = [];
+      while (w.nextNode()) nodes.push(w.currentNode);
+      nodes.forEach(function (t) {
+        if (t.parentNode && t.parentNode.classList && t.parentNode.classList.contains('code')) return;
+        var txt = t.nodeValue; CODE_RE.lastIndex = 0; if (!CODE_RE.test(txt)) return; CODE_RE.lastIndex = 0;
+        var frag = document.createDocumentFragment(), last = 0, m;
+        while ((m = CODE_RE.exec(txt))) {
+          var n = m[1], c = CODES[n], end = m.index + n.length;
+          if (seen[c] || txt.slice(end, end + 12).indexOf(c) >= 0) continue;   // 這段已經標過或文字本身已寫了代號
+          seen[c] = 1; frag.appendChild(document.createTextNode(txt.slice(last, end)));
+          var sp = document.createElement('span'); sp.className = 'code'; sp.textContent = '（' + c + '）'; frag.appendChild(sp); last = end;
+        }
+        if (last) { frag.appendChild(document.createTextNode(txt.slice(last))); t.parentNode.replaceChild(frag, t); }
+      });
+    });
+  }
+
   /* ================= 版面 ================= */
   var V = {};
   var ROUTES = [
@@ -422,6 +457,7 @@
     var news = (N && N.news || []).slice().sort(function (a, b) { return (b.weight || 0) - (a.weight || 0) || (b.time > a.time ? 1 : -1); });
     if (!news.length) return;
     function draw(cat) { $('#ng').innerHTML = news.filter(function (n) { return cat === '*' || n.cat === cat; }).map(function (n) { return '<article class="news-card"><div class="news-meta"><span class="cat">' + esc(n.cat) + '</span>' + impChip(n.impact) + '<span>' + esc(n.time.slice(5).replace('-', '/')) + '</span></div><h3>' + esc(n.title) + '</h3><div class="read-box"><b class="lbl">解讀</b>' + esc(n.read) + '</div><div class="src-link">來源：<a href="' + esc(n.url) + '" target="_blank" rel="noopener">' + esc(n.source) + '</a></div>' + (n.module ? '<a class="go" href="#' + n.module + '">看相關數據 →</a>' : '') + '</article>'; }).join(''); }
+    var draw0 = draw; draw = function (c) { draw0(c); try { annotateCodes($('#ng').parentNode); } catch (e) {} };
     draw('*');
     $('#nf').addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; this.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', x === b); }); draw(b.getAttribute('data-c')); });
   };
@@ -433,7 +469,7 @@
     return '<div class="tbl-wrap"><table class="tbl heat wide"><thead><tr><th>標的</th>' + (mini ? '' : '<th>類型</th>') + '<th class="num">價格／淨值</th><th class="num">日期</th><th class="num">今日</th><th class="num">1 個月</th><th class="num">今年</th><th class="num">1 年</th>' +
       (mini ? '' : '<th class="num">3 年年化</th><th class="num">年化波動</th><th class="num">3 年最大回撤</th>') + '<th class="num">距高點</th><th>規則讀值</th></tr></thead><tbody>' +
       it.map(function (x) { var q = Q(x.key) || {}, r = x.risk || {};
-        return '<tr><td><b>' + esc(short(x.key)) + '</b>' + (mini ? '' : '<br><span class="note">' + esc(x.full) + '</span>') + '</td>' + (mini ? '' : '<td><span class="note">' + esc(x.type === 'fund' ? '基金・' + (x.style || '') : 'ETF') + '<br>' + esc(x.region || '') + '</span></td>') +
+        return '<tr><td><b>' + esc(short(x.key)) + '</b>' + (x.type === 'fund' ? ' <span class="fcode">' + esc(x.code) + '</span>' : '') + (mini ? '' : '<br><span class="note">' + esc(x.full) + '</span>') + '</td>' + (mini ? '' : '<td><span class="note">' + esc(x.type === 'fund' ? '基金・' + (x.style || '') : 'ETF') + '<br>' + esc(x.region || '') + '</span></td>') +
           '<td class="num">' + px(q.c) + '</td><td class="num">' + mdOf(q.d) + '</td>' + heat(q.chg_pct, 3, 2) + heat(q.r1m, 12) + heat(q.ytd, 60) + heat(q.r1y, 80) +
           (mini ? '' : heat(r.cagr3y, 40) + '<td class="num">' + (r.vol1y == null ? '—' : fmt.n(r.vol1y, 1) + '%') + '</td>' + heat(r.mdd3y, 40)) + heat(q.dd_ath, 30) + '<td>' + ruleChips(x, mini) + '</td></tr>'; }).join('') +
       '</tbody></table></div>' + (mini ? '<p class="note">本刊長期追蹤的指數 ETF 與基金；基金淨值通常晚一到兩天公布，日期欄是資料日。</p>' : '');
@@ -487,7 +523,7 @@
     var top10 = top.reduce(function (s, t) { return s + t.w; }, 0), cty = {};
     top.forEach(function (t) { cty[t.country || '其他'] = (cty[t.country || '其他'] || 0) + t.w; });
     var stat = function (k, v, c) { return '<div><span>' + k + '</span><b class="' + (c || '') + '">' + v + '</b></div>'; };
-    var head = '<header class="fcard-h"><span class="fno">' + ('0' + (i + 1)).slice(-2) + '</span><div class="fname"><h3>' + esc(short(x.key)) + '</h3><p>' + esc(x.full) + '</p><div class="ftags">' + tags.map(function (t) { return '<span>' + esc(t) + '</span>'; }).join('') + '</div></div>' +
+    var head = '<header class="fcard-h"><span class="fno">' + ('0' + (i + 1)).slice(-2) + '</span><div class="fname"><h3>' + esc(short(x.key)) + '</h3><p>' + esc(x.full) + ' <span class="fcode">' + esc(x.code) + '</span></p><div class="ftags">' + tags.map(function (t) { return '<span>' + esc(t) + '</span>'; }).join('') + '</div></div>' +
       '<div class="fstate">' + (n && n.tag ? '<span class="tn ' + (TN[n.tone] || '') + '">' + esc(n.tag) + '</span>' : ruleChips(x, true)) + '</div>' +
       '<div class="fpx"><b>' + px(q.c) + '</b><span class="' + cls(q.chg_pct) + '">' + fmt.pct(q.chg_pct, 2) + '</span><small>' + mdOf(q.d) + (x.type === 'fund' ? ' 淨值' : ' 收盤') + '</small></div></header>';
     var stats = '<div class="fstats">' + stat('今年', fmt.pct(q.ytd, 1), cls(q.ytd)) + stat('1 年', fmt.pct(q.r1y, 1), cls(q.r1y)) + stat('距高點', fmt.pct(q.dd_ath, 1), cls(q.dd_ath)) + stat('高於 200 日線', fmt.pct(q.dev200, 1)) + stat('年化波動', r.vol1y == null ? '—' : fmt.n(r.vol1y, 1) + '%') + stat('3 年最大回撤', fmt.pct(r.mdd3y, 1), 'down') + '</div>';
@@ -768,6 +804,7 @@
     }).join('');
     ROUTES.forEach(function (r) { try { if (V[r[0]].after) V[r[0]].after(); } catch (e) { console.error(e); } });
     mounted.forEach(observe); settleMeters(v);
+    try { annotateCodes(v); } catch (e) { console.error(e); }
     void v.offsetWidth; v.classList.add('view-enter');
   }
   function activate(id) {
