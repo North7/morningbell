@@ -397,13 +397,193 @@ D['heat_note'] = HT.get('note')
 
 D['focus'] = {'ids': [x['key'] for x in focus], 'items': focus, 'corr': cm, 'overlap': sorted(ov, key=lambda x: -x['w'])}
 
+# ---------- 多空判定：回調還是轉空（2026-11-05） ----------
+ST, DF, LT = M['stage'], M['defense'], M['lights']
+
+
+def ma_series(v, n):
+    out, s_ = [None] * len(v), 0.0
+    for i, x in enumerate(v):
+        s_ += x
+        if i >= n: s_ -= v[i - n]
+        if i >= n - 1: out[i] = s_ / n
+    return out
+
+
+def trend(key):
+    cl = closes(key)
+    if len(cl) < 260: return None
+    v = [c for _, c in cl]; m200, m50 = ma_series(v, 200), ma_series(v, 50)
+    run_dn = run_up = 0
+    for i in range(len(v) - 1, 0, -1):
+        if m200[i] is None: break
+        if v[i] < m200[i]:
+            if run_up: break
+            run_dn += 1
+        else:
+            if run_dn: break
+            run_up += 1
+    pk = max(range(len(v)), key=lambda i: v[i])
+    sd = ST['slope_days']; slope = pct(m200[-1], m200[-1 - sd])
+    dd = pct(v[-1], v[pk]); days = len(v) - 1 - pk
+    q = {'d': cl[-1][0], 'c': v[-1], 'sma200': r2(m200[-1]), 'sma50': r2(m50[-1]), 'dev200': r2(pct(v[-1], m200[-1])), 'slope200': r2(slope, 2),
+         'below_run': run_dn, 'above_run': run_up, 'dd': r2(dd, 1), 'days': days, 'peak_d': cl[pk][0], 'peak': r2(v[pk]),
+         'cross_gap': r2(pct(m50[-1], m200[-1])), 'rsi': r2(rsi(v[-300:]), 0), 'px20': r2(v[pk] * (1 + ST['bear_dd'] / 100))}
+    rising = slope > 0.2; falling = slope < -0.2
+    if dd <= ST['bear_dd'] and v[-1] < m200[-1] and not rising: st = ('bear', '空頭', 'down')
+    elif run_dn >= ST['weak_days'] and (not rising or m50[-1] < m200[-1]): st = ('weak', '轉弱', 'down')
+    elif dd <= ST['pullback_dd'] or v[-1] < m200[-1]: st = ('pullback', '多頭中的修正', 'warn')
+    else: st = ('bull', '多頭', 'up')
+    q['stage'] = {'k': st[0], 'label': st[1], 'tone': st[2]}
+    q['trend_checks'] = [
+        {'label': '收盤在 200 日線之上', 'ok': v[-1] >= m200[-1], 'val': f"{q['dev200']:+.1f}%", 'say': f"200 日線 {fmtn(m200[-1])}；" + (f"再跌 {abs(q['dev200']):.1f}% 跌破" if v[-1] >= m200[-1] else f"已連 {run_dn} 日在線下")},
+        {'label': '200 日線仍在上升', 'ok': rising, 'val': f"{slope:+.2f}%", 'say': f"和 {sd} 個交易日前比"},
+        {'label': '50 日線在 200 日線之上', 'ok': m50[-1] >= m200[-1], 'val': f"{q['cross_gap']:+.1f}%", 'say': '跌破就是「死亡交叉」，代表中期趨勢轉弱'},
+        {'label': f"跌幅未達 {ST['bear_dd']}%", 'ok': dd > ST['bear_dd'], 'val': f"{dd:.1f}%", 'say': f"{ST['bear_dd']}% 線在 {fmtn(q['px20'])}"}]
+    return q, cl
+
+
+def fmtn(x): return '—' if x is None else (f'{x:,.0f}' if x >= 1000 else f'{x:,.2f}')
+
+
+def analogs(cl, dd_now, days_now):
+    """歷史上從 52 週高點跌到同樣深度的每一段（價格回到距 52 週高點 5% 以內才算新的一段）：
+    第一次觸及當天在不在 200 日線上、從高點花了幾天、這段最後跌多深、之後 3／6／12 個月報酬。"""
+    if dd_now is None or dd_now > -5: return None
+    v = [c for _, c in cl]; n = len(v); m200 = ma_series(v, 200)
+    from collections import deque
+    hi, hi_i, dq = [0.0] * n, [0] * n, deque()
+    for i in range(n):
+        while dq and v[dq[-1]] <= v[i]: dq.pop()
+        dq.append(i)
+        if dq[0] <= i - 252: dq.popleft()
+        hi[i], hi_i[i] = v[dq[0]], dq[0]
+    dd52 = [pct(v[i], hi[i]) for i in range(n)]
+    out, armed = [], True
+    for i in range(252, n):
+        if dd52[i] > -5: armed = True; continue
+        if armed and dd52[i] <= dd_now:
+            armed = False
+            if i >= n - 5: continue   # 就是現在這一段
+            pk = hi_i[i]; ref = v[pk]; low = v[i]; j = i
+            while j < n and j - i < 504 and dd52[j] <= -5: low = min(low, v[j]); j += 1
+            rec = next((k - pk for k in range(i, min(n, i + 756)) if v[k] >= ref), None)
+            f = lambda k: r2(pct(v[i + k], v[i]), 1) if i + k < n else None
+            out.append({'d': cl[i][0], 'peak': cl[pk][0], 'days': i - pk, 'above200': m200[i] is not None and v[i] >= m200[i], 'depth': r2(pct(low, ref), 1),
+                        'f3m': f(63), 'f6m': f(126), 'f12m': f(252), 'rec': rec})
+    def summ(ev):
+        if not ev: return None
+        d12 = [e['f12m'] for e in ev if e['f12m'] is not None]; d6 = [e['f6m'] for e in ev if e['f6m'] is not None]; rc = [e['rec'] for e in ev if e['rec'] is not None]
+        return {'n': len(ev), 'to20': sum(e['depth'] <= -20 for e in ev), 'to30': sum(e['depth'] <= -30 for e in ev), 'depth_med': r2(st.median([e['depth'] for e in ev]), 1),
+                'f6m_med': r2(st.median(d6), 1) if d6 else None, 'f12m_med': r2(st.median(d12), 1) if d12 else None, 'f12m_pos': r2(sum(x > 0 for x in d12) / len(d12) * 100, 0) if d12 else None,
+                'rec_med': int(st.median(rc)) if rc else None, 'rec_n': len(rc)}
+    fast = max(30, int(days_now * 1.5))
+    return {'level': r2(dd_now, 1), 'fast_days': fast, 'from': cl[252][0], 'all': summ(out), 'fast': summ([e for e in out if e['days'] <= fast]),
+            'above': summ([e for e in out if e['above200']]), 'below': summ([e for e in out if not e['above200']]),
+            'fast_above': summ([e for e in out if e['days'] <= fast and e['above200']]), 'events': out[-16:]}
+
+
+def fred_last(sid):
+    s = series('FRED_' + sid); return (s[-1][0], s[-1][1], s) if s else (None, None, [])
+
+
+# 全市場寬度（台股上市普通股）
+codes, rows = S.read_tw_all(); breadth = None
+if len(rows) >= 60:
+    cols = list(zip(*[r for _, r in rows])); dates = [d for d, _ in rows]; nD = len(dates)
+    p200 = [[0, 0] for _ in range(nD)]; p50 = [[0, 0] for _ in range(nD)]; hi = [0] * nD; lo = [0] * nD
+    for col in cols:
+        c = list(col)
+        for i in range(nD):
+            x = c[i]
+            if x is None: continue
+            for win, acc in ((200, p200), (50, p50)):
+                if i >= win - 1:
+                    w = [y for y in c[i - win + 1:i + 1] if y is not None]
+                    if len(w) >= win * 0.9: acc[i][1] += 1; acc[i][0] += x >= sum(w) / len(w)
+            if i >= 240:
+                w = [y for y in c[max(0, i - 249):i] if y is not None]
+                if len(w) >= 200: hi[i] += x > max(w); lo[i] += x < min(w)
+    ser = lambda acc: [[dn(dates[i]), r2(acc[i][0] / acc[i][1] * 100, 1)] for i in range(nD) if acc[i][1] >= 300]
+    ad = S.read_hist('TW_AD'); line = 0; adl = []
+    for r in ad:
+        if r[1] is not None and r[2] is not None: line += r[1] - r[2]; adl.append([dn(r[0]), line])
+    breadth = {'d': dates[-1], 'pct200': ser(p200), 'pct50': ser(p50), 'hilo': [[dn(dates[i]), hi[i], lo[i]] for i in range(nD) if i >= 240], 'adl': adl[-260:],
+               'ad_last': {'d': ad[-1][0], 'adv': ad[-1][1], 'dec': ad[-1][2]} if ad else None}
+    lastv = lambda s_: s_[-1][1] if s_ else None
+    breadth['now'] = {'pct200': lastv(breadth['pct200']), 'pct50': lastv(breadth['pct50']), 'hi': breadth['hilo'][-1][1] if breadth['hilo'] else None, 'lo': breadth['hilo'][-1][2] if breadth['hilo'] else None,
+                      'pct200_1m': breadth['pct200'][-22][1] if len(breadth['pct200']) > 22 else None}
+
+hy = D['macro'].get('BAMLH0A0HYM2') or {}
+sahm_d, sahm, _ = fred_last('SAHMREALTIME'); nfci_d, nfci, _ = fred_last('NFCI'); icsa_d, _, icsa_s = fred_last('ICSA')
+claims = None
+if len(icsa_s) > 60:
+    v4 = [sum(x for _, x in icsa_s[i - 3:i + 1]) / 4 for i in range(len(icsa_s) - 52, len(icsa_s))]
+    claims = {'d': icsa_d, 'v4': r2(v4[-1], 0), 'rise': r2(pct(v4[-1], min(v4)), 1)}
+spx_t = trend('SPX')
+sysl = [
+    {'k': 'hy', 'label': '信用利差擴大', 'on': bool(hy) and (hy.get('v', 0) >= LT['hy_level'] or (hy.get('chg1m') or 0) >= LT['hy_chg1m']), 'val': f"{hy.get('v')}%（一個月 {hy.get('chg1m'):+.2f}）" if hy else '—',
+     'rule': f"高收益債利差 ≥ {LT['hy_level']}% 或一個月升 ≥ {LT['hy_chg1m']}", 'd': hy.get('d')},
+    {'k': 'nfci', 'label': '金融情勢偏緊', 'on': nfci is not None and nfci > LT['nfci'], 'val': '—' if nfci is None else f"{nfci:+.2f}", 'rule': '芝加哥 Fed 金融情勢指數 > 0（比平均緊）', 'd': nfci_d},
+    {'k': 'sahm', 'label': '衰退訊號（Sahm）', 'on': sahm is not None and sahm >= LT['sahm'], 'val': '—' if sahm is None else f"{sahm:.2f}", 'rule': f"失業率三個月均值比前 12 個月低點高 ≥ {LT['sahm']} 個百分點", 'd': sahm_d},
+    {'k': 'claims', 'label': '初領失業金上升', 'on': bool(claims) and claims['rise'] >= LT['claims_rise'], 'val': '—' if not claims else f"{claims['v4']/1000:.0f}K（比一年低點 {claims['rise']:+.0f}%）", 'rule': f"四週均值比一年低點高 ≥ {LT['claims_rise']}%", 'd': icsa_d},
+    {'k': 'curve', 'label': '殖利率曲線倒掛', 'on': (D['macro'].get('last') or {}).get('s10_3m', 1) < 0, 'val': f"{(D['macro'].get('last') or {}).get('s10_3m')}", 'rule': '10 年 − 3 個月 < 0', 'd': (D['macro'].get('last') or {}).get('d')},
+    {'k': 'spx', 'label': '美股大盤跌破 200 日線', 'on': bool(spx_t) and spx_t[0]['c'] < spx_t[0]['sma200'], 'val': f"{spx_t[0]['dev200']:+.1f}%" if spx_t else '—', 'rule': 'S&P 500 收盤低於 200 日線（全球風險偏好轉弱）', 'd': spx_t[0]['d'] if spx_t else None}]
+sys_on = sum(1 for x in sysl if x['on'])
+fx = D['macro'].get('DEXTAUS') or {}; tws = D['taiwan'] or {}; fng = (D['sentiment'].get('fng') or {}); vx = D['sentiment'].get('vix') or {}
+regime = {'systemic': sysl, 'sys_on': sys_on, 'breadth': breadth, 'markets': [], 'defense_note': DF['note']}
+for key, name in (('TW_TAIEX', '台股加權指數'), ('SPX_LONG', 'S&P 500'), ('NDX_LONG', '那斯達克 100')):
+    t = trend(key if key != 'SPX_LONG' or len(closes('SPX_LONG')) > 2000 else 'SPX')
+    if not t: continue
+    q, cl = t; tw_ = key == 'TW_TAIEX'
+    if tw_:
+        bn = (breadth or {}).get('now') or {}
+        local = [{'k': 'breadth', 'label': '市場寬度崩壞', 'on': bn.get('pct200') is not None and bn['pct200'] < LT['tw_breadth200'], 'val': '—' if bn.get('pct200') is None else f"{bn['pct200']:.0f}% 站上 200 日線", 'rule': f"上市股票站上 200 日線的比例 < {LT['tw_breadth200']}%"},
+                 {'k': 'twd', 'label': '台幣急貶', 'on': (fx.get('chg1m') or 0) >= LT['twd_chg1m'], 'val': f"{fx.get('v')}（一個月 {fx.get('chg1m'):+.2f}）" if fx else '—', 'rule': f"美元兌台幣一個月升 ≥ {LT['twd_chg1m']} 元（外資匯出）"}]
+        ml = tws.get('margin_last') or {}; ins = tws.get('inst_sum') or {}
+        f20s = [sum((r[1] or 0) for r in (tws.get('inst') or [])[max(0, i - 19):i + 1]) for i in range(len(tws.get('inst') or []))]
+        cap = [{'k': 'rsi', 'label': '超賣', 'on': (q['rsi'] or 50) <= LT['rsi_low'], 'val': f"RSI {q['rsi']:.0f}", 'rule': f"RSI ≤ {LT['rsi_low']}"},
+               {'k': 'margin', 'label': '融資斷頭／去槓桿', 'on': (ml.get('chg20') or 0) <= LT['margin_cut'], 'val': f"20 日 {ml.get('chg20'):+.1f}%" if ml else '—', 'rule': f"融資餘額 20 日 ≤ {LT['margin_cut']}%"},
+               {'k': 'fii', 'label': '外資賣超極端', 'on': bool(f20s) and ins.get('f20') is not None and ins['f20'] <= sorted(f20s)[max(0, len(f20s) // 10)], 'val': f"20 日 {ins.get('f20', 0):,.0f} 億", 'rule': '外資 20 日累計賣超在近半年最低的 10%'},
+               {'k': 'wash', 'label': '寬度洗盤', 'on': bn.get('pct50') is not None and bn['pct50'] <= LT['breadth50_washout'], 'val': '—' if bn.get('pct50') is None else f"{bn['pct50']:.0f}% 站上 50 日線", 'rule': f"站上 50 日線的比例 ≤ {LT['breadth50_washout']}%"},
+               {'k': 'lows', 'label': '新低家數大增', 'on': bool(bn.get('lo')) and bn['lo'] >= 100, 'val': '—' if bn.get('lo') is None else f"新高 {bn['hi']}／新低 {bn['lo']}", 'rule': '單日創 52 週新低 ≥ 100 檔'}]
+    else:
+        sec = D['sentiment'].get('breadth') or {}
+        local = [{'k': 'sectors', 'label': '類股普遍轉弱', 'on': sec.get('sectors_above200', 11) <= LT['us_sectors200'], 'val': f"{sec.get('sectors_above200')}／{sec.get('sectors_n')} 類股站上 200 日線", 'rule': f"站上 200 日線的類股 ≤ {LT['us_sectors200']}／11"}]
+        cap = [{'k': 'rsi', 'label': '超賣', 'on': (q['rsi'] or 50) <= LT['rsi_low'], 'val': f"RSI {q['rsi']:.0f}", 'rule': f"RSI ≤ {LT['rsi_low']}"},
+               {'k': 'vix', 'label': 'VIX 恐慌', 'on': (vx.get('v') or 0) >= LT['vix_panic'], 'val': f"{vx.get('v')}", 'rule': f"VIX ≥ {LT['vix_panic']}"},
+               {'k': 'term', 'label': '波動率期限倒掛', 'on': (vx.get('ratio_3m') or 0) >= 1, 'val': f"{vx.get('ratio_3m')}", 'rule': 'VIX ÷ 3 個月 VIX ≥ 1'},
+               {'k': 'fng', 'label': '極度恐懼', 'on': fng.get('score') is not None and fng['score'] <= LT['fng_fear'], 'val': f"{fng.get('score')}", 'rule': f"CNN 恐懼貪婪 ≤ {LT['fng_fear']}"}]
+    on_local = sum(1 for x in local if x['on']); cap_on = sum(1 for x in cap if x['on'])
+    risk = sys_on + on_local
+    dfn = q['below_run'] >= DF['days_below'] and (q['slope200'] <= 0.2 or risk >= DF['systemic_min'])
+    an = analogs(cl, q['dd'], q['days'])
+    stg = q['stage']['k']
+    if stg == 'bull' and risk <= 1: lean = ('多頭延續', 'pos', f"四項趨勢檢查都成立、距高點只有 {q['dd']}%，系統性風險燈亮 {risk} 個；目前的下跌只是多頭裡的正常波動。")
+    elif stg in ('bull', 'pullback') and risk <= 1: lean = ('回調', 'pos', f"趨勢仍在（{'站在' if q['dev200'] >= 0 else '剛跌破'}上升中的 200 日線）、系統性風險燈只亮 {risk} 個，比較像多頭裡的修正，不像景氣或信用出問題的轉空。")
+    elif stg in ('bull', 'pullback'): lean = ('回調，但風險升高', 'warn', f"價格趨勢仍在，但系統性風險燈亮了 {risk} 個，修正有機會拉長或加深，要盯風險燈是否繼續增加。")
+    elif stg == 'weak': lean = ('轉弱', 'neg', f"收盤已連 {q['below_run']} 日在 200 日線之下" + ('，且 200 日線不再上升' if q['slope200'] <= 0.2 else '，50 日線也跌破 200 日線') + f"；系統性風險燈 {risk} 個。")
+    else: lean = ('空頭', 'neg', f"距高點 {q['dd']}%，在下降的 200 日線之下。")
+    flips = []
+    if stg in ('bull', 'pullback'):
+        flips.append(f"收盤連 {DF['days_below']} 日跌破 200 日線（{fmtn(q['sma200'])}，距今 {q['dev200']:+.1f}%），且 200 日線走平 → 轉弱")
+        flips.append(f"系統性風險燈亮到 {DF['systemic_min']} 個以上（目前 {risk} 個）→ 改判為可能轉空")
+        if q['dd'] > ST['bear_dd']: flips.append(f"跌破 {ST['bear_dd']}%（{fmtn(q['px20'])}）→ 進入熊市定義")
+    else:
+        flips.append(f"收盤連 {DF['days_below']} 日站回 200 日線（{fmtn(q['sma200'])}）→ 解除轉弱")
+        flips.append(f"系統性風險燈降到 1 個以下（目前 {risk} 個）")
+    regime['markets'].append({'key': key, 'name': name, **q, 'local': local, 'cap': cap, 'risk_on': risk, 'risk_n': len(sysl) + len(local), 'cap_on': cap_on, 'cap_n': len(cap),
+                              'defense': {'on': dfn, 'below_run': q['below_run'], 'need': DF['days_below']}, 'analogs': an,
+                              'view': {'lean': lean[0], 'tone': lean[1], 'why': lean[2], 'flips': flips}})
+D['regime'] = regime
+
 # ---------- 資料狀態 ----------
 def last_d(key, keyn=1):
     r = S.read_hist(key, keyn); return r[-1][0] if r else None
 health = [['美股（Nasdaq）', last_d('SPY')], ['S&P 500 指數（FRED）', last_d('SPX')], ['VIX（CBOE）', last_d('CBOE_VIX')], ['美債殖利率（財政部）', last_d('UST')],
           ['高收益債利差（FRED）', last_d('FRED_BAMLH0A0HYM2')], ['美元兌台幣（FRED）', last_d('FRED_DEXTAUS')], ['台股（證交所）', last_d('TW_TAIEX')],
           ['三大法人', last_d('TW_INST')], ['融資餘額', last_d('TW_MARGIN')], ['外資台指期（期交所）', last_d('TW_FUT')], ['類股指數', last_d('TW_SECT', 2)],
-          ['恐懼貪婪（CNN）', (snap.get('fng') or {}).get('d')], ['基金淨值（鉅亨網）', min([last_d(k) for k in FUNDS] or [None])]]
+          ['恐懼貪婪（CNN）', (snap.get('fng') or {}).get('d')], ['台股全市場（寬度）', S.read_tw_all()[1][-1][0] if S.read_tw_all()[1] else None], ['衰退與金融情勢（FRED）', last_d('FRED_NFCI')], ['基金淨值（鉅亨網）', min([last_d(k) for k in FUNDS] or [None])]]
 D['health'] = [{'name': n, 'd': d} for n, d in health]
 D['errors'] = errors
 json.dump(D, open(os.path.join(ROOT, 'data', 'latest.json'), 'w'), ensure_ascii=False, separators=(',', ':'))

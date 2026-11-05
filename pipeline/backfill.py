@@ -109,6 +109,19 @@ if want('TW_SECT'):
         except Exception as e: log('FAIL sect', d, e)
     log('TW_SECT', S.merge_hist('TW_SECT', rows, head=['d', 'name', 'c'], keyn=2))
 
+if want('TW_ALL'):   # 全市場收盤（寬度用）：最近約 380 個交易日，已有的日子跳過
+    have = {d for d, _ in S.read_tw_all()[1]}; rows = []; adv = []
+    alld = [today - dt.timedelta(days=i) for i in range(0, 560)]
+    for d in sorted(x.strftime('%Y%m%d') for x in alld if x.weekday() < 5):
+        if f'{d[:4]}-{d[4:6]}-{d[6:]}' in have: continue
+        try:
+            r = S.tw_all(d)
+            if r: rows.append((r[0], r[1])); adv.append([r[0], r[2].get('adv'), r[2].get('dec'), r[2].get('flat')])
+        except Exception as e: log('FAIL all', d, e)
+        if len(rows) >= 40: S.merge_tw_all(rows); S.merge_hist('TW_AD', adv, head=['d', 'adv', 'dec', 'flat']); rows, adv = [], []
+    if rows: S.merge_tw_all(rows); S.merge_hist('TW_AD', adv, head=['d', 'adv', 'dec', 'flat'])
+    log('TW_ALL', S.read_tw_all()[1][-1][0] if S.read_tw_all()[1] else None)
+
 if want('TW_FUT'):
     rows = []
     for k in range(6, -1, -1):

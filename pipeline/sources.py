@@ -210,6 +210,61 @@ def tw_sectors(day):   # 類股指數收盤
 
 
 # ---------- Yahoo：S&P 500 長歷史（1927 起） ----------
+def tw_all(day):
+    """全市場收盤（上市普通股，不含 ETF、權證）＋漲跌家數。回傳 (日期, {代號: 收盤}, {'adv','dec','flat'})；休市回 None。"""
+    j = twse('afterTrading/MI_INDEX', date=day, type='ALLBUT0999')
+    if j.get('stat') != 'OK': return None
+    tbs = j.get('tables') or []
+    px, ad = {}, {}
+    for t in tbs:
+        f = t.get('fields') or []
+        if '證券代號' in f and '收盤價' in f:
+            ic, ip = f.index('證券代號'), f.index('收盤價')
+            for r in t.get('data') or []:
+                c = str(r[ic]).strip()
+                if len(c) == 4 and c.isdigit() and c[0] != '0':
+                    v = num(r[ip])
+                    if v: px[c] = v
+        if t.get('title') == '漲跌證券數合計':
+            for r in t.get('data') or []:
+                k = str(r[0]); v = num(str(r[2]).split('(')[0]) if len(r) > 2 else None
+                if k.startswith('上漲'): ad['adv'] = v
+                elif k.startswith('下跌'): ad['dec'] = v
+                elif k.startswith('持平'): ad['flat'] = v
+    if not px: return None
+    return f'{day[:4]}-{day[4:6]}-{day[6:]}', px, ad
+
+
+ALL_KEEP = 400   # 全市場檔只留最近 400 個交易日（一年半），每天一行，git 差異很小
+
+
+def merge_tw_all(rows):
+    """data/hist/TW_ALL.csv：第一列是代號，之後每天一行收盤（缺值空白）。rows：[(日期, {代號: 收盤})]"""
+    p = hist_path('TW_ALL'); codes, data = [], {}
+    if os.path.exists(p):
+        with open(p) as f:
+            rd = csv.reader(f); head = next(rd, None) or ['d']
+            codes = head[1:]
+            for r in rd:
+                if r: data[r[0]] = {c: num(v) for c, v in zip(codes, r[1:]) if v}
+    for d, px in rows: data[d] = px
+    known = set(codes); codes += sorted({c for _, px in rows for c in px} - known)
+    keep = sorted(data)[-ALL_KEEP:]
+    os.makedirs(HIST, exist_ok=True)
+    with open(p, 'w', newline='') as f:
+        w = csv.writer(f); w.writerow(['d'] + codes)
+        for d in keep: w.writerow([d] + ['' if data[d].get(c) is None else data[d][c] for c in codes])
+    return len(keep), len(codes)
+
+
+def read_tw_all():
+    p = hist_path('TW_ALL')
+    if not os.path.exists(p): return [], []
+    with open(p) as f:
+        rd = csv.reader(f); head = next(rd); codes = head[1:]
+        return codes, [(r[0], [num(v) for v in r[1:]] + [None] * (len(codes) - len(r) + 1)) for r in rd if r]
+
+
 # ---------- 鉅亨網：共同基金淨值、基本資料、前十大持股 ----------
 CNYES = 'https://fund.api.cnyes.com/fund/api/v1/funds/'
 

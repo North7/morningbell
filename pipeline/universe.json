@@ -387,7 +387,10 @@
     "BAMLH0A0HYM2": "高收益債利差",
     "DFII10": "10 年期實質利率",
     "DTWEXBGS": "美元指數（廣義）",
-    "DEXTAUS": "美元兌新台幣"
+    "DEXTAUS": "美元兌新台幣",
+    "SAHMREALTIME": "Sahm 衰退指標",
+    "ICSA": "初領失業金人數",
+    "NFCI": "芝加哥 Fed 金融情勢指數"
   },
   "_note_focus": "重點追蹤：本刊長期追蹤的指數 ETF 與基金（網站上統一叫「本刊追蹤標的」，不代表任何人持有）。funds 的 id 是鉅亨網代號。",
   "funds": [

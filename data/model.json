@@ -85,5 +85,32 @@
     "rsi_hot": 70,
     "near_tier": 2,
     "note": "偏熱／過熱只是提醒「價格離長期均線很遠、追高的風險變大」，可以當作檢視比重或暫停加碼的參考，不是賣出訊號。加碼區是加碼框架的規則讀值，不是買進建議。"
+  },
+  "stage": {
+    "_note": "多空判定的市場階段（規則化，只是標籤）。順序：空頭 > 轉弱 > 多頭中的修正 > 多頭。",
+    "bear_dd": -20,
+    "weak_days": 5,
+    "slope_days": 20,
+    "pullback_dd": -10
+  },
+  "defense": {
+    "days_below": 5,
+    "systemic_min": 3,
+    "note": "防守模式（範例規則，非投資建議）：收盤連 5 日在 200 日線之下，且 200 日線已走平或下降、或系統性風險燈亮到 3 個以上 → 進入防守：加碼階梯每階減半、偏熱標的暫停加碼；收盤連 5 日站回 200 日線 → 解除。"
+  },
+  "lights": {
+    "hy_level": 5.0,
+    "hy_chg1m": 0.75,
+    "nfci": 0,
+    "sahm": 0.5,
+    "claims_rise": 20,
+    "tw_breadth200": 40,
+    "twd_chg1m": 1.0,
+    "us_sectors200": 4,
+    "rsi_low": 30,
+    "vix_panic": 30,
+    "fng_fear": 25,
+    "margin_cut": -10,
+    "breadth50_washout": 20
   }
 }

@@ -17,5 +17,11 @@ out = {'meta': D['meta'], 'errors': D['errors'], 'health': D['health'],
        'focus': {'items': [{'key': x['key'], 'name': x['name'], 'type': x['type'], 'risk': x['risk'], 'info': {k: (x.get('info') or {}).get(k) for k in ('fee', 'r1y')},
                             'top3': [(t['name'], t['w']) for t in ((x.get('hold') or {}).get('top') or [])[:3]], 'hold_d': (x.get('hold') or {}).get('d')} for x in D.get('focus', {}).get('items', [])],
                  'overlap': D.get('focus', {}).get('overlap', [])[:4]},
+       'regime': {'sys_on': D.get('regime', {}).get('sys_on'), 'systemic': [{k: x.get(k) for k in ('label', 'on', 'val', 'rule')} for x in D.get('regime', {}).get('systemic', [])],
+                  'breadth_now': (D.get('regime', {}).get('breadth') or {}).get('now'),
+                  'markets': [{k: m.get(k) for k in ('name', 'd', 'c', 'dd', 'days', 'peak_d', 'dev200', 'slope200', 'below_run', 'sma200', 'sma50', 'px20', 'rsi', 'stage', 'risk_on', 'risk_n', 'cap_on', 'cap_n', 'defense', 'view')}
+                              | {'local': [{k: x.get(k) for k in ('label', 'on', 'val')} for x in m.get('local', [])], 'cap': [{k: x.get(k) for k in ('label', 'on', 'val')} for x in m.get('cap', [])],
+                                 'analogs': {k: (m.get('analogs') or {}).get(k) for k in ('level', 'fast_days', 'from', 'all', 'fast', 'above', 'below', 'fast_above')} if m.get('analogs') else None}
+                              for m in D.get('regime', {}).get('markets', [])]},
        'taiwan': {k: D['taiwan'].get(k) for k in ('inst_sum', 'margin_last', 'fut_last')} | {'adr': {k: (D['taiwan'].get('adr') or {}).get(k) for k in ('v', 'fx', 'fx_d')}, 'inst_last5': (D['taiwan'].get('inst') or [])[-5:]}}
 print(json.dumps(out, ensure_ascii=False, separators=(',', ':')))

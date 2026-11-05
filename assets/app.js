@@ -393,6 +393,7 @@
   var V = {};
   var ROUTES = [
     ['overview', '頭版', '今天的市場'],
+    ['regime', '多空判定', '回調還是轉空'],
     ['news', '消息', '新聞與解讀'],
     ['focus', '重點追蹤', '九檔指數 ETF 與基金'],
     ['position', '加碼框架', '回撤與加碼位置'],
@@ -425,6 +426,7 @@
     var plan = '<div class="sec-h"><h2>今天該做什麼</h2><span class="en">The Plan</span><hr>' + staleTag() + '</div><div class="grid">' +
       panel('span-7', '今天該做什麼、盯什麼', '依加碼框架 · 非投資建議', actionsHtml()) + panel('span-5', '今天變了什麼', '相對上一期', changesHtml()) + '</div>';
     return front + '<div class="tape" aria-label="今日數據帶"><div class="tape-track">' + tapeItems() + tapeItems() + '</div></div>' + healthHtml() +
+      '<div class="sec-h"><h2>多空判定</h2><span class="en">Pullback or Bear?</span><hr><a href="#regime">完整判定 →</a></div>' + regimeStrip() +
       '<div class="sec-h"><h2>兩市收盤</h2><span class="en">The Close</span><hr></div>' + board +
       newsBlock + plan +
       '<div class="sec-h"><h2>重點追蹤</h2><span class="en">Focus List</span><hr><a href="#focus">九檔完整分析 →</a></div>' + focusTable(true) +
@@ -460,6 +462,60 @@
     var draw0 = draw; draw = function (c) { draw0(c); try { annotateCodes($('#ng').parentNode); } catch (e) {} };
     draw('*');
     $('#nf').addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; this.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', x === b); }); draw(b.getAttribute('data-c')); });
+  };
+
+  /* ---------------- 多空判定：回調還是轉空（2026-11-05）：規則化的市場階段、系統性風險燈、恐慌見底訊號、歷史條件機率、防守規則 ---------------- */
+  function RG() { return D.regime || {}; }
+  var TONE2 = { up: 'up', warn: 'warn', down: 'down', pos: 'up', neg: 'down', neu: '' };
+  function lightRow(x, bad) { return '<div class="lt' + (x.on ? (bad ? ' on-bad' : ' on-good') : '') + '"><span class="mk">' + (x.on ? '●' : '○') + '</span><b>' + esc(x.label) + '</b><span class="v num">' + esc(x.val || '—') + '</span><span class="note">' + esc(x.rule || '') + (x.d ? ' · ' + mdOf(x.d) : '') + '</span></div>'; }
+  function regimeStrip() {
+    var ms = RG().markets || []; if (!ms.length) return '';
+    return '<div class="rg-strip">' + ms.map(function (m) { return '<a href="#regime" class="rg-chip"><span class="n">' + esc(m.name) + '</span><span class="tn ' + TONE2[m.stage.tone] + '">' + esc(m.stage.label) + '</span><b class="' + TONE2[m.view.tone] + '">傾向：' + esc(m.view.lean) + '</b><small>距高點 ' + fmt.pct(m.dd, 1) + ' · 風險燈 ' + m.risk_on + '/' + m.risk_n + ' · 恐慌訊號 ' + m.cap_on + '/' + m.cap_n + '</small></a>'; }).join('') + '</div>';
+  }
+  function anaRow(lab, a, cur) {
+    if (!a) return '<tr><td>' + lab + '</td><td class="num">0</td><td colspan="6" class="note">沒有同樣條件的歷史樣本</td></tr>';
+    return '<tr><td>' + lab + '</td><td class="num">' + a.n + '</td><td class="num">' + a.to20 + '（' + fmt.n(a.to20 / a.n * 100, 0) + '%）</td>' + heat(a.depth_med, 40) + heat(a.f6m_med, 30) + heat(a.f12m_med, 40) + '<td class="num">' + (a.f12m_pos == null ? '—' : a.f12m_pos + '%') + '</td><td class="num">' + (a.rec_med == null ? '—' : a.rec_med + ' 天') + '</td></tr>';
+  }
+  function analogHtml(m) {
+    var a = m.analogs; if (!a) return '<p class="note">距 52 週高點不到 5%，不做歷史比對。</p>';
+    var al = a.all || {}, fa = a.fast_above;
+    var say = '<p class="say">' + esc(m.name) + ' 自 ' + a.from.slice(0, 4) + ' 年以來，從 52 週高點跌到 <b>' + fmt.pct(a.level, 1) + '</b> 的有 ' + (al.n || 0) + ' 段，其中 ' + (al.to20 || 0) + ' 段最後跌破 −20%。' +
+      (fa ? '但條件和現在一樣——' + a.fast_days + ' 個交易日內跌到這裡、當時仍在 200 日線之上——的只有 ' + fa.n + ' 段，' + fa.to20 + ' 段跌破 −20%、最深中位數 ' + fmt.pct(fa.depth_med, 1) + '。' : '跌得一樣快、且當時仍在 200 日線之上的情況，歷史上沒有出現過。') + '</p>';
+    var tb = '<div class="tbl-wrap"><table class="tbl heat wide"><thead><tr><th>條件</th><th class="num">次數</th><th class="num">最後跌破 −20%</th><th class="num">最深（中位）</th><th class="num">6 個月後</th><th class="num">12 個月後</th><th class="num">12 個月上漲比例</th><th class="num">收復高點</th></tr></thead><tbody>' +
+      anaRow('全部', a.all) + anaRow(a.fast_days + ' 天內跌到這裡', a.fast) + anaRow('當時仍在 200 日線上', a.above) + anaRow('跌破 200 日線之後才到這裡', a.below) + anaRow('<b>和現在一樣（快速＋線上）</b>', a.fast_above) + '</tbody></table></div>';
+    var ev = (a.events || []).slice().reverse().slice(0, 8).map(function (e) { return '<tr><td>' + e.d + '</td><td class="num">' + e.days + ' 天</td><td>' + (e.above200 ? '線上' : '線下') + '</td>' + heat(e.depth, 40) + heat(e.f3m, 20) + heat(e.f6m, 30) + heat(e.f12m, 40) + '<td class="num">' + (e.rec == null ? '未收復' : e.rec + ' 天') + '</td></tr>'; }).join('');
+    return say + tb + '<details class="ev"><summary>最近幾段的明細</summary><div class="tbl-wrap"><table class="tbl heat wide"><thead><tr><th>觸及日</th><th class="num">從高點</th><th>200 日線</th><th class="num">這段最深</th><th class="num">3 個月後</th><th class="num">6 個月後</th><th class="num">12 個月後</th><th class="num">收復高點</th></tr></thead><tbody>' + ev + '</tbody></table></div></details>' +
+      '<p class="note">「一段」＝從 52 週高點跌到這個深度，價格回到距 52 週高點 5% 以內才算下一段；報酬只算價格。樣本少（次數 < 5）時只能當參考，不能當機率。</p>';
+  }
+  function marketCard(m, i) {
+    var v = m.view || {}, d = m.defense || {};
+    var checks = (m.trend_checks || []).map(function (c) { return '<div class="ck' + (c.ok ? ' ok' : ' no') + '"><span class="mk">' + (c.ok ? '✓' : '×') + '</span><b>' + esc(c.label) + '</b><span class="v num">' + esc(c.val) + '</span><span class="note">' + esc(c.say) + '</span></div>'; }).join('');
+    var head = '<header class="fcard-h"><span class="fno">' + ('0' + (i + 1)).slice(-2) + '</span><div class="fname"><h3>' + esc(m.name) + '</h3><p>' + mdOf(m.d) + ' 收盤 ' + fmtN(m.c) + ' · 高點 ' + mdOf(m.peak_d) + ' ' + fmtN(m.peak) + '（' + m.days + ' 個交易日前）</p></div>' +
+      '<div class="fstate"><span class="tn ' + TONE2[m.stage.tone] + '">' + esc(m.stage.label) + '</span></div><div class="fpx"><b class="' + cls(m.dd) + '">' + fmt.pct(m.dd, 1) + '</b><small>距高點</small></div></header>';
+    var verdict = '<div class="rg-verdict ' + TONE2[v.tone] + '"><span class="k">傾向</span><b>' + esc(v.lean) + '</b><p>' + esc(v.why) + '</p></div>';
+    var flips = '<ul class="flips">' + (v.flips || []).map(function (f) { return '<li>' + esc(f) + '</li>'; }).join('') + '</ul>';
+    var dfn = '<p class="note">防守規則：' + (d.on ? '<b class="down">已觸發</b>' : '未觸發') + '（收盤連 ' + d.below_run + '／' + d.need + ' 日在 200 日線之下）。' + esc(RG().defense_note || '') + '</p>';
+    return '<article class="fcard" id="rg-' + m.key + '">' + head + verdict +
+      '<div class="fcard-b"><div class="fcol">' + fsec('趨勢檢查', '<div class="cks">' + checks + '</div>', '<small>四項全 ✓ 才是完整的多頭</small>') + fsec('會推翻這個看法的條件', flips) + fsec('防守規則', dfn) + '</div>' +
+      '<div class="fcol">' + fsec('系統性風險燈（轉空佐證）', '<div class="lts">' + (RG().systemic || []).concat(m.local || []).map(function (x) { return lightRow(x, true); }).join('') + '</div>', '<small>亮 ' + m.risk_on + '／' + m.risk_n + '</small>') +
+      fsec('恐慌見底訊號（回調佐證）', '<div class="lts">' + (m.cap || []).map(function (x) { return lightRow(x, false); }).join('') + '</div>', '<small>亮 ' + m.cap_on + '／' + m.cap_n + '</small>') + '</div></div>' +
+      fsec('歷史上跌到這裡之後', analogHtml(m)) + (m.key === 'TW_TAIEX' && RG().breadth ? fsec('台股市場寬度', '<div class="grid2"><div><p class="note">站上 200 日線／50 日線的股票比例（上市普通股）</p><div class="chart" id="c-br-ma"></div></div><div><p class="note">每日創 52 週新高／新低家數</p><div class="chart" id="c-br-hl"></div></div></div><p class="note">寬度看的是「多數股票」而不是指數：指數還在 200 日線上、但多數股票已跌破，代表跌勢擴散；新低家數暴增後縮小，常是賣壓宣洩的訊號。</p>') : '') + '</article>';
+  }
+  var fmtN = function (x) { return x == null ? '—' : fmt.n(x, x >= 1000 ? 0 : 2); };
+  V.regime = function () {
+    var r = RG(), ms = r.markets || [];
+    if (!ms.length) return '<p class="err">本日未取得多空判定資料。</p>';
+    return readBar('regime') + '<div class="grid">' +
+      panel('span-12', '怎麼讀這一版', '規則寫死、每天自動計算 · 參數在 data/model.json', '<p class="say">大跌時要回答兩個問題：<b>趨勢壞了沒有</b>（價格與均線），以及<b>是不是景氣或信用出問題</b>（系統性風險燈）。趨勢還在、風險燈不亮，比較像多頭裡的回調；趨勢轉弱、風險燈一個個亮起，才是轉空的樣子。恐慌見底訊號越多，代表賣壓越接近宣洩，但它不保證就是低點。</p><p class="note">這些是規則讀值與歷史統計，不是預測，也不是買賣建議。</p>') +
+      '<nav class="fnav">' + ms.map(function (m) { return '<button type="button" data-k="' + m.key + '"><i class="' + TONE2[m.stage.tone] + '"></i>' + esc(m.name) + '：' + esc(m.view.lean) + '</button>'; }).join('') + '</nav>' +
+      ms.map(marketCard).join('') + '</div>';
+  };
+  V.regime.after = function () {
+    var nv = document.querySelector('#pg-regime .fnav');
+    if (nv) nv.addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; var el = document.getElementById('rg-' + b.getAttribute('data-k')); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - stickyH() - 12, behavior: reduced ? 'auto' : 'smooth' }); });
+    var br = RG().breadth; if (!br) return;
+    mount($('#c-br-ma'), function (el) { lineChart(el, { h: 200, series: [{ name: '站上 50 日線', data: br.pct50, color: 'var(--s2)', w: 1.5 }, { name: '站上 200 日線', data: br.pct200, color: 'var(--s1)' }], y0: 0, y1: 100, refs: [{ y: 50, color: 'var(--ink-3)' }, { y: 20, color: 'var(--down)', label: '20% 洗盤' }], yFmt: function (v) { return v.toFixed(0) + '%'; }, tipFmt: function (v) { return fmt.n(v, 1) + '%'; }, aria: '台股市場寬度' }); });
+    mount($('#c-br-hl'), function (el) { lineChart(el, { h: 200, series: [{ name: '52 週新高', data: br.hilo.map(function (r) { return [r[0], r[1]]; }), color: 'var(--up)', w: 1.5 }, { name: '52 週新低', data: br.hilo.map(function (r) { return [r[0], r[2]]; }), color: 'var(--down)', w: 1.5 }], y0: 0, yFmt: function (v) { return v.toFixed(0); }, tipFmt: function (v) { return fmt.n(v, 0) + ' 檔'; }, aria: '新高新低家數' }); });
   };
 
   /* ---------------- 重點追蹤：本刊長期追蹤的九檔指數 ETF 與基金（只呈現標的本身的數據） ---------------- */

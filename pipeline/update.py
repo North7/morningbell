@@ -94,6 +94,15 @@ if not a.skip_tw:
             if f'{d[:4]}-{d[4:6]}-{d[6:]}' not in have or d == days[-1]: rows += S.tw_sectors(d) or []
         return S.merge_hist('TW_SECT', rows, head=['d', 'name', 'c'], keyn=2)
     run('twse TW_SECT', sect)
+    def twall():   # 全市場收盤（寬度）：最近幾個交易日沒有的補上
+        have = {d for d, _ in S.read_tw_all()[1]}; rows, adv = [], []
+        for d in days:
+            if f'{d[:4]}-{d[4:6]}-{d[6:]}' in have and d != days[-1]: continue
+            r = S.tw_all(d)
+            if r: rows.append((r[0], r[1])); adv.append([r[0], r[2].get('adv'), r[2].get('dec'), r[2].get('flat')])
+        S.merge_hist('TW_AD', adv, head=['d', 'adv', 'dec', 'flat'])
+        return S.merge_tw_all(rows)
+    run('twse TW_ALL', twall)
     run('taifex TW_FUT', lambda: S.merge_hist('TW_FUT', S.taifex_fut((today - dt.timedelta(days=20)).strftime('%Y/%m/%d'), today.strftime('%Y/%m/%d')), head=['d', 'net_oi', 'net_amt']))
     codes = {u['sym'] for u in U['tw']}
     def val():
