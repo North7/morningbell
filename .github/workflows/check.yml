@@ -11,7 +11,7 @@ on:
 
 jobs:
   check:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04   # 2026-11：ubuntu-latest 升到 26.04 後 Playwright 1.56 裝不了瀏覽器
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
