@@ -236,6 +236,13 @@ for sid, name in U['fred'].items():
     x1m = min(s, key=lambda r: abs(dn(r[0]) - (dn(s[-1][0]) - 30)))[1]
     mac[sid] = {'name': name, 'd': s[-1][0], 'v': s[-1][1], 'chg1m': r2(s[-1][1] - x1m, 3), 'pct10y': r2(sum(x <= s[-1][1] for x in v10) / len(v10) * 100, 0),
                 'hist': [[dn(d), x] for d, x in s if dn(d) >= cut]}
+# 美元兌台幣改用 Yahoo（較新）；FRED DEXTAUS 只在 Yahoo 取不到時用
+fxy = closes('FX_TWD')
+if fxy and (not mac.get('DEXTAUS') or fxy[-1][0] > mac['DEXTAUS']['d']):
+    cut = dn(fxy[-1][0]) - 3 * 365; v10 = [c for d, c in fxy]
+    x1m = min(fxy, key=lambda r: abs(dn(r[0]) - (dn(fxy[-1][0]) - 30)))[1]
+    mac['DEXTAUS'] = {'name': '美元兌新台幣', 'd': fxy[-1][0], 'v': r2(fxy[-1][1], 3), 'chg1m': r2(fxy[-1][1] - x1m, 3), 'pct10y': r2(sum(x <= fxy[-1][1] for x in v10) / len(v10) * 100, 0),
+                      'hist': [[dn(d), r2(c, 3)] for d, c in fxy if dn(d) >= cut], 'src': 'Yahoo'}
 D['macro'] = mac
 
 # ---------- 情緒 ----------
@@ -311,7 +318,7 @@ for u in U['tw']:
     if u['sym'] in rev: q['rev'] = rev[u['sym']]
     if u['sym'] in nav: q['nav'] = nav[u['sym']]
 # 台積電 ADR 溢價：TSM（1 ADR = 5 股）× 匯率 ÷ 2330
-fx = dict(series('FRED_DEXTAUS')); tsm = dict(closes('TSM')); t2330 = closes('TW_2330')
+fx = {**dict(series('FRED_DEXTAUS')), **dict(closes('FX_TWD'))}; tsm = dict(closes('TSM')); t2330 = closes('TW_2330')
 if fx and tsm and t2330:
     fxd = sorted(fx); prem = []; j = 0; last_fx = None
     for d, c in t2330:
@@ -430,7 +437,7 @@ def trend(key):
          'below_run': run_dn, 'above_run': run_up, 'dd': r2(dd, 1), 'days': days, 'peak_d': cl[pk][0], 'peak': r2(v[pk]),
          'cross_gap': r2(pct(m50[-1], m200[-1])), 'rsi': r2(rsi(v[-300:]), 0), 'px20': r2(v[pk] * (1 + ST['bear_dd'] / 100))}
     rising = slope > 0.2; falling = slope < -0.2
-    if dd <= ST['bear_dd'] and v[-1] < m200[-1] and not rising: st = ('bear', '空頭', 'down')
+    if dd <= ST['bear_dd']: st = ('bear', '熊市（跌幅 ≥ 20%）', 'down')   # 2026-11-06：跌幅一到 20% 就標熊市，趨勢與風險燈另外區分是急跌型還是空頭
     elif run_dn >= ST['weak_days'] and (not rising or m50[-1] < m200[-1]): st = ('weak', '轉弱', 'down')
     elif dd <= ST['pullback_dd'] or v[-1] < m200[-1]: st = ('pullback', '多頭中的修正', 'warn')
     else: st = ('bull', '多頭', 'up')
@@ -581,12 +588,18 @@ for key, name in (('TW_TAIEX', '台股加權指數'), ('SPX_LONG', 'S&P 500'), (
     elif stg in ('bull', 'pullback') and risk <= 1: lean = ('回調', 'pos', f"趨勢仍在（{'站在' if q['dev200'] >= 0 else '剛跌破'}上升中的 200 日線）、系統性風險燈只亮 {risk} 個，比較像多頭裡的修正，不像景氣或信用出問題的轉空。")
     elif stg in ('bull', 'pullback'): lean = ('回調，但風險升高', 'warn', f"價格趨勢仍在，但系統性風險燈亮了 {risk} 個，修正有機會拉長或加深，要盯風險燈是否繼續增加。")
     elif stg == 'weak': lean = ('轉弱', 'neg', f"收盤已連 {q['below_run']} 日在 200 日線之下" + ('，且 200 日線不再上升' if q['slope200'] <= 0.2 else '，50 日線也跌破 200 日線') + f"；系統性風險燈 {risk} 個。")
-    else: lean = ('空頭', 'neg', f"距高點 {q['dd']}%，在下降的 200 日線之下。")
+    elif q['slope200'] > 0.2 and risk <= 1: lean = ('急跌型熊市', 'warn', f"跌幅已達 {q['dd']}%、符合熊市定義，但 200 日線仍在上升、系統性風險燈只亮 {risk} 個：比較像族群或資金面引發的急跌，不是景氣或信用出問題的長空。急跌型能不能止跌，看恐慌訊號（現在 {cap_on}／{len(cap)}）與能否站回 200 日線。")
+    elif q['slope200'] <= 0.2 and risk >= DF['systemic_min']: lean = ('空頭', 'neg', f"跌幅 {q['dd']}%、200 日線已不再上升，系統性風險燈亮 {risk} 個：趨勢與基本面同時轉壞。")
+    else: lean = ('熊市，風險升高', 'neg', f"跌幅 {q['dd']}%" + ('、200 日線已不再上升' if q['slope200'] <= 0.2 else '') + f"，系統性風險燈亮 {risk} 個；還沒到趨勢與基本面同時轉壞，但要盯風險燈。")
     flips = []
     if stg in ('bull', 'pullback'):
         flips.append(f"收盤連 {DF['days_below']} 日跌破 200 日線（{fmtn(q['sma200'])}，距今 {q['dev200']:+.1f}%），且 200 日線走平 → 轉弱")
         flips.append(f"系統性風險燈亮到 {DF['systemic_min']} 個以上（目前 {risk} 個）→ 改判為可能轉空")
         if q['dd'] > ST['bear_dd']: flips.append(f"跌破 {ST['bear_dd']}%（{fmtn(q['px20'])}）→ 進入熊市定義")
+    elif stg == 'bear':
+        flips.append(f"收盤站回 {ST['bear_dd']}% 線（{fmtn(q['px20'])}）之上、再連 {DF['days_below']} 日站穩 200 日線（{fmtn(q['sma200'])}）→ 回到修正")
+        flips.append(f"系統性風險燈亮到 {DF['systemic_min']} 個以上（目前 {risk} 個）→ 改判景氣或信用引發的空頭")
+        flips.append(f"200 日線轉為走平或下降（目前 {q['slope200']:+.2f}%）→ 長期趨勢轉空")
     else:
         flips.append(f"收盤連 {DF['days_below']} 日站回 200 日線（{fmtn(q['sma200'])}）→ 解除轉弱")
         flips.append(f"系統性風險燈降到 1 個以下（目前 {risk} 個）")
@@ -599,7 +612,7 @@ D['regime'] = regime
 def last_d(key, keyn=1):
     r = S.read_hist(key, keyn); return r[-1][0] if r else None
 health = [['美股（Nasdaq）', last_d('SPY')], ['S&P 500 指數（FRED）', last_d('SPX')], ['VIX（CBOE）', last_d('CBOE_VIX')], ['美債殖利率（財政部）', last_d('UST')],
-          ['高收益債利差（FRED）', last_d('FRED_BAMLH0A0HYM2')], ['美元兌台幣（FRED）', last_d('FRED_DEXTAUS')], ['台股（證交所）', last_d('TW_TAIEX')],
+          ['高收益債利差（FRED）', last_d('FRED_BAMLH0A0HYM2')], ['美元兌台幣（Yahoo）', last_d('FX_TWD')], ['台股（證交所）', last_d('TW_TAIEX')],
           ['三大法人', last_d('TW_INST')], ['融資餘額', last_d('TW_MARGIN')], ['外資台指期（期交所）', last_d('TW_FUT')], ['類股指數', last_d('TW_SECT', 2)],
           ['恐懼貪婪（CNN）', (snap.get('fng') or {}).get('d')], ['台股全市場（寬度）', S.read_tw_all()[1][-1][0] if S.read_tw_all()[1] else None], ['衰退與金融情勢（FRED）', last_d('FRED_NFCI')], ['基金淨值（鉅亨網）', min([last_d(k) for k in FUNDS] or [None])]]
 D['health'] = [{'name': n, 'd': d} for n, d in health]

@@ -49,6 +49,8 @@ if not a.skip_us:
         run('fred ' + sid, f)
     # S&P 500 長歷史：和 SPX 同一份 Yahoo 資料
     run('yahoo ^GSPC long', lambda: S.merge_hist('SPX_LONG', done(S.yahoo('^GSPC', 40))))
+    # 美元兌台幣：Yahoo 即時（FRED 的 DEXTAUS 晚一週，留作備援）
+    run('yahoo TWD=X', lambda: S.merge_hist('FX_TWD', done(S.yahoo('TWD=X', 40))))
     # 長線估值：席勒本益比、S&P 500 每股盈餘（multpl，月資料）
     run('multpl CAPE', lambda: S.merge_hist('MULTPL_CAPE', S.multpl('shiller-pe'), head=('d', 'v')))
     run('multpl EPS', lambda: S.merge_hist('MULTPL_EPS', S.multpl('s-p-500-earnings'), head=('d', 'v')))
