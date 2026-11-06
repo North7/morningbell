@@ -510,9 +510,27 @@ if len(rows) >= 60:
         if r[1] is not None and r[2] is not None: line += r[1] - r[2]; adl.append([dn(r[0]), line])
     breadth = {'d': dates[-1], 'pct200': ser(p200), 'pct50': ser(p50), 'hilo': [[dn(dates[i]), hi[i], lo[i]] for i in range(nD) if i >= 240], 'adl': adl[-260:],
                'ad_last': {'d': ad[-1][0], 'adv': ad[-1][1], 'dec': ad[-1][2]} if ad else None}
+    # 52 週新高占比（牛市寬度）與台股版興登堡預兆：新高、新低都 ≥ 2.2% 家數；新高 ≤ 新低 × 2；加權指數高於 50 日前；麥克連振盪指標 < 0
+    tot = [sum(1 for col in cols if col[i] is not None) for i in range(nD)]
+    breadth['hipct'] = [[dn(dates[i]), r2(hi[i] / tot[i] * 100, 1), r2(lo[i] / tot[i] * 100, 1)] for i in range(nD) if i >= 240 and tot[i]]
+    ema = lambda xs, n: (lambda k: [x for x in __import__('itertools').accumulate(xs, lambda a_, x_: a_ + k * (x_ - a_))])(2 / (n + 1))
+    adm = {r[0]: r for r in ad if r[1] is not None and r[2] is not None and (r[1] + r[2])}
+    ad_d = sorted(adm); ratio = [(adm[d][1] - adm[d][2]) / (adm[d][1] + adm[d][2]) * 1000 for d in ad_d]
+    mco = dict(zip(ad_d, [a_ - b_ for a_, b_ in zip(ema(ratio, 19), ema(ratio, 39))])) if ratio else {}
+    tx = dict(closes('TW_TAIEX')); txd = sorted(tx); txi = {d: i for i, d in enumerate(txd)}
+    hind = []
+    for i in range(nD):
+        if i < 240 or not tot[i]: continue
+        d = dates[i]; hp, lp = hi[i] / tot[i] * 100, lo[i] / tot[i] * 100
+        up50 = d in txi and txi[d] >= 50 and tx[d] > tx[txd[txi[d] - 50]]
+        if hp >= 2.2 and lp >= 2.2 and hi[i] <= 2 * lo[i] and up50 and mco.get(d, 0) < 0: hind.append(d)
+    breadth['hindenburg'] = hind[-20:]
+    breadth['mco'] = [[dn(d), r2(mco[d], 1)] for d in ad_d[-260:]] if mco else []
     lastv = lambda s_: s_[-1][1] if s_ else None
     breadth['now'] = {'pct200': lastv(breadth['pct200']), 'pct50': lastv(breadth['pct50']), 'hi': breadth['hilo'][-1][1] if breadth['hilo'] else None, 'lo': breadth['hilo'][-1][2] if breadth['hilo'] else None,
-                      'pct200_1m': breadth['pct200'][-22][1] if len(breadth['pct200']) > 22 else None}
+                      'pct200_1m': breadth['pct200'][-22][1] if len(breadth['pct200']) > 22 else None,
+                      'hipct': breadth['hipct'][-1][1] if breadth['hipct'] else None, 'mco': breadth['mco'][-1][1] if breadth['mco'] else None,
+                      'hind_last': breadth['hindenburg'][-1] if breadth['hindenburg'] else None, 'hind_30d': sum(1 for d in breadth['hindenburg'] if dn(d) >= dn(dates[-1]) - 30)}
 
 hy = D['macro'].get('BAMLH0A0HYM2') or {}
 sahm_d, sahm, _ = fred_last('SAHMREALTIME'); nfci_d, nfci, _ = fred_last('NFCI'); icsa_d, _, icsa_s = fred_last('ICSA')

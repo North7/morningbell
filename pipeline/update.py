@@ -49,6 +49,9 @@ if not a.skip_us:
         run('fred ' + sid, f)
     # S&P 500 長歷史：和 SPX 同一份 Yahoo 資料
     run('yahoo ^GSPC long', lambda: S.merge_hist('SPX_LONG', done(S.yahoo('^GSPC', 40))))
+    # 長線估值：席勒本益比、S&P 500 每股盈餘（multpl，月資料）
+    run('multpl CAPE', lambda: S.merge_hist('MULTPL_CAPE', S.multpl('shiller-pe'), head=('d', 'v')))
+    run('multpl EPS', lambda: S.merge_hist('MULTPL_EPS', S.multpl('s-p-500-earnings'), head=('d', 'v')))
     # CNN 恐懼貪婪（常擋機器人；失敗就顯示本日未取得）
     def fng():
         j = S.get('https://production.dataviz.cnn.io/index/fearandgreed/graphdata', timeout=20)

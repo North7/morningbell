@@ -390,7 +390,12 @@
     "DEXTAUS": "美元兌新台幣",
     "SAHMREALTIME": "Sahm 衰退指標",
     "ICSA": "初領失業金人數",
-    "NFCI": "芝加哥 Fed 金融情勢指數"
+    "NFCI": "芝加哥 Fed 金融情勢指數",
+    "NCBEILQ027S": "非金融企業股權市值",
+    "GDP": "名目 GDP",
+    "WALCL": "Fed 總資產",
+    "CPIAUCSL": "CPI",
+    "UNRATE": "失業率"
   },
   "_note_focus": "重點追蹤：本刊長期追蹤的指數 ETF 與基金（網站上統一叫「本刊追蹤標的」，不代表任何人持有）。funds 的 id 是鉅亨網代號。",
   "funds": [

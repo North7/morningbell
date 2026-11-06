@@ -725,3 +725,15 @@ input[type="range"]::-moz-range-thumb { width: 4px; height: 26px; background: va
 .grid2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; }
 details.ev { margin-top: 8px; font-size: 13px; } details.ev summary { cursor: pointer; color: var(--ink-2); }
 @media (max-width: 860px) { .rg-strip, .grid2 { grid-template-columns: minmax(0, 1fr); } .rg-chip + .rg-chip { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); } .rg-verdict { grid-template-columns: auto minmax(0, 1fr); } .rg-verdict p { grid-column: 1 / -1; } }
+/* 長線視角（2026-11-06） */
+.dist { display: grid; grid-template-columns: repeat(11, minmax(0, 1fr)); gap: 4px; align-items: end; margin-top: 8px; }
+.dist .dc { display: grid; gap: 3px; justify-items: center; }
+.dist .stack { display: flex; flex-direction: column-reverse; gap: 2px; width: 100%; align-items: stretch; justify-content: flex-start; }
+.dist .stack span { font-family: var(--f-mono); font-size: 10px; text-align: center; line-height: 17px; color: #fff; }
+.dist .stack span.u { background: var(--up); } .dist .stack span.d { background: var(--down); }
+.dist b { font-family: var(--f-mono); font-size: 12px; } .dist small { font-size: 10.5px; color: var(--ink-3); white-space: nowrap; }
+table.mx { border-collapse: collapse; font-family: var(--f-mono); font-size: 10px; }
+table.mx th { font-weight: 500; color: var(--ink-3); padding: 1px 3px; position: sticky; left: 0; background: var(--deck); }
+table.mx td { width: 24px; min-width: 24px; height: 18px; text-align: center; padding: 0; border: 1px solid var(--void); color: var(--ink); }
+.tbl.mo td, .tbl.mo th { padding-right: 4px; font-size: 12px; }
+@media (max-width: 860px) { .dist { grid-template-columns: repeat(11, minmax(26px, 1fr)); overflow-x: auto; } .dist small { writing-mode: vertical-rl; } }

@@ -397,6 +397,7 @@
     ['news', '消息', '新聞與解讀'],
     ['focus', '重點追蹤', '九檔指數 ETF 與基金'],
     ['position', '加碼框架', '回撤與加碼位置'],
+    ['longrun', '長線視角', '把這次放回歷史裡'],
     ['macro', '宏觀', '利率、美元與信用'],
     ['sentiment', '情緒', '恐慌、貪婪與寬度'],
     ['sectors', '板塊', '資金往哪裡去'],
@@ -499,7 +500,12 @@
       '<div class="fcard-b"><div class="fcol">' + fsec('趨勢檢查', '<div class="cks">' + checks + '</div>', '<small>四項全 ✓ 才是完整的多頭</small>') + fsec('會推翻這個看法的條件', flips) + fsec('防守規則', dfn) + '</div>' +
       '<div class="fcol">' + fsec('系統性風險燈（轉空佐證）', '<div class="lts">' + (RG().systemic || []).concat(m.local || []).map(function (x) { return lightRow(x, true); }).join('') + '</div>', '<small>亮 ' + m.risk_on + '／' + m.risk_n + '</small>') +
       fsec('恐慌見底訊號（回調佐證）', '<div class="lts">' + (m.cap || []).map(function (x) { return lightRow(x, false); }).join('') + '</div>', '<small>亮 ' + m.cap_on + '／' + m.cap_n + '</small>') + '</div></div>' +
-      fsec('歷史上跌到這裡之後', analogHtml(m)) + (m.key === 'TW_TAIEX' && RG().breadth ? fsec('台股市場寬度', '<div class="grid2"><div><p class="note">站上 200 日線／50 日線的股票比例（上市普通股）</p><div class="chart" id="c-br-ma"></div></div><div><p class="note">每日創 52 週新高／新低家數</p><div class="chart" id="c-br-hl"></div></div></div><p class="note">寬度看的是「多數股票」而不是指數：指數還在 200 日線上、但多數股票已跌破，代表跌勢擴散；新低家數暴增後縮小，常是賣壓宣洩的訊號。</p>') : '') + '</article>';
+      fsec('歷史上跌到這裡之後', analogHtml(m)) + (m.key === 'TW_TAIEX' && RG().breadth ? fsec('台股市場寬度', '<div class="grid2"><div><p class="note">站上 200 日線／50 日線的股票比例（上市普通股）</p><div class="chart" id="c-br-ma"></div></div><div><p class="note">創 52 週新高／新低的股票占比（牛市寬度）</p><div class="chart" id="c-br-hl"></div></div></div>' + hindHtml() + '<p class="note">寬度看的是「多數股票」而不是指數：指數還在 200 日線上、但多數股票已跌破，代表跌勢擴散；新低家數暴增後縮小，常是賣壓宣洩的訊號。</p>') : '') + '</article>';
+  }
+  function hindHtml() {
+    var b = RG().breadth || {}, n = b.now || {}, h = b.hindenburg || [];
+    return '<p class="say">台股版興登堡預兆（寬度背離預警）：' + (h.length ? '近一年觸發 ' + h.length + ' 次，最近一次 <b>' + h[h.length - 1] + '</b>' + (n.hind_30d ? '，近 30 天內有 ' + n.hind_30d + ' 次' : '') : '近一年沒有觸發') + '。麥克連振盪指標 ' + fmt.n(n.mco, 0) + '（< 0 代表下跌家數占優）。</p>' +
+      '<p class="note">興登堡預兆原本用美國紐約證交所全市場，本站改用台股上市普通股：同一天新高、新低占比都 ≥ 2.2%、新高 ≤ 新低 × 2、加權指數高於 50 個交易日前、麥克連振盪指標 < 0。它的意思是「指數還在漲，但市場已經分裂」；誤報率高，只當提醒，不是規則。</p>';
   }
   var fmtN = function (x) { return x == null ? '—' : fmt.n(x, x >= 1000 ? 0 : 2); };
   V.regime = function () {
@@ -515,7 +521,8 @@
     if (nv) nv.addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; var el = document.getElementById('rg-' + b.getAttribute('data-k')); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - stickyH() - 12, behavior: reduced ? 'auto' : 'smooth' }); });
     var br = RG().breadth; if (!br) return;
     mount($('#c-br-ma'), function (el) { lineChart(el, { h: 200, series: [{ name: '站上 50 日線', data: br.pct50, color: 'var(--s2)', w: 1.5 }, { name: '站上 200 日線', data: br.pct200, color: 'var(--s1)' }], y0: 0, y1: 100, refs: [{ y: 50, color: 'var(--ink-3)' }, { y: 20, color: 'var(--down)', label: '20% 洗盤' }], yFmt: function (v) { return v.toFixed(0) + '%'; }, tipFmt: function (v) { return fmt.n(v, 1) + '%'; }, aria: '台股市場寬度' }); });
-    mount($('#c-br-hl'), function (el) { lineChart(el, { h: 200, series: [{ name: '52 週新高', data: br.hilo.map(function (r) { return [r[0], r[1]]; }), color: 'var(--up)', w: 1.5 }, { name: '52 週新低', data: br.hilo.map(function (r) { return [r[0], r[2]]; }), color: 'var(--down)', w: 1.5 }], y0: 0, yFmt: function (v) { return v.toFixed(0); }, tipFmt: function (v) { return fmt.n(v, 0) + ' 檔'; }, aria: '新高新低家數' }); });
+    var hv = (br.hindenburg || []).map(function (d) { return { x: dnOf(d), label: '' }; });
+    mount($('#c-br-hl'), function (el) { lineChart(el, { h: 200, series: [{ name: '52 週新高占比', data: (br.hipct || []).map(function (r) { return [r[0], r[1]]; }), color: 'var(--up)', w: 1.5 }, { name: '52 週新低占比', data: (br.hipct || []).map(function (r) { return [r[0], r[2]]; }), color: 'var(--down)', w: 1.5 }], vlines: hv, y0: 0, yFmt: function (v) { return v.toFixed(0) + '%'; }, tipFmt: function (v) { return fmt.n(v, 1) + '%'; }, aria: '新高新低占比；虛線為興登堡預兆' }); });
   };
 
   /* ---------------- 重點追蹤：本刊長期追蹤的九檔指數 ETF 與基金（只呈現標的本身的數據） ---------------- */
@@ -617,6 +624,139 @@
       mount($('#c-fx-' + i), function (el) { lineChart(el, { h: 170, series: [{ name: short(x.key), data: x.hist, color: 'var(--s1)', area: true }], refs: q.sma200 ? [{ y: q.sma200, color: 'var(--ink-3)', label: '200 日線', below: true }] : [], tipFmt: px, yFmt: fmt.k, aria: x.name + ' 近一年' }); });
       var tp = document.querySelector('.fx-top-' + i); if (tp) bindLadder(tp, ((x.hold || {}).top || []).map(function (t) { return { tip: '<div class="t">' + esc(t.name) + '</div><div class="r"><i style="background:var(--s1)"></i><span>' + esc((t.sector || '') + ' ' + (t.country || '')) + '</span><b>' + fmt.n(t.w, 2) + '%</b></div>' }; }));
     });
+  };
+
+  /* ---------------- 長線視角（2026-11-06）：圖的構想參考老錢日日談 Big Picture，資料與程式為本站自有；data/longrun.json 打開這一版才載入 ---------------- */
+  var LR = null, LRI = 0;
+  function lrSeg(id, opts, cur) { return '<div class="seg" id="' + id + '">' + opts.map(function (o, i) { return '<button type="button" aria-pressed="' + (i === cur) + '" data-i="' + i + '">' + esc(o) + '</button>'; }).join('') + '</div>'; }
+  function bindSeg(id, fn) { var sg = $('#' + id); if (!sg) return; sg.addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; sg.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', x === b); }); fn(+b.getAttribute('data-i')); }); }
+  var ymdn = function (y) { return Math.round(Date.UTC(y, 0, 1) / 864e5); };
+  function annualSvg(el, rows) {
+    var W = Math.max(300, el.clientWidth), H = 260, ML = 8, MR = 46, MT = 14, MB = 24, pw = W - ML - MR, ph = H - MT - MB, n = rows.length;
+    var hi = Math.max(10, Math.max.apply(null, rows.map(function (r) { return r.ret; }))), lo = Math.min(-10, Math.min.apply(null, rows.map(function (r) { return Math.min(r.ret, r.dd); })));
+    var Y = function (v) { return MT + (hi - v) / (hi - lo) * ph; }, bw = pw / n, s = '', stp = niceStep(hi - lo, 5);
+    for (var t = Math.ceil(lo / stp) * stp; t <= hi; t += stp) s += '<line class="' + (t === 0 ? 'base' : 'gl') + '" x1="' + ML + '" x2="' + (ML + pw) + '" y1="' + Y(t).toFixed(1) + '" y2="' + Y(t).toFixed(1) + '"/><text class="ax" x="' + (ML + pw + 6) + '" y="' + (Y(t) + 3.5).toFixed(1) + '">' + t + '%</text>';
+    var every = Math.ceil(n / Math.max(1, Math.floor(pw / 40)));
+    rows.forEach(function (r, i) {
+      var x = ML + i * bw, w = Math.max(1, bw * 0.7), y0 = Y(0), y = Y(r.ret);
+      s += '<g class="yr" data-i="' + i + '"><rect x="' + x.toFixed(1) + '" y="' + MT + '" width="' + bw.toFixed(1) + '" height="' + ph + '" fill="transparent"/><rect x="' + (x + (bw - w) / 2).toFixed(1) + '" y="' + Math.min(y, y0).toFixed(1) + '" width="' + w.toFixed(1) + '" height="' + Math.max(1, Math.abs(y - y0)).toFixed(1) + '" fill="' + (r.ret >= 0 ? 'var(--up)' : 'var(--down)') + '" opacity="' + (r.part ? .45 : .85) + '"/>' +
+        '<circle cx="' + (x + bw / 2).toFixed(1) + '" cy="' + Y(r.dd).toFixed(1) + '" r="' + Math.min(3, bw / 2.5).toFixed(1) + '" fill="var(--ink-2)"/></g>';
+      if (i % every === 0 || i === n - 1) s += '<text class="ax" x="' + (x + bw / 2).toFixed(1) + '" y="' + (H - 6) + '" text-anchor="middle">' + r.y + '</text>';
+    });
+    el.innerHTML = svgEl(W, H, s, '年度報酬與年內最大回撤');
+    el.querySelectorAll('.yr').forEach(function (g) { var r = rows[+g.getAttribute('data-i')]; g.addEventListener('pointermove', function (ev) { showTip(ev.clientX, ev.clientY, '<div class="t">' + r.y + (r.part ? '（今年至今）' : '') + '</div><div class="r"><i style="background:' + (r.ret >= 0 ? 'var(--up)' : 'var(--down)') + '"></i><span>全年報酬</span><b>' + fmt.pct(r.ret, 1) + '</b></div><div class="r"><i style="background:var(--ink-2)"></i><span>年內最大回撤</span><b>' + fmt.pct(r.dd, 1) + '</b></div>'); }); g.addEventListener('pointerleave', hideTip); });
+  }
+  function distHtml(rows) {
+    var bins = [[-99, -40], [-40, -30], [-30, -20], [-20, -10], [-10, 0], [0, 10], [10, 20], [20, 30], [30, 40], [40, 50], [50, 999]], full = rows.filter(function (r) { return !r.part; });
+    var col = bins.map(function (b) { return full.filter(function (r) { return r.ret >= b[0] && r.ret < b[1]; }); }), mx = Math.max.apply(null, col.map(function (c) { return c.length; }));
+    var lab = function (b) { return b[0] === -99 ? '< −40%' : b[1] === 999 ? '≥ 50%' : b[0] + '～' + b[1] + '%'; };
+    var avg = full.reduce(function (s, r) { return s + r.ret; }, 0) / full.length, pos = full.filter(function (r) { return r.ret > 0; }).length;
+    return '<p class="say">' + full.length + ' 個完整年度裡，<b>' + pos + ' 年上漲（' + fmt.n(pos / full.length * 100, 0) + '%）</b>，平均 ' + fmt.pct(avg, 1) + '；但真正落在 0～20% 「平均附近」的只有 ' + (col[5].length + col[6].length) + ' 年——單一年份很少剛好等於平均。</p>' +
+      '<div class="dist">' + col.map(function (c, i) { return '<div class="dc"><div class="stack" style="height:' + (mx * 19) + 'px">' + c.map(function (r) { return '<span class="' + (r.ret >= 0 ? 'u' : 'd') + '" title="' + r.y + '：' + fmt.pct(r.ret, 1) + '">' + String(r.y).slice(2) + '</span>'; }).join('') + '</div><b>' + c.length + '</b><small>' + lab(bins[i]) + '</small></div>'; }).join('') + '</div><p class="note">每一格是一年（顯示年份後兩碼），只算價格、不含股息。</p>';
+  }
+  function matrixHtml(ye, span) {
+    var ys = ye.slice(-span - 1), n = ys.length, s = '<div class="tbl-wrap"><table class="mx"><thead><tr><th>買入＼賣出</th>';
+    for (var j = 1; j < n; j++) s += '<th>' + String(ys[j][0]).slice(2) + '</th>';
+    s += '</tr></thead><tbody>';
+    for (var i = 0; i < n - 1; i++) {
+      s += '<tr><th>' + ys[i][0] + '</th>';
+      for (var k = 1; k < n; k++) {
+        if (k <= i) { s += '<td></td>'; continue; }
+        var r = (Math.pow(ys[k][1] / ys[i][1], 1 / (k - i)) - 1) * 100, a = Math.min(1, Math.abs(r) / 20) * 0.75;
+        s += '<td style="background:color-mix(in srgb,' + (r >= 0 ? 'var(--up)' : 'var(--down)') + ' ' + (a * 100).toFixed(0) + '%,transparent)" title="' + ys[i][0] + ' 年底買、' + ys[k][0] + ' 年底賣：年化 ' + fmt.pct(r, 1) + '">' + (Math.abs(r) >= 10 ? Math.round(r) : r.toFixed(0)) + '</td>';
+      }
+      s += '</tr>';
+    }
+    return s + '</tbody></table></div><p class="note">列＝哪一年年底買進，欄＝哪一年年底賣出，格子＝年化報酬（%，只算價格）。越往右下（持有越久），紅色越多。</p>';
+  }
+  function monthlyHtml(mo, since) {
+    var by = {}; mo.forEach(function (r) { (by[r[0]] = by[r[0]] || {})[r[1]] = r[2]; });
+    var ys = Object.keys(by).map(Number).sort(), all = ys.filter(function (y) { return y >= since; }), MN = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+    var stat = MN.map(function (_, m) { var v = ys.map(function (y) { return by[y][m + 1]; }).filter(function (x) { return x != null; }); return { up: v.filter(function (x) { return x > 0; }).length / v.length * 100, avg: v.reduce(function (s, x) { return s + x; }, 0) / v.length, n: v.length }; });
+    var s = '<div class="tbl-wrap"><table class="tbl heat mo"><thead><tr><th>年</th>' + MN.map(function (m) { return '<th class="num">' + m + ' 月</th>'; }).join('') + '<th class="num">全年</th></tr></thead><tbody>';
+    all.slice().reverse().forEach(function (y) { var tot = 1; s += '<tr><td>' + y + '</td>' + MN.map(function (_, m) { var v = by[y][m + 1]; if (v != null) tot *= 1 + v / 100; return v == null ? '<td></td>' : heat(v, 8); }).join('') + heat((tot - 1) * 100, 30) + '</tr>'; });
+    s += '<tr class="hl"><td><b>上漲機率</b></td>' + stat.map(function (x) { return '<td class="num"><b>' + fmt.n(x.up, 0) + '%</b></td>'; }).join('') + '<td></td></tr><tr class="hl"><td><b>平均</b></td>' + stat.map(function (x) { return heat(x.avg, 3); }).join('') + '<td></td></tr></tbody></table></div>';
+    return s + '<p class="note">上漲機率與平均用 ' + ys[0] + ' 年以來全部 ' + stat[0].n + ' 年計算；表格只列 ' + since + ' 年起。季節性只是統計傾向，樣本內每個月都有大漲也有大跌。</p>';
+  }
+  function cycleTable(cyc) {
+    var rows = cyc.slice().reverse().slice(0, 14);
+    return '<div class="tbl-wrap"><table class="tbl heat"><thead><tr><th>階段</th><th>起</th><th>迄</th><th class="num">漲跌</th><th class="num">交易日</th><th class="num">約幾年</th></tr></thead><tbody>' +
+      rows.map(function (c) { return '<tr' + (c.ongoing ? ' class="hl"' : '') + '><td><span class="tn ' + (c.k === 'bull' ? 'up' : 'down') + '">' + (c.k === 'bull' ? '牛市' : '熊市') + '</span>' + (c.ongoing ? ' 進行中' : '') + '</td><td>' + c.s + '</td><td>' + (c.ongoing ? '至今' : c.e) + '</td>' + heat(c.chg, 80) + '<td class="num">' + c.days + '</td><td class="num">' + fmt.n(c.cal / 365.25, 1) + '</td></tr>'; }).join('') + '</tbody></table></div>';
+  }
+  function cycleStats(cyc) {
+    var b = cyc.filter(function (c) { return c.k === 'bull' && !c.ongoing; }), r = cyc.filter(function (c) { return c.k === 'bear' && !c.ongoing; }), med = function (a) { a = a.slice().sort(function (x, y) { return x - y; }); return a.length ? a[Math.floor(a.length / 2)] : null; };
+    var cur = cyc[cyc.length - 1];
+    return '<p class="say">以 ±20% 劃分，' + b.length + ' 次牛市中位數 <b>' + fmt.pct(med(b.map(function (c) { return c.chg; })), 0) + '</b>、約 ' + fmt.n(med(b.map(function (c) { return c.cal; })) / 365.25, 1) + ' 年；' + r.length + ' 次熊市中位數 <b>' + fmt.pct(med(r.map(function (c) { return c.chg; })), 0) + '</b>、約 ' + fmt.n(med(r.map(function (c) { return c.cal; })) / 365.25, 1) + ' 年。' +
+      '現在是' + (cur.k === 'bull' ? '牛市' : '熊市') + '，從 ' + cur.s + ' 起 ' + fmt.pct(cur.chg, 1) + '、' + fmt.n(cur.cal / 365.25, 1) + ' 年' + (cur.ext ? '（本段' + (cur.k === 'bull' ? '高點' : '低點') + ' ' + cur.ext + '）' : '') + '。</p>';
+  }
+  function lrIdx() { return (LR && LR.idx || [])[LRI]; }
+  function lrCut(pts, yrs) { if (!yrs || !pts.length) return pts; var c = pts[pts.length - 1][0] - yrs * 365.25; return pts.filter(function (p) { return p[0] >= c; }); }
+  var LRV = { vol: 2, roll: 2, mx: 30, cyc: 0 };
+  function drawIdx() {
+    var x = lrIdx(); if (!x) return;
+    var first = x.weekly[0][0], yrs = [0, 30, 10][LRV.cyc];
+    $('#lr-cyc-say').innerHTML = cycleStats(x.cycles); $('#lr-cyc-tb').innerHTML = cycleTable(x.cycles);
+    var bands = x.cycles.filter(function (c) { return c.k === 'bear'; }).map(function (c) { return { x0: dnOf(c.s), x1: dnOf(c.e), color: 'var(--down-dim)' }; });
+    mount($('#c-lr-cyc'), function (el) { lineChart(el, { h: 280, log: true, series: [{ name: x.name, data: lrCut(x.weekly, yrs), color: 'var(--ink)', w: 1.5, end: true }], vbands: bands, tipFmt: function (v) { return fmt.n(v, 0); }, yFmt: fmt.k, aria: x.name + ' 牛熊週期' }); });
+    mount($('#c-lr-ann'), function (el) { annualSvg(el, x.annual.slice(-[999, 50, 30][LRV.cyc] || -999)); });
+    $('#lr-ann-say').innerHTML = (function () { var f = x.annual.filter(function (r) { return !r.part; }), dd10 = f.filter(function (r) { return r.dd <= -10; }).length, pos = f.filter(function (r) { return r.ret > 0; }).length, med = f.map(function (r) { return r.dd; }).sort(function (a, b) { return a - b; })[Math.floor(f.length / 2)];
+      return '<p class="say">' + f.length + ' 個完整年度裡，年內最大回撤的中位數是 <b>' + fmt.pct(med, 1) + '</b>，' + dd10 + ' 年（' + fmt.n(dd10 / f.length * 100, 0) + '%）曾跌超過 10%；但全年收紅的有 ' + pos + ' 年（' + fmt.n(pos / f.length * 100, 0) + '%）。一年中出現一次像樣的回檔是常態。</p>'; })();
+    $('#lr-dist').innerHTML = distHtml(x.annual);
+    $('#lr-mx').innerHTML = matrixHtml(x.year_end, LRV.mx);
+    $('#lr-mo').innerHTML = monthlyHtml(x.monthly, x.key === 'TW_TAIEX' ? 2001 : 2000);
+    var W = [1, 5, 10, 20][LRV.roll], ser = x.rolling.map(function (r) { return [r[0], r[[0, 1, 2, 3, 4][[1, 5, 10, 20].indexOf(W) + 1]]]; }).filter(function (p) { return p[1] != null; });
+    var vals = ser.map(function (p) { return p[1]; }), neg = vals.filter(function (v) { return v < 0; }).length;
+    $('#lr-roll-say').innerHTML = '<p class="say">任意時點往回看 ' + W + ' 年，年化報酬為負的時間占 <b>' + fmt.n(neg / vals.length * 100, 0) + '%</b>；最差 ' + fmt.pct(Math.min.apply(null, vals), 1) + '、最好 ' + fmt.pct(Math.max.apply(null, vals), 1) + '、現在 ' + fmt.pct(vals[vals.length - 1], 1) + '。持有越久，虧損的機率越低。</p>';
+    mount($('#c-lr-roll'), function (el) { lineChart(el, { h: 240, series: [{ name: W + ' 年年化', data: ser, color: 'var(--s1)', area: true }], refs: [{ y: 0, color: 'var(--ink)' }], yFmt: function (v) { return v.toFixed(0) + '%'; }, tipFmt: function (v) { return fmt.pct(v, 1); }, aria: '滾動報酬' }); });
+    var bl = x.bulls, cur = bl.filter(function (b) { return b.ongoing; })[0], mxd = Math.max(cur ? cur.pts.length * 5 * 2 : 1500, 750);
+    var ser2 = bl.filter(function (b) { return !b.ongoing; }).map(function (b) { return { name: b.s.slice(0, 7) + '（' + fmt.pct(b.chg, 0) + '）', data: b.pts.map(function (v, i) { return [i * 5, v]; }).filter(function (p) { return p[0] <= mxd; }), color: 'var(--ink-3)', w: 1, end: false }; });
+    if (cur) ser2.push({ name: '這一輪（' + cur.s + ' 起）', data: cur.pts.map(function (v, i) { return [i * 5, v]; }), color: 'var(--red)', w: 3 });
+    $('#lr-bull-say').innerHTML = cur ? '<p class="say">這一輪牛市從 ' + cur.s + ' 起 ' + cur.days + ' 個交易日、' + fmt.pct(cur.chg, 1) + '；同一時間點，過去 ' + (ser2.length - 1) + ' 輪牛市的中位數是 <b>' + (function () { var v = bl.filter(function (b) { return !b.ongoing && b.pts.length > Math.floor(cur.days / 5); }).map(function (b) { return b.pts[Math.floor(cur.days / 5)]; }).sort(function (a, b) { return a - b; }); return v.length ? fmt.pct(v[Math.floor(v.length / 2)], 0) + '（有 ' + v.length + ' 輪走到這麼久）' : '—（沒有一輪走到這麼久）'; })() + '</b>。</p>' : '<p class="note">目前不在牛市。</p>';
+    var lg = function (sr) { return sr.map(function (o) { return Object.assign({}, o, { data: o.data.map(function (p) { return [p[0], 100 + p[1]]; }) }); }); };   // 對數座標：起點＝100
+    mount($('#c-lr-bull'), function (el) { lineChart(el, { h: 300, xType: 'num', x0: 0, x1: mxd, log: true, series: lg(ser2), xticks: [0, 250, 500, 750, 1000, 1250, 1500, 2000, 2500].filter(function (t) { return t <= mxd; }).map(function (t) { return [t, t ? (t / 250).toFixed(0) + ' 年' : '起點']; }), xTipFmt: function (v) { return '第 ' + v + ' 個交易日'; }, yFmt: function (v) { return fmt.pct(v - 100, 0); }, tipFmt: function (v) { return fmt.pct(v - 100, 0); }, aria: '牛市路徑比較（對數座標）' }); });
+    var vy = [1, 3, 10, 0][LRV.vol], vv = lrCut(x.vol, vy);
+    mount($('#c-lr-vol'), function (el) { lineChart(el, { h: 220, series: [{ name: '60 日', data: vv.map(function (r) { return [r[0], r[2]]; }), color: 'var(--s2)', w: 1.5 }, { name: '20 日', data: vv.map(function (r) { return [r[0], r[1]]; }), color: 'var(--s1)' }], refs: [{ y: 30, color: 'var(--down)', label: '30% 高波動' }], y0: 0, yFmt: function (v) { return v.toFixed(0) + '%'; }, tipFmt: function (v) { return fmt.n(v, 1) + '%'; }, aria: '波動率' }); });
+    document.querySelectorAll('.lr-name').forEach(function (e) { e.textContent = x.name; });
+  }
+  function drawGlobal() {
+    var L = LR; if (!L) return;
+    var spx = L.idx[0];
+    if (spx) mount($('#c-lr-vix'), function (el) { lineChart(el, { h: 280, log: true, series: [{ name: 'S&P 500', data: spx.weekly.filter(function (p) { return p[0] >= dnOf('1990-01-01'); }), color: 'var(--ink)', w: 1.5 }], vbands: L.vix30.map(function (p) { return { x0: p[0], x1: p[1], color: 'var(--down-dim)' }; }), tipFmt: function (v) { return fmt.n(v, 0); }, yFmt: fmt.k, aria: 'VIX 恐慌期間與 S&P 500' }); });
+    var c = L.cape; if (c) { $('#lr-cape-say').innerHTML = '<p class="say">席勒本益比 <b>' + fmt.n(c.now, 1) + '</b>（' + fmt.md(c.d) + '），1871 年以來第 <b>' + c.pct + '</b> 百分位；長期平均 ' + c.mean + '、1990 年以來平均 ' + c.mean_1990 + '。高估值不代表馬上會跌，但歷史上起點估值越高，之後十年的報酬通常越低。</p>';
+      mount($('#c-lr-cape'), function (el) { lineChart(el, { h: 240, series: [{ name: 'CAPE', data: c.hist, color: 'var(--s1)', area: true }], refs: [{ y: c.mean, color: 'var(--ink-3)', label: '長期平均 ' + c.mean }, { y: c.mean_1990, color: 'var(--warn)', label: '1990 起平均 ' + c.mean_1990 }], yFmt: function (v) { return v.toFixed(0); }, tipFmt: function (v) { return fmt.n(v, 1); }, aria: '席勒本益比' }); }); }
+    var b = L.buffett; if (b) { $('#lr-buf-say').innerHTML = '<p class="say">改良版巴菲特指標 <b>' + fmt.n(b.now, 0) + '%</b>（' + b.d.slice(0, 7) + ' 季資料），' + (b.pct >= 99 ? '是 1945 年以來最高' : '在 1945 年以來第 ' + b.pct + ' 百分位') + '；平均 ' + b.mean + '%。分母加上 Fed 資產，扣掉央行擴表推升市值的部分。</p>';
+      mount($('#c-lr-buf'), function (el) { lineChart(el, { h: 240, series: [{ name: '原版（÷ GDP）', data: b.hist.map(function (r) { return [r[0], r[2]]; }), color: 'var(--ink-3)', w: 1.5, dash: '4 4' }, { name: '改良版（÷ GDP＋Fed 資產）', data: b.hist.map(function (r) { return [r[0], r[1]]; }), color: 'var(--s1)' }], refs: [{ y: b.mean, color: 'var(--ink-3)', label: '改良版平均 ' + b.mean + '%' }], yFmt: function (v) { return v.toFixed(0) + '%'; }, tipFmt: function (v) { return fmt.n(v, 0) + '%'; }, aria: '巴菲特指標' }); }); }
+    var m = L.misery; if (m) { $('#lr-mis-say').innerHTML = '<p class="say">痛苦指數 <b>' + fmt.n(m.now, 1) + '</b>（' + m.d.slice(0, 7) + '）＝ CPI 年增率 ＋ 失業率，長期平均 ' + m.mean + '。數字越高，代表通膨與失業對家庭的壓力越大，也常是 Fed 兩難的時候。</p>';
+      mount($('#c-lr-mis'), function (el) { lineChart(el, { h: 220, series: [{ name: '失業率', data: m.hist.map(function (r) { return [r[0], r[3]]; }), color: 'var(--s3)', w: 1.2 }, { name: 'CPI 年增率', data: m.hist.map(function (r) { return [r[0], r[2]]; }), color: 'var(--s2)', w: 1.2 }, { name: '痛苦指數', data: m.hist.map(function (r) { return [r[0], r[1]]; }), color: 'var(--s1)' }], refs: [{ y: m.mean, color: 'var(--ink-3)', label: '平均 ' + m.mean }], yFmt: function (v) { return v.toFixed(0); }, tipFmt: function (v) { return fmt.n(v, 1); }, aria: '痛苦指數' }); }); }
+    var s7 = L.m7; if (s7) { var l7 = s7.hist[s7.hist.length - 1]; $('#lr-m7-say').innerHTML = '<p class="say">' + s7.from.slice(0, 4) + ' 年起，七巨頭等權指數從 100 到 <b>' + fmt.n(l7[1], 0) + '</b>，同期 S&P 500 到 ' + fmt.n(l7[2], 0) + '；這也是大盤越來越集中的原因。</p>';
+      mount($('#c-lr-m7'), function (el) { lineChart(el, { h: 240, log: true, series: [{ name: 'S&P 500（SPY）', data: s7.hist.map(function (r) { return [r[0], r[2]]; }), color: 'var(--ink-3)', w: 1.5 }, { name: '七巨頭等權', data: s7.hist.map(function (r) { return [r[0], r[1]]; }), color: 'var(--s1)' }], yFmt: fmt.k, tipFmt: function (v) { return fmt.n(v, 0); }, aria: '七巨頭等權指數' }); }); }
+    var e = L.eps; if (e) mount($('#c-lr-eps'), function (el) { lineChart(el, { h: 220, log: true, series: [{ name: '每股盈餘', data: e.hist, color: 'var(--s3)', area: true }], yFmt: fmt.k, tipFmt: function (v) { return fmt.n(v, 2); }, aria: 'S&P 500 每股盈餘' }); });
+  }
+  V.longrun = function () {
+    var p = function (id, t, src, body, extra, span) { return panel(span || 'span-12', t, src, body, extra); };
+    return readBar('longrun') + '<div class="grid">' +
+      panel('span-12', '把這次放回歷史裡', '圖的構想參考老錢日日談 Big Picture · 資料與計算為本站自有', '<p class="say">短線看新聞，長線看分布：漲多少、跌多少、多久、多常發生。下面前七張圖可以切換 <b>S&P 500（1928 起）</b>、<b>那斯達克 100（1985 起）</b>、<b>台股加權（2000 起）</b>；後面幾張是美股的估值與總經。報酬只算價格、不含股息。</p>' + lrSeg('lr-idx', ['S&P 500', '那斯達克 100', '台股加權'], 0)) +
+      p('', '<span class="lr-name">S&P 500</span>牛熊週期', '±20% 劃分 · 綠底為熊市', '<div id="lr-cyc-say"></div><div class="chart" id="c-lr-cyc"></div><div id="lr-cyc-tb"></div>', lrSeg('lr-cyc-sg', ['全部', '30 年', '10 年'], 0)) +
+      p('', '<span class="lr-name">S&P 500</span>年度報酬與年內最大回撤', '柱＝全年報酬 · 點＝當年從高點最大回撤', '<div id="lr-ann-say"></div><div class="chart" id="c-lr-ann"></div>') +
+      p('', '<span class="lr-name">S&P 500</span>年度報酬分布', '每一格是一年', '<div id="lr-dist"></div>') +
+      p('', '<span class="lr-name">S&P 500</span>跨年持有年化報酬', '年底買、年底賣', '<div id="lr-mx"></div>', lrSeg('lr-mx-sg', ['近 20 年', '近 30 年', '近 40 年'], 1)) +
+      p('', '<span class="lr-name">S&P 500</span>月度漲跌', '各月上漲機率與平均', '<div id="lr-mo"></div>') +
+      p('', '<span class="lr-name">S&P 500</span>滾動報酬', '月底取樣 · 往回看 N 年的年化報酬', '<div id="lr-roll-say"></div><div class="chart" id="c-lr-roll"></div>', lrSeg('lr-roll-sg', ['1 年', '5 年', '10 年', '20 年'], 2)) +
+      p('', '<span class="lr-name">S&P 500</span>牛市路徑比較', '從牛市起點算的漲幅 · 灰線為歷次牛市 · 對數座標', '<div id="lr-bull-say"></div><div class="chart" id="c-lr-bull"></div>') +
+      p('', '<span class="lr-name">S&P 500</span>波動率', '20 日與 60 日年化實際波動 · 30% 以上屬高波動', legend([['20 日', 'var(--s1)'], ['60 日', 'var(--s2)']]) + '<div class="chart" id="c-lr-vol"></div>', lrSeg('lr-vol-sg', ['1 年', '3 年', '10 年', '全部'], 2)) +
+      p('', 'VIX 恐慌期間與 S&P 500', '綠底＝VIX 連續 5 日以上收在 30 之上 · 對數座標', '<div class="chart" id="c-lr-vix"></div><p class="note">恐慌期間常出現在跌勢的後段，但不是每次都是低點（2008 年恐慌持續了好幾個月）。</p>') +
+      p('', '席勒本益比（CAPE）', 'multpl · 月資料 · 1871 起', '<div id="lr-cape-say"></div><div class="chart" id="c-lr-cape"></div>', '', 'span-6') +
+      p('', '改良版巴菲特指標', 'FRED · 季資料', '<div id="lr-buf-say"></div>' + legend([['改良版（÷ GDP＋Fed 資產）', 'var(--s1)'], ['原版（÷ GDP）', 'var(--ink-3)', 'dash']]) + '<div class="chart" id="c-lr-buf"></div><p class="note">分子用 FRED 的非金融企業股權市值，和常見的「全市場總市值」口徑不同，看趨勢與相對位置比看絕對值有意義。</p>', '', 'span-6') +
+      p('', '痛苦指數', 'FRED · CPI 年增率 ＋ 失業率', '<div id="lr-mis-say"></div>' + legend([['痛苦指數', 'var(--s1)'], ['CPI 年增率', 'var(--s2)'], ['失業率', 'var(--s3)']]) + '<div class="chart" id="c-lr-mis"></div>', '', 'span-6') +
+      p('', 'S&P 500 每股盈餘', 'multpl · 十二個月滾動 · 對數座標', '<div class="chart" id="c-lr-eps"></div><p class="note">股價長期跟著盈餘走；估值（本益比）決定的是中間的起伏。資料約晚兩到三個月。</p>', '', 'span-6') +
+      p('', '七巨頭等權指數 vs S&P 500', '蘋果、微軟、輝達、Alphabet、亞馬遜、Meta、特斯拉 · 每週等權再平衡', '<div id="lr-m7-say"></div>' + legend([['七巨頭等權', 'var(--s1)'], ['S&P 500（SPY）', 'var(--ink-3)']]) + '<div class="chart" id="c-lr-m7"></div>') + '</div>';
+  };
+  V.longrun.after = function () {
+    var go2 = function () { drawIdx(); drawGlobal(); };
+    load('data/longrun.json').then(function (j) { LR = j; go2();
+      bindSeg('lr-idx', function (i) { LRI = i; drawIdx(); }); bindSeg('lr-cyc-sg', function (i) { LRV.cyc = i; drawIdx(); }); bindSeg('lr-mx-sg', function (i) { LRV.mx = [20, 30, 40][i]; drawIdx(); });
+      bindSeg('lr-roll-sg', function (i) { LRV.roll = i; drawIdx(); }); bindSeg('lr-vol-sg', function (i) { LRV.vol = i; drawIdx(); });
+    }).catch(function (e) { var el = $('#lr-cyc-say'); if (el) el.innerHTML = '<p class="err">長線資料載入失敗：' + esc(e.message) + '</p>'; });
   };
 
   /* ---------------- 加碼框架 ---------------- */
@@ -837,7 +977,7 @@
   };
 
   V.method = function () {
-    var src = [['Nasdaq', '美股、ETF、那斯達克與費半指數日線（近 10 年）', '每日'], ['FRED（聖路易聯儲）', 'S&P 500 指數、那斯達克 100 長歷史、高收益債利差、實質利率、美元指數、美元兌台幣', '每日（部分晚 1–7 天）'], ['美國財政部', '殖利率曲線', '每日'], ['CBOE', 'VIX、VIX9D、VIX3M、VIX6M', '每日'], ['CNN', '恐懼貪婪指數', '每日（常擋自動抓取）'], ['臺灣證券交易所', '加權指數、個股與 ETF 日線、三大法人、融資融券、類股指數、本益比與殖利率、月營收、ETF 預估淨值', '每個交易日'], ['臺灣期貨交易所', '三大法人台指期未平倉', '每個交易日'], ['鉅亨網', '共同基金淨值、經理費、規模、前十大持股（重點追蹤版）', '每日（境外基金晚一到兩天）']];
+    var src = [['Nasdaq', '美股、ETF、那斯達克與費半指數日線（近 10 年）', '每日'], ['FRED（聖路易聯儲）', 'S&P 500 指數、那斯達克 100 長歷史、高收益債利差、實質利率、美元指數、美元兌台幣', '每日（部分晚 1–7 天）'], ['美國財政部', '殖利率曲線', '每日'], ['CBOE', 'VIX、VIX9D、VIX3M、VIX6M', '每日'], ['CNN', '恐懼貪婪指數', '每日（常擋自動抓取）'], ['臺灣證券交易所', '加權指數、個股與 ETF 日線、三大法人、融資融券、類股指數、本益比與殖利率、月營收、ETF 預估淨值', '每個交易日'], ['臺灣期貨交易所', '三大法人台指期未平倉', '每個交易日'], ['鉅亨網', '共同基金淨值、經理費、規模、前十大持股（重點追蹤版）', '每日（境外基金晚一到兩天）'], ['multpl', '席勒本益比、S&P 500 每股盈餘（長線視角版）', '每月'], ['Yahoo', 'S&P 500 1928 年起日線、美股收盤當天的最新收盤', '每日'], ['老錢日日談 Big Picture', '長線視角版多張圖的構想參考（stock.laoqianriritan.com）；資料與程式為本站自有', '—']];
     return '<div class="grid">' + panel('span-12', '這是什麼', '', '<div class="prose"><p>晨鐘是一份給長期投資人的美股、台股日報：看懂市場今天發生什麼、現在在什麼位置、資金往哪裡去，以及在回檔時依照事先寫好的規則分批加碼。它是破曉 Daybreak（比特幣日報）的姊妹刊。</p>' +
       '<p><b>原則</b>：數字由程式每天自動抓、自動算，取不到就顯示「本日未取得」，不推估、不沿用舊值。文字判讀由 Claude 每天讀數據後撰寫，只解釋數字、不改數字。加碼框架是範例參數，每月檢討才改。</p>' +
       '<p><b>發刊</b>：晨刊（美股收盤後，台北約 07:00）以 S&P 500 為頭版；午後刊（台股收盤、法人數據公布後，台北約 16:00）以加權指數為頭版。</p>' +

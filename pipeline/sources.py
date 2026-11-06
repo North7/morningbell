@@ -265,6 +265,19 @@ def read_tw_all():
         return codes, [(r[0], [num(v) for v in r[1:]] + [None] * (len(codes) - len(r) + 1)) for r in rd if r]
 
 
+def multpl(path):
+    """multpl.com 的月表（例如 shiller-pe、s-p-500-earnings），回傳 [[YYYY-MM-DD, 值]]。"""
+    import re
+    html = get(f'https://www.multpl.com/{path}/table/by-month', raw=True)
+    mon = {m: i + 1 for i, m in enumerate(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])}
+    rows = []
+    for d, v in re.findall(r'<td>([A-Z][a-z]{2} \d+, \d{4})</td>\s*<td>\s*(?:&#x2002;)?\s*(?:<abbr[^>]*>[^<]*</abbr>\s*)?([\d.,]+)', html):
+        m, dd, y = d.replace(',', '').split()
+        rows.append([f'{int(y):04d}-{mon[m]:02d}-{int(dd):02d}', num(v)])
+    if not rows: raise RuntimeError(f'multpl {path} 無資料')
+    return sorted(rows)
+
+
 # ---------- 鉅亨網：共同基金淨值、基本資料、前十大持股 ----------
 CNYES = 'https://fund.api.cnyes.com/fund/api/v1/funds/'
 
