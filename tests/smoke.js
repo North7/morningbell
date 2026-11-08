@@ -23,6 +23,10 @@ const BASE = process.env.BASE || 'http://localhost:8765/';
     bad.forEach(t => { console.log(`✗ ${w}px ${t}`); fail++; });
     errs.forEach(e => { console.log(`✗ ${w}px JS 錯誤：${e}`); fail++; });
     console.log(`${w}px：${ids.length} 個版面，錯誤 ${bad.length + errs.length}`);
+    // 新手指南（guide.html）也不能橫向捲動
+    await p.goto(BASE + 'guide.html'); await p.waitForTimeout(800);
+    const gw = await p.evaluate(() => document.documentElement.scrollWidth);
+    if (gw > w + 1) { console.log(`✗ ${w}px guide.html: 橫向溢出 ${gw}px`); fail++; }
     await ctx.close();
   }
   await b.close(); if (fail) { console.log(`共 ${fail} 個問題`); process.exit(1); } console.log('全部通過');

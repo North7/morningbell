@@ -737,3 +737,8 @@ table.mx th { font-weight: 500; color: var(--ink-3); padding: 1px 3px; position:
 table.mx td { width: 24px; min-width: 24px; height: 18px; text-align: center; padding: 0; border: 1px solid var(--void); color: var(--ink); }
 .tbl.mo td, .tbl.mo th { padding-right: 4px; font-size: 12px; }
 @media (max-width: 860px) { .dist { grid-template-columns: repeat(11, minmax(26px, 1fr)); overflow-x: auto; } .dist small { writing-mode: vertical-rl; } }
+/* 新手指南入口（2026-11-09） */
+.guide-cta { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; padding: 10px 14px; border: 1px solid var(--red); background: var(--flare-dim); color: var(--ink-2); font-size: 14px; }
+.guide-cta b { color: var(--red-ink); font-weight: 900; }
+.guide-cta span { margin-left: auto; color: var(--red-ink); font-weight: 700; }
+.guide-cta:hover { color: var(--ink); background-size: 0 0; }

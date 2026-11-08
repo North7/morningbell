@@ -426,7 +426,7 @@
     var ev = (N && N.events || []).map(function (e) { var dd = dnOf(e.date) - dnOf(new Date().toISOString().slice(0, 10)); return '<div class="event"><span class="d">' + e.date.slice(5).replace('-', '/') + '</span><span>' + esc(e.label) + '</span><span class="in' + (dd === 0 ? ' now' : '') + '">' + (dd > 0 ? dd + ' 天後' : dd === 0 ? '今天' : '已過') + '</span></div>'; }).join('');
     var plan = '<div class="sec-h"><h2>今天該做什麼</h2><span class="en">The Plan</span><hr>' + staleTag() + '</div><div class="grid">' +
       panel('span-7', '今天該做什麼、盯什麼', '依加碼框架 · 非投資建議', actionsHtml()) + panel('span-5', '今天變了什麼', '相對上一期', changesHtml()) + '</div>';
-    return front + '<div class="tape" aria-label="今日數據帶"><div class="tape-track">' + tapeItems() + tapeItems() + '</div></div>' + healthHtml() +
+    return '<a class="guide-cta" href="guide.html"><b>第一次來？</b>3 分鐘看懂晨鐘：每天看哪裡、標籤是什麼意思、大跌時看哪一版 <span aria-hidden="true">→</span></a>' + front + '<div class="tape" aria-label="今日數據帶"><div class="tape-track">' + tapeItems() + tapeItems() + '</div></div>' + healthHtml() +
       '<div class="sec-h"><h2>多空判定</h2><span class="en">Pullback or Bear?</span><hr><a href="#regime">完整判定 →</a></div>' + regimeStrip() +
       '<div class="sec-h"><h2>兩市收盤</h2><span class="en">The Close</span><hr></div>' + board +
       newsBlock + plan +
