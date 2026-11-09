@@ -12,11 +12,12 @@ OWN = re.compile(r'持倉|我的部位|扣款|(?<!基金的)(?<!持股包括)持
 CODE = re.compile(r'（[0-9A-Z.]{2,14}）|\([0-9A-Z.]{2,14}\)')
 DATE = re.compile(r'\d{4}-\d{2}-\d{2}|\d{1,2}/\d{1,2}|\d{4} ?年|\d{1,2} 月 ?\d{1,2} 日|\d{1,2}:\d{2}')
 NUM = re.compile(r'[+\-−]?\d[\d,]*(?:\.\d+)?')
+NAME = re.compile(r'\d+ ?日(?:均)?線|S&P ?500|那斯達克 ?100|台灣 ?50|0050|006208|0056|00878|00919|00929|00713|00679B|七巨頭|前十大')   # 名稱裡的數字不算數據
 POINT_MAX = 2
 REQ = ('date', 'slot', 'edition', 'written_utc', 'stance', 'headline', 'summary', 'modules', 'news', 'actions', 'changes')
 
 
-def nums(s): return len(NUM.findall(DATE.sub('', CODE.sub('', s))))
+def nums(s): return len(NUM.findall(NAME.sub('', DATE.sub('', CODE.sub('', s)))))
 
 
 def walk(o, path=''):
