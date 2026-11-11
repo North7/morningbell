@@ -1,8 +1,8 @@
 # 晨鐘 Morningbell
 
-**給長期投資人的美股、台股日報。** 兩市收盤、要聞解讀、回撤與加碼位置、宏觀、情緒、板塊輪動與台股籌碼。破曉 [Daybreak](https://north7.github.io/daybreak/)（比特幣日報）的姊妹刊。
+**給長期投資人的美股、台股日報。** 兩市收盤、要聞解讀、回撤與加碼位置、宏觀、情緒、板塊輪動與台股籌碼。破曉 [Daybreak](https://daybreak.aronlab.dev/)（比特幣日報）的姊妹刊。
 
-網站：<https://north7.github.io/morningbell/>
+網站：<https://morningbell.aronlab.dev/>
 
 ## 每天兩刊
 
