@@ -28,9 +28,12 @@ jobs:
           python3 tests/pipeline_check.py
           python3 -c "import json,glob;[json.load(open(f)) for f in glob.glob('data/*.json')+['pipeline/universe.json']]"
       - name: Render every section (desktop / mobile)
+        timeout-minutes: 6
         run: |
           npm i --no-save playwright@1.56.1
-          npx playwright install --with-deps chromium
+          # 用 GitHub runner 預裝的 Chrome，不下載瀏覽器、不裝系統套件（2026-11-12：Ubuntu 軟體來源 DNS 失敗時 --with-deps 會卡到逾時）
+          CHROMIUM=$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || true)
+          if [ -z "$CHROMIUM" ]; then npx playwright install chromium; fi
           python3 -m http.server 8765 >/dev/null 2>&1 &
           sleep 1
-          node tests/smoke.js
+          CHROMIUM="$CHROMIUM" node tests/smoke.js
