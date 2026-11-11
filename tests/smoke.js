@@ -3,7 +3,8 @@
 const { chromium } = require(process.env.PW || 'playwright');
 const BASE = process.env.BASE || 'http://localhost:8765/';
 (async () => {
-  const b = await chromium.launch(); let fail = 0;
+  // CHROMIUM：用 runner 預裝的 Chrome（2026-11-12：playwright install --with-deps 要連 Ubuntu 軟體來源，DNS 壞掉時會卡到逾時）
+  const b = await chromium.launch(process.env.CHROMIUM ? { executablePath: process.env.CHROMIUM } : {}); let fail = 0;
   for (const w of [1280, 390]) {
     const ctx = await b.newContext({ viewport: { width: w, height: 900 } });
     await ctx.route(/fonts\.(googleapis|gstatic)\.com/, r => r.abort());   // 測試不依賴外部字型
