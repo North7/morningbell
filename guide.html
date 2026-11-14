@@ -100,10 +100,15 @@ footer b { font-family: var(--mono); color: var(--ink); }
   .calm h2 { font-size: 26px; } .calm p { font-size: 17px; }
 }
 </style>
+<script>
+// 2026-11-15：選了英文（?lang=en 或之前選過）就轉到英文版
+(function () { var q = null, s = null; try { q = new URLSearchParams(location.search).get('lang'); s = localStorage.getItem('morningbell.lang'); } catch (e) {}
+  if ((q || s) === 'en' && !/[?&]png=1/.test(location.search)) location.replace('guide.en.html'); })();
+</script>
 </head>
 <body>
 <main class="sheet">
-  <a class="back" href="./" data-hide-in-png>← 回到晨鐘</a>
+  <a class="back" href="./" data-hide-in-png>← 回到晨鐘</a> <a class="back" href="guide.en.html" data-hide-in-png style="float:right">English</a>
   <header class="top">
     <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M18 44V30a14 14 0 0 1 28 0v14" fill="none" stroke="#1F4FE0" stroke-width="5"/><path d="M10 46h44" stroke="#0A0A0A" stroke-width="5"/><circle cx="32" cy="53" r="4" fill="#0A0A0A"/></svg>
     <span class="kicker">MORNINGBELL · 使用指南</span>
