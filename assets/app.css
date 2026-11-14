@@ -742,3 +742,31 @@ table.mx td { width: 24px; min-width: 24px; height: 18px; text-align: center; pa
 .guide-cta b { color: var(--red-ink); font-weight: 900; }
 .guide-cta span { margin-left: auto; color: var(--red-ink); font-weight: 700; }
 .guide-cta:hover { color: var(--ink); background-size: 0 0; }
+
+/* 中／EN（2026-11-15）：桌面在頂部列最右邊，行動版和日刊／夜刊按鈕並排在右上；切換時內容先糊掉淡出再重新載入 */
+.m-prefs { display: flex; align-items: center; gap: 6px; order: 10; }
+.m-prefs #m-theme { display: none; }
+.lang-toggle { position: relative; display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--ink); flex: none; }
+.lang-toggle button { position: relative; z-index: 1; border: 0; background: transparent; min-width: 34px; height: 26px; padding: 0 8px; font-family: var(--f-mono); font-size: 11px; font-weight: 700; letter-spacing: .04em; color: var(--ink-2); cursor: pointer; transition: color .3s; }
+.lang-toggle button[lang="zh-Hant"] { font-family: inherit; font-size: 12px; }
+.lang-toggle button[aria-pressed="true"] { color: var(--void); }
+.lang-toggle::before { content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 50%; background: var(--ink); transition: transform .45s var(--snap); }
+.lang-toggle.en::before { transform: translateX(100%); }
+.lang-out #view, .lang-out .rail, .lang-out .crumb, .lang-out .ticker { opacity: 0; filter: blur(6px); transition: opacity .25s, filter .25s; }
+@media (max-width: 860px) {
+  .m-prefs { position: absolute; top: 10px; right: 16px; }
+  .m-prefs #m-theme { display: inline-flex; }
+  .lang-toggle button { height: 28px; min-width: 32px; }
+  .crumb { padding-right: 124px; }
+}
+@media (prefers-reduced-motion: reduce) { .lang-toggle::before { transition: none; } .lang-out * { transition: none !important; } }
+/* 英文版：標題改用 Archivo 窄體（Noto Sans TC 的西文太寬）；頭條字級比中文小一號、行寬放寬；頂部列的語言切換固定在右上角，不跟著換行 */
+:root[lang="en"] { --f-cjk-display: "Archivo", var(--f-sys-cjk); }
+:root[lang="en"] .front h2 { font-stretch: 82%; font-size: clamp(30px, 3.4vw, 58px); line-height: 1.06; max-width: 28ch; letter-spacing: -.015em; }
+:root[lang="en"] .crumb h1 { font-stretch: 90%; letter-spacing: 0; }
+#tk-stance { max-width: min(46ch, calc(100vw - 32px)); overflow: hidden; text-overflow: ellipsis; }
+.stamp .chip { white-space: normal; max-width: 100%; }   /* 英文的定調比較長，頭版下方的定調可以換行 */
+@media (min-width: 861px) {
+  .top { position: sticky; padding-right: calc(var(--gut) + 84px); }
+  .m-prefs { position: absolute; top: 14px; right: var(--gut); }
+}

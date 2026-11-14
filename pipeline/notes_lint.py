@@ -28,6 +28,39 @@ def walk(o, path=''):
     elif isinstance(o, str): yield path, o
 
 
+KEEP = ('date', 'slot', 'edition', 'written_utc', 'tone', 'kind', 'dir', 'sym', 'value', 'weight', 'impact', 'module', 'url', 'time')
+OWN_EN = re.compile(r'\b(my|our) (position|holding|portfolio)s?\b|\bwe (own|hold)\b', re.I)
+
+
+def shape(a, b, path, out):
+    """英文版和中文版的結構要一致：同樣的鍵、同樣長度的陣列、不翻的欄位原樣"""
+    if isinstance(a, dict):
+        if not isinstance(b, dict): out.append(f'en {path}：型別不同'); return
+        for k in set(a) | set(b):
+            if k not in b: out.append(f'en {path}.{k}：英文版缺這個欄位')
+            elif k not in a: out.append(f'en {path}.{k}：中文版沒有這個欄位')
+            elif k in KEEP and a[k] != b[k] and not isinstance(a[k], (dict, list)): out.append(f'en {path}.{k}：要和中文版一樣（{a[k]!r}）')
+            else: shape(a[k], b[k], f'{path}.{k}' if path else k, out)
+    elif isinstance(a, list):
+        if not isinstance(b, list) or len(a) != len(b): out.append(f'en {path}：陣列長度要和中文版一樣'); return
+        for i, (x, y) in enumerate(zip(a, b)): shape(x, y, f'{path}[{i}]', out)
+
+
+def lint_en(n):
+    """2026-11-15：英文版 data/notes.en.json（網站英文版讀這份）。沒有就提醒；日期不同代表忘了更新"""
+    p = os.path.join(ROOT, 'data', 'notes.en.json')
+    if not os.path.exists(p): return ['缺 data/notes.en.json（英文版判讀）']
+    e = json.load(open(p)); out = []
+    if (e.get('date'), e.get('slot')) != (n.get('date'), n.get('slot')): return [f'notes.en.json 是 {e.get("date")} {e.get("slot")}，中文版是 {n.get("date")} {n.get("slot")}：英文版要跟著更新']
+    shape(n, e, '', out)
+    if len(e.get('headline', '')) > 110: out.append(f'en headline {len(e["headline"])} 字元，上限 110（英文比中文長，頭條會佔滿一整個畫面）')
+    for path, s in walk(e):
+        if path.endswith(('.url', '.source')): continue
+        if re.search(r'[\u4e00-\u9fff]', s): out.append(f'en {path}：還有中文')
+        if OWN_EN.search(s): out.append(f'en {path}：不得暗示持有（「{OWN_EN.search(s).group(0)}」）')
+    return out
+
+
 def main():
     n = json.load(open(os.path.join(ROOT, 'data', 'notes.json')))
     bad = [f'缺欄位 {k}' for k in REQ if k not in n]
@@ -48,6 +81,7 @@ def main():
     for k, f in (n.get('focus_items') or {}).items():
         first = re.split(r'[。；]', f.get('view', ''))[0]
         if nums(first) > POINT_MAX: bad.append(f'focus_items.{k}.view 第一句 {nums(first)} 個數字，最多 {POINT_MAX} 個')
+    bad += lint_en(n)
     if bad:
         print(f'notes_lint：{len(bad)} 個問題'); [print(' -', b) for b in bad]; sys.exit(1)
     print('notes_lint：通過')

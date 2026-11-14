@@ -387,18 +387,18 @@ for x in focus:
     q = Q[x['key']]; h = TG.get(x['key']) or {}; dev, rsi_, dd = q.get('dev200'), q.get('rsi'), q.get('dd_ath')
     sig = []
     hit = h.get('hit') or []
-    if hit and dd is not None and dd <= max(hit): sig.append({'k': 'zone', 'tone': 'pos', 'label': '加碼區', 'say': f"距高點 {dd:.1f}%，位於第 1 階（{M['ladder'][0]['dd']}%）之下；這段回撤（{h.get('ath_d')} 高點起）已觸發 {len(hit)} 階、最深 {h.get('ep_low')}%"})
+    if hit and dd is not None and dd <= max(hit): sig.append({'k': 'zone', 'tone': 'pos', 'label': '加碼區', 'say': f"距高點 {dd:.1f}%，位於第 1 階（{M['ladder'][0]['dd']}%）之下；這段回撤（{h.get('ath_d')} 高點起）已觸發 {len(hit)} 階、最深 {h.get('ep_low')}%", 'say_en': f"{dd:.1f}% from the high, below tier 1 ({M['ladder'][0]['dd']}%). This drawdown (from the {h.get('ath_d')} high) has hit {len(hit)} tiers, deepest {h.get('ep_low')}%"})
     elif h.get('next') and h['next']['dist'] is not None and h['next']['dist'] > -HT.get('near_tier', 2):
-        sig.append({'k': 'near', 'tone': 'warn', 'label': '接近加碼階', 'say': f"再跌 {abs(h['next']['dist']):.1f}% 到 {h['next']['dd']}% 階（{h['next']['px']}）"})
-    if dev is not None and dev >= HT.get('hot_dev200', 30): sig.append({'k': 'hot', 'tone': 'neg', 'label': '過熱', 'say': f"高於 200 日線 {dev:.1f}%（≥ {HT.get('hot_dev200')}%）"})
-    elif dev is not None and dev >= HT.get('warm_dev200', 20): sig.append({'k': 'warm', 'tone': 'warn', 'label': '偏熱', 'say': f"高於 200 日線 {dev:.1f}%（≥ {HT.get('warm_dev200')}%）"})
-    if rsi_ is not None and rsi_ >= HT.get('rsi_hot', 70): sig.append({'k': 'rsi', 'tone': 'warn', 'label': '短線超買', 'say': f"RSI {rsi_:.0f}（≥ {HT.get('rsi_hot')}）"})
-    if dev is not None and dev < 0: sig.append({'k': 'below', 'tone': 'warn', 'label': '跌破長期均線', 'say': f"低於 200 日線 {abs(dev):.1f}%" + ('，均線仍上升' if q.get('sma200_up') else '，均線已走平或下降')})
-    if not sig: sig.append({'k': 'neutral', 'tone': 'neu', 'label': '中性', 'say': f"距高點 {dd:.1f}%、高於 200 日線 {dev:.1f}%，沒有觸發任何規則" if dd is not None and dev is not None else '沒有觸發任何規則'})
+        sig.append({'k': 'near', 'tone': 'warn', 'label': '接近加碼階', 'say': f"再跌 {abs(h['next']['dist']):.1f}% 到 {h['next']['dd']}% 階（{h['next']['px']}）", 'say_en': f"{abs(h['next']['dist']):.1f}% more to the {h['next']['dd']}% tier ({h['next']['px']})"})
+    if dev is not None and dev >= HT.get('hot_dev200', 30): sig.append({'k': 'hot', 'tone': 'neg', 'label': '過熱', 'say': f"高於 200 日線 {dev:.1f}%（≥ {HT.get('hot_dev200')}%）", 'say_en': f"{dev:.1f}% above the 200-day line (≥ {HT.get('hot_dev200')}%)"})
+    elif dev is not None and dev >= HT.get('warm_dev200', 20): sig.append({'k': 'warm', 'tone': 'warn', 'label': '偏熱', 'say': f"高於 200 日線 {dev:.1f}%（≥ {HT.get('warm_dev200')}%）", 'say_en': f"{dev:.1f}% above the 200-day line (≥ {HT.get('warm_dev200')}%)"})
+    if rsi_ is not None and rsi_ >= HT.get('rsi_hot', 70): sig.append({'k': 'rsi', 'tone': 'warn', 'label': '短線超買', 'say': f"RSI {rsi_:.0f}（≥ {HT.get('rsi_hot')}）", 'say_en': f"RSI {rsi_:.0f} (≥ {HT.get('rsi_hot')})"})
+    if dev is not None and dev < 0: sig.append({'k': 'below', 'tone': 'warn', 'label': '跌破長期均線', 'say': f"低於 200 日線 {abs(dev):.1f}%" + ('，均線仍上升' if q.get('sma200_up') else '，均線已走平或下降'), 'say_en': f"{abs(dev):.1f}% below the 200-day line" + (', line still rising' if q.get('sma200_up') else ', line flat or falling')})
+    if not sig: sig.append({'k': 'neutral', 'tone': 'neu', 'label': '中性', 'say': f"距高點 {dd:.1f}%、高於 200 日線 {dev:.1f}%，沒有觸發任何規則" if dd is not None and dev is not None else '沒有觸發任何規則', 'say_en': f"{dd:.1f}% from the high, {dev:.1f}% above the 200-day line. No rule triggered" if dd is not None and dev is not None else 'No rule triggered'})
     sma = q.get('sma200')
-    lv = [{'k': 'tier', 'label': f"加碼 {t['dd']}% 階", 'px': t['px'], 'hit': t['dd'] in hit} for t in (h.get('levels') or [])]
-    if sma: lv += [{'k': 'sma', 'label': '200 日線', 'px': r2(sma)}, {'k': 'warm', 'label': f"偏熱線（200 日線 +{HT.get('warm_dev200')}%）", 'px': r2(sma * (1 + HT.get('warm_dev200', 20) / 100))}, {'k': 'hot', 'label': f"過熱線（200 日線 +{HT.get('hot_dev200')}%）", 'px': r2(sma * (1 + HT.get('hot_dev200', 30) / 100))}]
-    lv += [{'k': 'hi', 'label': '52 週高點', 'px': q.get('hi52')}, {'k': 'lo', 'label': '52 週低點', 'px': q.get('lo52')}, {'k': 'ath', 'label': f"歷史高點（{q.get('ath_d')}）", 'px': q.get('ath')}]
+    lv = [{'k': 'tier', 'label': f"加碼 {t['dd']}% 階", 'label_en': f"Add tier {t['dd']}%", 'px': t['px'], 'hit': t['dd'] in hit} for t in (h.get('levels') or [])]
+    if sma: lv += [{'k': 'sma', 'label': '200 日線', 'px': r2(sma)}, {'k': 'warm', 'label': f"偏熱線（200 日線 +{HT.get('warm_dev200')}%）", 'label_en': f"Warm line (200-day +{HT.get('warm_dev200')}%)", 'px': r2(sma * (1 + HT.get('warm_dev200', 20) / 100))}, {'k': 'hot', 'label': f"過熱線（200 日線 +{HT.get('hot_dev200')}%）", 'label_en': f"Hot line (200-day +{HT.get('hot_dev200')}%)", 'px': r2(sma * (1 + HT.get('hot_dev200', 30) / 100))}]
+    lv += [{'k': 'hi', 'label': '52 週高點', 'px': q.get('hi52')}, {'k': 'lo', 'label': '52 週低點', 'px': q.get('lo52')}, {'k': 'ath', 'label': f"歷史高點（{q.get('ath_d')}）", 'label_en': f"All-time high ({q.get('ath_d')})", 'px': q.get('ath')}]
     x['rule'] = {'state': sig[0], 'signals': sig, 'levels': sorted([l for l in lv if l['px']], key=lambda l: -l['px']), 'next': h.get('next'), 'hit': hit, 'ep_low': h.get('ep_low'), 'rsi': rsi_, 'dev200': dev, 'c': q.get('c')}
 D['heat_note'] = HT.get('note')
 
@@ -443,10 +443,10 @@ def trend(key):
     else: st = ('bull', '多頭', 'up')
     q['stage'] = {'k': st[0], 'label': st[1], 'tone': st[2]}
     q['trend_checks'] = [
-        {'label': '收盤在 200 日線之上', 'ok': v[-1] >= m200[-1], 'val': f"{q['dev200']:+.1f}%", 'say': f"200 日線 {fmtn(m200[-1])}；" + (f"再跌 {abs(q['dev200']):.1f}% 跌破" if v[-1] >= m200[-1] else f"已連 {run_dn} 日在線下")},
-        {'label': '200 日線仍在上升', 'ok': rising, 'val': f"{slope:+.2f}%", 'say': f"和 {sd} 個交易日前比"},
-        {'label': '50 日線在 200 日線之上', 'ok': m50[-1] >= m200[-1], 'val': f"{q['cross_gap']:+.1f}%", 'say': '跌破就是「死亡交叉」，代表中期趨勢轉弱'},
-        {'label': f"跌幅未達 {ST['bear_dd']}%", 'ok': dd > ST['bear_dd'], 'val': f"{dd:.1f}%", 'say': f"{ST['bear_dd']}% 線在 {fmtn(q['px20'])}"}]
+        {'label': '收盤在 200 日線之上', 'ok': v[-1] >= m200[-1], 'val': f"{q['dev200']:+.1f}%", 'say': f"200 日線 {fmtn(m200[-1])}；" + (f"再跌 {abs(q['dev200']):.1f}% 跌破" if v[-1] >= m200[-1] else f"已連 {run_dn} 日在線下"), 'say_en': f"200-day line {fmtn(m200[-1])}. " + (f"{abs(q['dev200']):.1f}% more to break it" if v[-1] >= m200[-1] else f"Below it for {run_dn} days")},
+        {'label': '200 日線仍在上升', 'ok': rising, 'val': f"{slope:+.2f}%", 'say': f"和 {sd} 個交易日前比", 'say_en': f"vs. {sd} trading days ago"},
+        {'label': '50 日線在 200 日線之上', 'ok': m50[-1] >= m200[-1], 'val': f"{q['cross_gap']:+.1f}%", 'say': '跌破就是「死亡交叉」，代表中期趨勢轉弱', 'say_en': 'A break below is a "death cross": the mid-term trend weakens'},
+        {'label': f"跌幅未達 {ST['bear_dd']}%", 'label_en': f"Drawdown above {ST['bear_dd']}%", 'ok': dd > ST['bear_dd'], 'val': f"{dd:.1f}%", 'say': f"{ST['bear_dd']}% 線在 {fmtn(q['px20'])}", 'say_en': f"The {ST['bear_dd']}% line is at {fmtn(q['px20'])}"}]
     return q, cl
 
 
@@ -547,11 +547,11 @@ if len(icsa_s) > 60:
     claims = {'d': icsa_d, 'v4': r2(v4[-1], 0), 'rise': r2(pct(v4[-1], min(v4)), 1)}
 spx_t = trend('SPX')
 sysl = [
-    {'k': 'hy', 'label': '信用利差擴大', 'on': bool(hy) and (hy.get('v', 0) >= LT['hy_level'] or (hy.get('chg1m') or 0) >= LT['hy_chg1m']), 'val': f"{hy.get('v')}%（一個月 {hy.get('chg1m'):+.2f}）" if hy else '—',
-     'rule': f"高收益債利差 ≥ {LT['hy_level']}% 或一個月升 ≥ {LT['hy_chg1m']}", 'd': hy.get('d')},
+    {'k': 'hy', 'label': '信用利差擴大', 'on': bool(hy) and (hy.get('v', 0) >= LT['hy_level'] or (hy.get('chg1m') or 0) >= LT['hy_chg1m']), 'val': f"{hy.get('v')}%（一個月 {hy.get('chg1m'):+.2f}）" if hy else '—', 'val_en': f"{hy.get('v')}% (1-mo {hy.get('chg1m'):+.2f})" if hy else '—',
+     'rule': f"高收益債利差 ≥ {LT['hy_level']}% 或一個月升 ≥ {LT['hy_chg1m']}", 'rule_en': f"High-yield spread ≥ {LT['hy_level']}% or up ≥ {LT['hy_chg1m']} in a month", 'd': hy.get('d')},
     {'k': 'nfci', 'label': '金融情勢偏緊', 'on': nfci is not None and nfci > LT['nfci'], 'val': '—' if nfci is None else f"{nfci:+.2f}", 'rule': '芝加哥 Fed 金融情勢指數 > 0（比平均緊）', 'd': nfci_d},
-    {'k': 'sahm', 'label': '衰退訊號（Sahm）', 'on': sahm is not None and sahm >= LT['sahm'], 'val': '—' if sahm is None else f"{sahm:.2f}", 'rule': f"失業率三個月均值比前 12 個月低點高 ≥ {LT['sahm']} 個百分點", 'd': sahm_d},
-    {'k': 'claims', 'label': '初領失業金上升', 'on': bool(claims) and claims['rise'] >= LT['claims_rise'], 'val': '—' if not claims else f"{claims['v4']/1000:.0f}K（比一年低點 {claims['rise']:+.0f}%）", 'rule': f"四週均值比一年低點高 ≥ {LT['claims_rise']}%", 'd': icsa_d},
+    {'k': 'sahm', 'label': '衰退訊號（Sahm）', 'on': sahm is not None and sahm >= LT['sahm'], 'val': '—' if sahm is None else f"{sahm:.2f}", 'rule': f"失業率三個月均值比前 12 個月低點高 ≥ {LT['sahm']} 個百分點", 'rule_en': f"3-mo avg unemployment ≥ {LT['sahm']} pt above its 12-mo low", 'd': sahm_d},
+    {'k': 'claims', 'label': '初領失業金上升', 'on': bool(claims) and claims['rise'] >= LT['claims_rise'], 'val': '—' if not claims else f"{claims['v4']/1000:.0f}K（比一年低點 {claims['rise']:+.0f}%）", 'val_en': '—' if not claims else f"{claims['v4']/1000:.0f}K ({claims['rise']:+.0f}% vs. 1-yr low)", 'rule': f"四週均值比一年低點高 ≥ {LT['claims_rise']}%", 'rule_en': f"4-week avg ≥ {LT['claims_rise']}% above its 1-yr low", 'd': icsa_d},
     {'k': 'curve', 'label': '殖利率曲線倒掛', 'on': (D['macro'].get('last') or {}).get('s10_3m', 1) < 0, 'val': f"{(D['macro'].get('last') or {}).get('s10_3m')}", 'rule': '10 年 − 3 個月 < 0', 'd': (D['macro'].get('last') or {}).get('d')},
     {'k': 'spx', 'label': '美股大盤跌破 200 日線', 'on': bool(spx_t) and spx_t[0]['c'] < spx_t[0]['sma200'], 'val': f"{spx_t[0]['dev200']:+.1f}%" if spx_t else '—', 'rule': 'S&P 500 收盤低於 200 日線（全球風險偏好轉弱）', 'd': spx_t[0]['d'] if spx_t else None}]
 sys_on = sum(1 for x in sysl if x['on'])
@@ -563,49 +563,62 @@ for key, name in (('TW_TAIEX', '台股加權指數'), ('SPX_LONG', 'S&P 500'), (
     q, cl = t; tw_ = key == 'TW_TAIEX'
     if tw_:
         bn = (breadth or {}).get('now') or {}
-        local = [{'k': 'breadth', 'label': '市場寬度崩壞', 'on': bn.get('pct200') is not None and bn['pct200'] < LT['tw_breadth200'], 'val': '—' if bn.get('pct200') is None else f"{bn['pct200']:.0f}% 站上 200 日線", 'rule': f"上市股票站上 200 日線的比例 < {LT['tw_breadth200']}%"},
-                 {'k': 'twd', 'label': '台幣急貶', 'on': (fx.get('chg1m') or 0) >= LT['twd_chg1m'], 'val': f"{fx.get('v')}（一個月 {fx.get('chg1m'):+.2f}）" if fx else '—', 'rule': f"美元兌台幣一個月升 ≥ {LT['twd_chg1m']} 元（外資匯出）"}]
+        local = [{'k': 'breadth', 'label': '市場寬度崩壞', 'on': bn.get('pct200') is not None and bn['pct200'] < LT['tw_breadth200'], 'val': '—' if bn.get('pct200') is None else f"{bn['pct200']:.0f}% 站上 200 日線", 'val_en': '—' if bn.get('pct200') is None else f"{bn['pct200']:.0f}% above 200-day", 'rule': f"上市股票站上 200 日線的比例 < {LT['tw_breadth200']}%", 'rule_en': f"Share of listed stocks above the 200-day line < {LT['tw_breadth200']}%"},
+                 {'k': 'twd', 'label': '台幣急貶', 'on': (fx.get('chg1m') or 0) >= LT['twd_chg1m'], 'val': f"{fx.get('v')}（一個月 {fx.get('chg1m'):+.2f}）" if fx else '—', 'val_en': f"{fx.get('v')} (1-mo {fx.get('chg1m'):+.2f})" if fx else '—', 'rule': f"美元兌台幣一個月升 ≥ {LT['twd_chg1m']} 元（外資匯出）", 'rule_en': f"USD/TWD up ≥ {LT['twd_chg1m']} in a month (foreign money leaving)"}]
         ml = tws.get('margin_last') or {}; ins = tws.get('inst_sum') or {}
         f20s = [sum((r[1] or 0) for r in (tws.get('inst') or [])[max(0, i - 19):i + 1]) for i in range(len(tws.get('inst') or []))]
         cap = [{'k': 'rsi', 'label': '超賣', 'on': (q['rsi'] or 50) <= LT['rsi_low'], 'val': f"RSI {q['rsi']:.0f}", 'rule': f"RSI ≤ {LT['rsi_low']}"},
-               {'k': 'margin', 'label': '融資斷頭／去槓桿', 'on': (ml.get('chg20') or 0) <= LT['margin_cut'], 'val': f"20 日 {ml.get('chg20'):+.1f}%" if ml else '—', 'rule': f"融資餘額 20 日 ≤ {LT['margin_cut']}%"},
-               {'k': 'fii', 'label': '外資賣超極端', 'on': bool(f20s) and ins.get('f20') is not None and ins['f20'] <= sorted(f20s)[max(0, len(f20s) // 10)], 'val': f"20 日 {ins.get('f20', 0):,.0f} 億", 'rule': '外資 20 日累計賣超在近半年最低的 10%'},
-               {'k': 'wash', 'label': '寬度洗盤', 'on': bn.get('pct50') is not None and bn['pct50'] <= LT['breadth50_washout'], 'val': '—' if bn.get('pct50') is None else f"{bn['pct50']:.0f}% 站上 50 日線", 'rule': f"站上 50 日線的比例 ≤ {LT['breadth50_washout']}%"},
-               {'k': 'lows', 'label': '新低家數大增', 'on': bool(bn.get('lo')) and bn['lo'] >= 100, 'val': '—' if bn.get('lo') is None else f"新高 {bn['hi']}／新低 {bn['lo']}", 'rule': '單日創 52 週新低 ≥ 100 檔'}]
+               {'k': 'margin', 'label': '融資斷頭／去槓桿', 'on': (ml.get('chg20') or 0) <= LT['margin_cut'], 'val': f"20 日 {ml.get('chg20'):+.1f}%" if ml else '—', 'val_en': f"20d {ml.get('chg20'):+.1f}%" if ml else '—', 'rule': f"融資餘額 20 日 ≤ {LT['margin_cut']}%", 'rule_en': f"Margin balance 20-day change ≤ {LT['margin_cut']}%"},
+               {'k': 'fii', 'label': '外資賣超極端', 'on': bool(f20s) and ins.get('f20') is not None and ins['f20'] <= sorted(f20s)[max(0, len(f20s) // 10)], 'val': f"20 日 {ins.get('f20', 0):,.0f} 億", 'val_en': f"20d {'−' if ins.get('f20', 0) < 0 else ''}NT${abs(ins.get('f20', 0)) / 10:,.1f}B", 'rule': '外資 20 日累計賣超在近半年最低的 10%'},
+               {'k': 'wash', 'label': '寬度洗盤', 'on': bn.get('pct50') is not None and bn['pct50'] <= LT['breadth50_washout'], 'val': '—' if bn.get('pct50') is None else f"{bn['pct50']:.0f}% 站上 50 日線", 'val_en': '—' if bn.get('pct50') is None else f"{bn['pct50']:.0f}% above 50-day", 'rule': f"站上 50 日線的比例 ≤ {LT['breadth50_washout']}%", 'rule_en': f"Share above the 50-day line ≤ {LT['breadth50_washout']}%"},
+               {'k': 'lows', 'label': '新低家數大增', 'on': bool(bn.get('lo')) and bn['lo'] >= 100, 'val': '—' if bn.get('lo') is None else f"新高 {bn['hi']}／新低 {bn['lo']}", 'val_en': '—' if bn.get('lo') is None else f"{bn['hi']} highs / {bn['lo']} lows", 'rule': '單日創 52 週新低 ≥ 100 檔'}]
     else:
         sec = D['sentiment'].get('breadth') or {}
-        local = [{'k': 'sectors', 'label': '類股普遍轉弱', 'on': sec.get('sectors_above200', 11) <= LT['us_sectors200'], 'val': f"{sec.get('sectors_above200')}／{sec.get('sectors_n')} 類股站上 200 日線", 'rule': f"站上 200 日線的類股 ≤ {LT['us_sectors200']}／11"}]
+        local = [{'k': 'sectors', 'label': '類股普遍轉弱', 'on': sec.get('sectors_above200', 11) <= LT['us_sectors200'], 'val': f"{sec.get('sectors_above200')}／{sec.get('sectors_n')} 類股站上 200 日線", 'val_en': f"{sec.get('sectors_above200')}/{sec.get('sectors_n')} sectors above 200-day", 'rule': f"站上 200 日線的類股 ≤ {LT['us_sectors200']}／11", 'rule_en': f"Sectors above the 200-day line ≤ {LT['us_sectors200']}/11"}]
         cap = [{'k': 'rsi', 'label': '超賣', 'on': (q['rsi'] or 50) <= LT['rsi_low'], 'val': f"RSI {q['rsi']:.0f}", 'rule': f"RSI ≤ {LT['rsi_low']}"},
                {'k': 'vix', 'label': 'VIX 恐慌', 'on': (vx.get('v') or 0) >= LT['vix_panic'], 'val': f"{vx.get('v')}", 'rule': f"VIX ≥ {LT['vix_panic']}"},
                {'k': 'term', 'label': '波動率期限倒掛', 'on': (vx.get('ratio_3m') or 0) >= 1, 'val': f"{vx.get('ratio_3m')}", 'rule': 'VIX ÷ 3 個月 VIX ≥ 1'},
-               {'k': 'fng', 'label': '極度恐懼', 'on': fng.get('score') is not None and fng['score'] <= LT['fng_fear'], 'val': f"{fng.get('score')}", 'rule': f"CNN 恐懼貪婪 ≤ {LT['fng_fear']}"}]
+               {'k': 'fng', 'label': '極度恐懼', 'on': fng.get('score') is not None and fng['score'] <= LT['fng_fear'], 'val': f"{fng.get('score')}", 'rule': f"CNN 恐懼貪婪 ≤ {LT['fng_fear']}", 'rule_en': f"CNN Fear & Greed ≤ {LT['fng_fear']}"}]
     on_local = sum(1 for x in local if x['on']); cap_on = sum(1 for x in cap if x['on'])
     risk = sys_on + on_local
     dfn = q['below_run'] >= DF['days_below'] and (q['slope200'] <= 0.2 or risk >= DF['systemic_min'])
     an = analogs(cl, q['dd'], q['days'])
     stg = q['stage']['k']
-    if stg == 'bull' and risk <= 1: lean = ('多頭延續', 'pos', f"四項趨勢檢查都成立、距高點只有 {q['dd']}%，系統性風險燈亮 {risk} 個；目前的下跌只是多頭裡的正常波動。")
-    elif stg in ('bull', 'pullback') and risk <= 1: lean = ('回調', 'pos', f"趨勢仍在（{'站在' if q['dev200'] >= 0 else '剛跌破'}上升中的 200 日線）、系統性風險燈只亮 {risk} 個，比較像多頭裡的修正，不像景氣或信用出問題的轉空。")
-    elif stg in ('bull', 'pullback'): lean = ('回調，但風險升高', 'warn', f"價格趨勢仍在，但系統性風險燈亮了 {risk} 個，修正有機會拉長或加深，要盯風險燈是否繼續增加。")
-    elif stg == 'weak': lean = ('轉弱', 'neg', f"收盤已連 {q['below_run']} 日在 200 日線之下" + ('，且 200 日線不再上升' if q['slope200'] <= 0.2 else '，50 日線也跌破 200 日線') + f"；系統性風險燈 {risk} 個。")
-    elif q['slope200'] > 0.2 and risk <= 1: lean = ('急跌型熊市', 'warn', f"跌幅已達 {q['dd']}%、符合熊市定義，但 200 日線仍在上升、系統性風險燈只亮 {risk} 個：比較像族群或資金面引發的急跌，不是景氣或信用出問題的長空。急跌型能不能止跌，看恐慌訊號（現在 {cap_on}／{len(cap)}）與能否站回 200 日線。")
-    elif q['slope200'] <= 0.2 and risk >= DF['systemic_min']: lean = ('空頭', 'neg', f"跌幅 {q['dd']}%、200 日線已不再上升，系統性風險燈亮 {risk} 個：趨勢與基本面同時轉壞。")
-    else: lean = ('熊市，風險升高', 'neg', f"跌幅 {q['dd']}%" + ('、200 日線已不再上升' if q['slope200'] <= 0.2 else '') + f"，系統性風險燈亮 {risk} 個；還沒到趨勢與基本面同時轉壞，但要盯風險燈。")
-    flips = []
+    up200 = q['slope200'] > 0.2
+    if stg == 'bull' and risk <= 1: lean = ('多頭延續', 'pos', f"四項趨勢檢查都成立、距高點只有 {q['dd']}%，系統性風險燈亮 {risk} 個；目前的下跌只是多頭裡的正常波動。",
+                                           f"All four trend checks pass and it is only {q['dd']}% from the high. Systemic lights on: {risk}. This dip is normal noise in an uptrend.")
+    elif stg in ('bull', 'pullback') and risk <= 1: lean = ('回調', 'pos', f"趨勢仍在（{'站在' if q['dev200'] >= 0 else '剛跌破'}上升中的 200 日線）、系統性風險燈只亮 {risk} 個，比較像多頭裡的修正，不像景氣或信用出問題的轉空。",
+                                                           f"The trend holds ({'above' if q['dev200'] >= 0 else 'just below'} a rising 200-day line) and only {risk} of {len(sysl) + len(local)} systemic lights are on. It looks like a pullback in an uptrend, not a turn caused by the economy or credit.")
+    elif stg in ('bull', 'pullback'): lean = ('回調，但風險升高', 'warn', f"價格趨勢仍在，但系統性風險燈亮了 {risk} 個，修正有機會拉長或加深，要盯風險燈是否繼續增加。",
+                                             f"The price trend holds, but {risk} of {len(sysl) + len(local)} systemic lights are on. The pullback may run longer or deeper. Watch whether more lights turn on.")
+    elif stg == 'weak': lean = ('轉弱', 'neg', f"收盤已連 {q['below_run']} 日在 200 日線之下" + ('，且 200 日線不再上升' if q['slope200'] <= 0.2 else '，50 日線也跌破 200 日線') + f"；系統性風險燈 {risk} 個。",
+                               f"It has closed below the 200-day line for {q['below_run']} days" + (', and the line is no longer rising' if q['slope200'] <= 0.2 else ', and the 50-day is below the 200-day') + f". Systemic lights on: {risk}.")
+    elif up200 and risk <= 1: lean = ('急跌型熊市', 'warn', f"跌幅已達 {q['dd']}%、符合熊市定義，但 200 日線仍在上升、系統性風險燈只亮 {risk} 個：比較像族群或資金面引發的急跌，不是景氣或信用出問題的長空。急跌型能不能止跌，看恐慌訊號（現在 {cap_on}／{len(cap)}）與能否站回 200 日線。",
+                                     f"Down {q['dd']}%, which meets the bear definition. But the 200-day line is still rising and only {risk} of {len(sysl) + len(local)} systemic lights are on. This looks like a fast drop driven by one group or by money flows, not a long bear from the economy or credit. Whether it bottoms depends on panic signals (now {cap_on}/{len(cap)}) and a return above the 200-day line.")
+    elif not up200 and risk >= DF['systemic_min']: lean = ('空頭', 'neg', f"跌幅 {q['dd']}%、200 日線已不再上升，系統性風險燈亮 {risk} 個：趨勢與基本面同時轉壞。",
+                                                          f"Down {q['dd']}%, the 200-day line is no longer rising, and {risk} of {len(sysl) + len(local)} systemic lights are on. Trend and fundamentals are both worse.")
+    else: lean = ('熊市，風險升高', 'neg', f"跌幅 {q['dd']}%" + ('、200 日線已不再上升' if not up200 else '') + f"，系統性風險燈亮 {risk} 個；還沒到趨勢與基本面同時轉壞，但要盯風險燈。",
+                  f"Down {q['dd']}%" + (', the 200-day line is no longer rising' if not up200 else '') + f". Systemic lights on: {risk}. Trend and fundamentals have not both turned, but watch the lights.")
+    flips, flips_en = [], []
+    def fl(zh, en): flips.append(zh); flips_en.append(en)
     if stg in ('bull', 'pullback'):
-        flips.append(f"收盤連 {DF['days_below']} 日跌破 200 日線（{fmtn(q['sma200'])}，距今 {q['dev200']:+.1f}%），且 200 日線走平 → 轉弱")
-        flips.append(f"系統性風險燈亮到 {DF['systemic_min']} 個以上（目前 {risk} 個）→ 改判為可能轉空")
-        if q['dd'] > ST['bear_dd']: flips.append(f"跌破 {ST['bear_dd']}%（{fmtn(q['px20'])}）→ 進入熊市定義")
+        fl(f"收盤連 {DF['days_below']} 日跌破 200 日線（{fmtn(q['sma200'])}，距今 {q['dev200']:+.1f}%），且 200 日線走平 → 轉弱",
+           f"{DF['days_below']} closes below the 200-day line ({fmtn(q['sma200'])}, now {q['dev200']:+.1f}%) and the line goes flat → weak")
+        fl(f"系統性風險燈亮到 {DF['systemic_min']} 個以上（目前 {risk} 個）→ 改判為可能轉空",
+           f"{DF['systemic_min']}+ systemic lights on (now {risk}) → may be turning bearish")
+        if q['dd'] > ST['bear_dd']: fl(f"跌破 {ST['bear_dd']}%（{fmtn(q['px20'])}）→ 進入熊市定義", f"Falls past {ST['bear_dd']}% ({fmtn(q['px20'])}) → bear market by definition")
     elif stg == 'bear':
-        flips.append(f"收盤站回 {ST['bear_dd']}% 線（{fmtn(q['px20'])}）之上、再連 {DF['days_below']} 日站穩 200 日線（{fmtn(q['sma200'])}）→ 回到修正")
-        flips.append(f"系統性風險燈亮到 {DF['systemic_min']} 個以上（目前 {risk} 個）→ 改判景氣或信用引發的空頭")
-        flips.append(f"200 日線轉為走平或下降（目前 {q['slope200']:+.2f}%）→ 長期趨勢轉空")
+        fl(f"收盤站回 {ST['bear_dd']}% 線（{fmtn(q['px20'])}）之上、再連 {DF['days_below']} 日站穩 200 日線（{fmtn(q['sma200'])}）→ 回到修正",
+           f"Closes back above the {ST['bear_dd']}% line ({fmtn(q['px20'])}), then {DF['days_below']} closes above the 200-day line ({fmtn(q['sma200'])}) → back to a pullback")
+        fl(f"系統性風險燈亮到 {DF['systemic_min']} 個以上（目前 {risk} 個）→ 改判景氣或信用引發的空頭",
+           f"{DF['systemic_min']}+ systemic lights on (now {risk}) → a bear driven by the economy or credit")
+        fl(f"200 日線轉為走平或下降（目前 {q['slope200']:+.2f}%）→ 長期趨勢轉空", f"The 200-day line goes flat or falls (now {q['slope200']:+.2f}%) → long-term trend turns down")
     else:
-        flips.append(f"收盤連 {DF['days_below']} 日站回 200 日線（{fmtn(q['sma200'])}）→ 解除轉弱")
-        flips.append(f"系統性風險燈降到 1 個以下（目前 {risk} 個）")
+        fl(f"收盤連 {DF['days_below']} 日站回 200 日線（{fmtn(q['sma200'])}）→ 解除轉弱", f"{DF['days_below']} closes back above the 200-day line ({fmtn(q['sma200'])}) → no longer weak")
+        fl(f"系統性風險燈降到 1 個以下（目前 {risk} 個）", f"Systemic lights drop to 1 or fewer (now {risk})")
     regime['markets'].append({'key': key, 'name': name, **q, 'local': local, 'cap': cap, 'risk_on': risk, 'risk_n': len(sysl) + len(local), 'cap_on': cap_on, 'cap_n': len(cap),
                               'defense': {'on': dfn, 'below_run': q['below_run'], 'need': DF['days_below']}, 'analogs': an,
-                              'view': {'lean': lean[0], 'tone': lean[1], 'why': lean[2], 'flips': flips}})
+                              'view': {'lean': lean[0], 'tone': lean[1], 'why': lean[2], 'why_en': lean[3], 'flips': flips, 'flips_en': flips_en}})
 D['regime'] = regime
 
 # ---------- 資料狀態 ----------

@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Morningbell in 3 minutes</title>
+<meta name="description" content="How to read Morningbell: when to read it, where to look first, which page to read in a big drop, and what the tags and colours mean.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=JetBrains+Mono:wght@400;700&family=Noto+Sans+TC:wght@900&display=swap">
+<style>
+/* 晨鐘使用指南英文版（2026-11-15，內容和 guide.html 相同）：一張直式長圖，手機看、可分享；同一份 HTML 也輸出成 assets/guide-en.png */
+:root {
+  --paper: #EEECE6; --card: #F6F5F1; --card2: #E8E5DE; --line: #D2CEC4; --ink: #0A0A0A; --ink2: #3D3C39; --ink3: #7A766F;
+  --blue: #1F4FE0; --blue-ink: #1A3FB8; --blue-dim: rgba(31, 79, 224, .09);
+  --up: #D7261C; --down: #0B8A4F; --warn: #9C6A00; --up-dim: rgba(215, 38, 28, .09); --down-dim: rgba(11, 138, 79, .1); --warn-dim: rgba(156, 106, 0, .1);
+  --sys: system-ui, -apple-system, "PingFang TC", "Microsoft JhengHei", "Noto Sans CJK TC", sans-serif;
+  --disp: "Archivo", var(--sys); --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--paper); color: var(--ink); font-family: "Archivo", var(--sys); -webkit-font-smoothing: antialiased; }
+.sheet { width: 100%; max-width: 1080px; margin: 0 auto; padding: 56px 56px 48px; }
+header.top { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0 22px; align-items: end; padding-bottom: 22px; border-bottom: 8px solid var(--ink); }
+header.top svg { width: 96px; height: 96px; grid-row: span 2; }
+.kicker { font-family: var(--mono); font-size: 18px; letter-spacing: .14em; color: var(--ink3); }
+h1 { margin: 6px 0 0; font-family: "Archivo", var(--sys); font-stretch: 85%; font-weight: 900; font-size: 64px; line-height: 1.05; letter-spacing: -.01em; }
+h1 em { font-style: normal; color: var(--blue); }
+.lead { margin: 22px 0 0; font-size: 24px; line-height: 1.6; color: var(--ink2); }
+.lead b { color: var(--ink); }
+.step { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 0 22px; margin-top: 44px; }
+.no { font-family: "Archivo", sans-serif; font-stretch: 62%; font-weight: 900; font-size: 104px; line-height: .8; color: var(--blue); }
+.step h2 { margin: 0; font-family: var(--disp); font-weight: 900; font-size: 36px; line-height: 1.2; }
+.step h2 small { display: block; margin-top: 4px; font-family: var(--sys); font-weight: 400; font-size: 21px; color: var(--ink3); }
+.body { grid-column: 2; margin-top: 16px; }
+.card { background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--ink); padding: 20px 22px; }
+.card + .card { margin-top: 14px; }
+.row .card + .card { margin-top: 0; }
+p { margin: 0; font-size: 22px; line-height: 1.65; color: var(--ink2); }
+p b { color: var(--ink); }
+.row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.time { display: grid; gap: 4px; }
+.time .t { font-family: var(--mono); font-size: 40px; font-weight: 700; color: var(--ink); }
+.time .k { font-family: var(--disp); font-weight: 900; font-size: 26px; }
+.time p { font-size: 19px; }
+ol.look { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; }
+ol.look li { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 14px; align-items: start; background: var(--card); border: 1px solid var(--line); padding: 16px 18px; }
+ol.look .n { width: 44px; height: 44px; display: grid; place-items: center; background: var(--ink); color: #fff; font-family: var(--mono); font-weight: 700; font-size: 22px; }
+ol.look li > div > b { display: block; font-family: var(--disp); font-weight: 900; font-size: 25px; color: var(--ink); margin-bottom: 2px; }
+.mock { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.chip { display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px; border: 2px solid currentColor; font-size: 19px; font-weight: 700; white-space: nowrap; }
+.chip.up { color: var(--up); background: var(--up-dim); } .chip.down { color: var(--down); background: var(--down-dim); } .chip.warn { color: var(--warn); background: var(--warn-dim); } .chip.neu { color: var(--ink3); }
+.chip.solid { color: #fff; background: var(--blue); border-color: var(--blue); }
+.mini-head { font-family: var(--disp); font-weight: 900; font-size: 30px; line-height: 1.3; }
+.mini-head em { font-style: normal; color: var(--blue); }
+.q { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--line); }
+.q > div { padding: 18px 20px; background: var(--card); }
+.q > div + div { border-left: 1px solid var(--line); }
+.q h3 { margin: 0 0 6px; font-family: var(--disp); font-weight: 900; font-size: 25px; }
+.q h3.down { color: var(--down); } .q h3.up { color: var(--up); }
+.q p { font-size: 19.5px; }
+.lights { margin-top: 10px; display: grid; gap: 6px; }
+.lt { display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 8px; font-size: 19px; color: var(--ink2); align-items: baseline; }
+.lt i { font-style: normal; font-size: 20px; }
+.legend { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px 16px; align-items: center; }
+.legend p { font-size: 20px; }
+.colors { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.colors div { padding: 16px 18px; border: 1px solid var(--line); background: var(--card); }
+.colors b { display: block; font-family: var(--mono); font-size: 34px; }
+.colors span { font-size: 19px; color: var(--ink2); }
+.pages { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.pages div { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 2px 12px; padding: 12px 14px; background: var(--card); border: 1px solid var(--line); }
+.pages .i { grid-row: span 2; font-family: var(--mono); font-weight: 700; font-size: 26px; color: var(--blue); white-space: nowrap; }
+.pages b { font-family: var(--disp); font-weight: 900; font-size: 22px; }
+.pages span { font-size: 17.5px; color: var(--ink2); line-height: 1.5; }
+.pages .hot { border: 2px solid var(--blue); background: var(--blue-dim); }
+.tips { display: grid; gap: 10px; }
+.tips div { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 20px; color: var(--ink2); }
+.tips div:last-child { border-bottom: 0; }
+.tips b { color: var(--ink); font-family: var(--disp); font-weight: 900; }
+.calm { margin-top: 44px; padding: 28px 30px; background: var(--ink); color: #F2F0EA; }
+.calm h2 { margin: 0 0 8px; font-family: var(--disp); font-weight: 900; font-size: 34px; }
+.calm p { color: #D8D4CB; font-size: 21px; }
+.calm b { color: #fff; }
+footer { margin-top: 28px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 18px; color: var(--ink3); }
+footer b { font-family: var(--mono); color: var(--ink); }
+.back { display: inline-block; margin: 0 auto 0; font-size: 18px; color: var(--blue-ink); text-decoration: none; }
+@media (max-width: 720px) {
+  .sheet { padding: 28px 16px 32px; }
+  header.top svg { width: 60px; height: 60px; }
+  h1 { font-size: 38px; } .lead { font-size: 18px; }
+  .step { grid-template-columns: 52px minmax(0, 1fr); gap: 0 12px; margin-top: 32px; }
+  .no { font-size: 64px; } .step h2 { font-size: 26px; } .step h2 small { font-size: 16px; }
+  .body { grid-column: 1 / -1; }
+  p, .time p, .q p, .legend p, .lt, .tips div { font-size: 16.5px; }
+  .row, .q, .colors, .pages { grid-template-columns: minmax(0, 1fr); }
+  .q > div + div { border-left: 0; border-top: 1px solid var(--line); }
+  .time .t { font-size: 30px; } .mini-head { font-size: 22px; } ol.look b { font-size: 20px; }
+  .chip { font-size: 15px; } .tips div { grid-template-columns: 96px minmax(0, 1fr); }
+  .calm h2 { font-size: 26px; } .calm p { font-size: 17px; }
+}
+</style>
+</head>
+<body>
+<main class="sheet">
+  <a class="back" href="./?lang=en" data-hide-in-png>← Back to Morningbell</a>
+  <header class="top">
+    <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M18 44V30a14 14 0 0 1 28 0v14" fill="none" stroke="#1F4FE0" stroke-width="5"/><path d="M10 46h44" stroke="#0A0A0A" stroke-width="5"/><circle cx="32" cy="53" r="4" fill="#0A0A0A"/></svg>
+    <span class="kicker">MORNINGBELL · HOW TO READ IT</span>
+    <h1>How to read Morningbell<br>in <em>3 minutes</em></h1>
+  </header>
+  <p class="lead">Morningbell is a <b>daily report on US and Taiwan stocks</b>. Each day it sums up what happened, where the market stands, and, in a big drop, whether it is a pullback or a turn to a bear market. <b>You don’t need to read every page.</b> Follow the order below: 1 minute on a normal day, 5 minutes in a big drop.</p>
+
+  <section class="step">
+    <span class="no">1</span>
+    <h2>When to read it<small>Two editions a day. Pick one time.</small></h2>
+    <div class="body row">
+      <div class="card time"><span class="t">07:30</span><span class="k">Morning edition</span><p>After the US close. The big number on the front page is the <b>S&amp;P 500</b>. It also says what to watch at the Taiwan open.</p></div>
+      <div class="card time"><span class="t">16:30</span><span class="k">Afternoon edition</span><p>After the Taiwan close and the foreign-investor flow data. The big number is the <b>TAIEX</b>.</p></div>
+    </div>
+    <div class="body"><p style="margin-top:10px;font-size:17px;color:var(--ink3)">Times are Taipei time (UTC+8).</p></div>
+  </section>
+
+  <section class="step">
+    <span class="no">2</span>
+    <h2>On the front page, check these 3 things<small>On a normal day, you can stop here</small></h2>
+    <div class="body">
+      <ol class="look">
+        <li><span class="n">1</span><div><b>The headline: what happened today</b><p>One line on the most important thing today. Numbers are marked in blue.</p>
+          <div class="mock"><span class="mini-head">TAIEX falls <em>1,873</em> points, loses <em>40,000</em>…</span></div></div></li>
+        <li><span class="n">2</span><div><b>Bull or bear: what kind of market this is</b><p>One box each for Taiwan, the S&amp;P 500 and the Nasdaq 100. It tells you if it is an <b>uptrend, a pullback, or a bear market</b>.</p>
+          <div class="mock"><span class="chip up">Uptrend intact</span><span class="chip warn">Pullback</span><span class="chip down">Bear, risk rising</span></div></div></li>
+        <li><span class="n">3</span><div><b>Today’s plan</b><p>General rules written in advance. <b>On most days the answer is “keep your regular investing plan, nothing extra to do.”</b></p>
+          <div class="mock"><span class="chip up">Do</span><span class="chip down">Don’t</span><span class="chip neu">Watch</span></div></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="step">
+    <span class="no">3</span>
+    <h2>Worried in a big drop? Read “Bull or bear”<small>It answers one question: is this a pullback, or a turn to a bear market?</small></h2>
+    <div class="body">
+      <div class="q">
+        <div><h3 class="down">● Systemic risk lights</h3><p>Warnings that credit, the economy or financial conditions are in trouble. <b>The more that are on, the more it looks like a real bear market.</b></p>
+          <div class="lights"><span class="lt"><i style="color:var(--down)">●</i>3 or more on → be careful, may be turning bear</span><span class="lt"><i style="color:var(--ink3)">○</i>None on → the economy is not the problem</span></div></div>
+        <div><h3 class="up">● Capitulation signals</h3><p>Signs of panic selling. <b>The more that are on, the closer selling may be to burning out</b> (not a promise of the bottom).</p>
+          <div class="lights"><span class="lt"><i style="color:var(--up)">●</i>Oversold, margin calls, heavy foreign selling…</span></div></div>
+      </div>
+      <div class="card" style="margin-top:14px"><p>Below that is <b>“After drops like this in the past”</b>: when the market fell this far before, how deep it went and what it did a year later. It usually calms people down. At the end there is always <b>“What would change this view”</b>, with exact price levels.</p></div>
+    </div>
+  </section>
+
+  <section class="step">
+    <span class="no">4</span>
+    <h2>Wondering whether to add? Read the “Focus list”<small>The 9 names the paper tracks: S&amp;P 500, QQQ, 0050 and 6 funds</small></h2>
+    <div class="body">
+      <div class="card"><p>Each one has a <b>rule reading</b> tag, from the same public rules:</p></div>
+      <div class="card legend">
+        <span class="chip up">Add zone</span><p>Down 5% or more from the high. A tier of the add-on ladder has been hit.</p>
+        <span class="chip warn">Near an add tier</span><p>Within 2% of the next add tier.</p>
+        <span class="chip neu">Neutral</span><p>No rule triggered. Keep regular monthly investing.</p>
+        <span class="chip warn">Warm</span><p>Up a lot: 20% or more above the long-term line. Be careful chasing.</p>
+        <span class="chip down">Hot</span><p>30% or more above the long-term line. A time to review weights and pause adding.</p>
+      </div>
+      <div class="card"><p>Tap a card for details: <b>Today’s read</b> (why), <b>Key levels</b> (the price of each add tier and how far away it is), and <b>Related news</b>.</p></div>
+    </div>
+  </section>
+
+  <section class="step">
+    <span class="no">5</span>
+    <h2>How to read the colours<small>Same as Taiwan trading apps</small></h2>
+    <div class="body colors">
+      <div><b style="color:var(--up)">+1.2%</b><span>Red = up</span></div>
+      <div><b style="color:var(--down)">−1.2%</b><span>Green = down</span></div>
+      <div><b style="color:var(--blue)">Blue</b><span>Morningbell’s brand colour. It marks key points, not up or down.</span></div>
+    </div>
+  </section>
+
+  <section class="step">
+    <span class="no">6</span>
+    <h2>Other pages, when you have time<small>On a computer, use the list on the left. On a phone, the row at the top. Tap to jump.</small></h2>
+    <div class="body pages">
+      <div class="hot"><span class="i">02</span><b>Bull or bear</b><span>A must in a big drop: pullback or bear market</span></div>
+      <div><span class="i">03</span><b>News</b><span>Today’s key news, each with what it means for markets</span></div>
+      <div class="hot"><span class="i">04</span><b>Focus list</b><span>Readings, levels and top holdings for the 9 names</span></div>
+      <div><span class="i">05</span><b>Add-on plan</b><span>How much to add at each drop, and how each tier did in the past</span></div>
+      <div><span class="i">06</span><b>Long view</b><span>Nearly 100 years of bull and bear markets and yearly returns</span></div>
+      <div><span class="i">07–09</span><b>Macro · Sentiment · Sectors</b><span>Rates, the fear index, and where money is moving</span></div>
+      <div><span class="i">10</span><b>Taiwan flows</b><span>Foreign investors, investment trusts, margin, ETF premiums</span></div>
+      <div><span class="i">11</span><b>Watchlist</b><span>Where each stock and ETF stands, at a glance</span></div>
+    </div>
+  </section>
+
+  <section class="step">
+    <span class="no">7</span>
+    <h2>Tips</h2>
+    <div class="body tips">
+      <div><b>See numbers</b><span>Press and hold a chart, or hover with a mouse, to see that day’s numbers.</span></div>
+      <div><b>Change pages</b><span>On a phone, swipe left or right. On a computer, scroll down or press 1–9.</span></div>
+      <div><b>At night</b><span>Switch to “Night” dark mode: bottom left on a computer, top right on a phone.</span></div>
+      <div><b>Add to home</b><span>In your phone browser, choose “Add to Home Screen”. It opens like an app.</span></div>
+      <div><b>中文</b><span>Tap 中 / EN at the top right to switch language.</span></div>
+    </div>
+  </section>
+
+  <section class="calm">
+    <h2>The one thing to remember</h2>
+    <p>Morningbell’s tags and readings are <b>rule-based readings and historical statistics</b>. They are not forecasts and not investment advice. On most days the market just moves normally. <b>Understanding what happened and sticking to your own plan</b> matters more than reacting to every move.</p>
+  </section>
+
+  <footer><span>Web <b>morningbell.aronlab.dev</b></span><span>Morningbell · For research only. Not investment advice.</span></footer>
+</main>
+<script>if (/[?&]png=1/.test(location.search)) document.querySelectorAll('[data-hide-in-png]').forEach(function (e) { e.remove(); });</script>
+</body>
+</html>
