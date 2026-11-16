@@ -1,221 +1,209 @@
 {
   "date": "2026-11-16",
-  "slot": "tw",
-  "edition": 46,
-  "written_utc": "2026-11-16T08:27:55Z",
+  "slot": "us",
+  "edition": 47,
+  "written_utc": "2026-11-16T23:20:52Z",
   "stance": {
-    "label": "Taiwan breaks its 200-day line · still a pullback by the rules · stay on plan",
+    "label": "US chips sell off again · S&P 500 still above its 200-day line · stay on plan",
     "tone": "cold",
-    "short": "Taiwan breaks 200-day"
+    "short": "Chips sell off again"
   },
-  "headline": "Taiwan crashes 6%, 2nd-biggest point drop ever; institutions sell NT$114B, index breaks 200-day",
-  "summary": "Today was panic selling in Taiwan, not yet a confirmed trend turn: the TAIEX closed 0.8% below its 200-day line, and the rules need 5 closes below with a flat line to call it weak. All three institutional groups sold, and investment trusts ended a 24-day buying streak. Nvidia earnings early Wednesday Taipei time are the next test. Keep regular investing on plan.",
+  "headline": "SOX plunges 5.3%, TSMC ADR falls 6.3%, Nasdaq enters correction; Taiwan tries to steady today",
+  "summary": "Last night was more chip selling, not a turn in the broad US market: the S&P 500 fell 1.9% but stays above its 200-day line, and no systemic lights are on. The pressure sits in semiconductors, and new US chip export rules add to it. Taiwan night futures rose 154 points, so today the question is whether Taiwan stops falling. Nvidia reports early Wednesday Taipei time. Keep regular investing on plan.",
   "watch": [
     {
-      "label": "TAIEX 200-day line",
-      "sym": "TW_TAIEX",
-      "value": 41381.7,
-      "note": "Closed 41,040.08 on 11/16, 0.8% below the line; weak only after 5 closes below and a flat line"
+      "label": "QQQ tier 3 (−15% from high)",
+      "sym": "QQQ",
+      "value": 645.71,
+      "note": "Closed 661.75 on 11/16, 2.4% away; the closest of the nine to its next tier"
+    },
+    {
+      "label": "S&P 500 200-day line",
+      "sym": "SPX",
+      "value": 7342.71,
+      "note": "Closed 7,416.59 on 11/16, still 1% above; weak only after 5 closes below and a flat line"
     },
     {
       "label": "TAIEX bear line (−20% from high)",
       "sym": "TW_TAIEX",
       "value": 39858.04,
-      "note": "About 3% away; a break means a bear market by definition"
-    },
-    {
-      "label": "0050 200-day line",
-      "sym": "TW_0050",
-      "value": 95.7,
-      "note": "Closed 96.45 on 11/16, still 0.8% above; tier 5 at 81.55 is 15.4% away"
+      "note": "Closed 41,040.08 on 11/16, about 3% away; a break means a bear market by definition"
     }
   ],
   "modules": {
     "overview": {
-      "lead": "Taiwan saw broad panic selling today: the TAIEX fell 2,635 points to 41,040, its second-biggest point drop ever, and closed at the day's low.",
+      "lead": "Chips led a broad US selloff last night, but the index fell only a third as much: the SOX lost 5.3%, the S&P 500 1.9%.",
       "points": [
-        "TSMC (2330) fell 5.7% to NT$2,215, back below its 200-day line.",
-        "MediaTek (2454) fell 7.9%, erasing Friday's limit-up rally in one day.",
-        "Electronics heavyweights led the fall: Delta Electronics (2308) hit limit-down and Hon Hai (2317) fell 9.3%.",
-        "2,137 listed and OTC stocks fell and only 304 rose, so there was almost nowhere to hide.",
-        "The OTC index fell 6.8%, deeper than the TAIEX.",
-        "A market rumor says Nvidia (NVDA) Vera Rubin volume could slip to the first half of 2027. It is unconfirmed, but it crushed PCB and substrate stocks."
+        "The Nasdaq fell 2.5% and is now more than 10% below its October high, a correction.",
+        "Nvidia (NVDA) fell another 4.1% to $156; the CEO shake-up still weighs on it.",
+        "Micron (MU) fell 7.6% and AMD (AMD) 5.6%; memory and AI chips sold off together.",
+        "TSMC's ADR (TSM) fell 6.3%, more than the SOX.",
+        "The equal-weight S&P 500 (RSP) fell only 1%; the selling was in big tech.",
+        "Consumer staples and utilities edged up, the only shelter last night."
       ]
     },
     "focus": {
-      "lead": "Among the nine tracked names, the pressure sits on the three Taiwan ones: 0050 fell 5.9% today, and the NAVs of Allianz Taiwan Technology, Cathay Taiwan High Dividend and Neuberger Berman Taiwan-Japan do not yet reflect the crash.",
+      "lead": "Among the nine, US tech is under the most strain: QQQ fell 2.7% and is 2.4% from tier 3. The two Taiwan funds' 11/16 NAVs already show Monday's crash.",
       "points": [
-        "Yuanta Taiwan 50 (0050) closed at 96.45, back under 100, but still 0.8% above its 200-day line.",
-        "0050 held up better than the TAIEX: the index broke its 200-day line, 0050 did not.",
-        "Cathay Taiwan High Dividend (TW000T3786A8): its top two, TSMC and MediaTek, fell 5.7% and 7.9% today; the next NAV will show it.",
-        "Allianz Taiwan Technology (TW000T3604Y3): Unimicron and TSMC are among its top three and were in today's hardest-hit group; its 47% one-year volatility is the highest of the nine.",
-        "Neuberger Berman Taiwan-Japan (TW000T5011A9): its largest holding Jentech is a cooling stock, and peer Asia Vital Components (3017) fell 9.9% today.",
-        "NAV dates: Neuberger Berman Taiwan-Japan to 11/12, the other five funds to 11/13; SPY and QQQ are also at the 11/13 close."
+        "QQQ closed 3% below its 200-day line, while SPY is still above.",
+        "SPY fell 1.9% but is still 1% above its 200-day line; the uptrend call holds.",
+        "Allianz Taiwan Technology (TW000T3604Y3) NAV fell 8.4% on 11/16, about 30% below its high.",
+        "Cathay Taiwan High Dividend (TW000T3786A8) NAV fell 7.8% on 11/16, now 6% below its 200-day line.",
+        "The two Taiwan funds share 6 top-10 names, about 27% of weight, so they fall almost in step.",
+        "NAV dates: Fidelity Japan Value, Neuberger Berman Taiwan-Japan and both AB funds are at 11/13, before these two days of chip selling."
       ]
     },
     "position": {
-      "lead": "No new add tier was hit today; 0050 is still 15% from tier 5, so the framework needs no extra action.",
+      "lead": "No new tier was hit last night; the closest is QQQ tier 3, 2.4% away.",
       "points": [
-        "0050 has used four tiers; tier 5 at 81.55 is 15.4% away.",
-        "QQQ tier 3 at 645.71 is 5% away (11/13 close).",
-        "SPY tier 2 at 701.18 is 7.1% away (11/13 close).",
+        "QQQ has hit two tiers; tier 3 at 645.71 is 2.4% away.",
+        "SPY tier 2 at 701.18 is 5.2% away.",
         "AB International Technology (LU0060230025) tier 5 at 1,219 is 10.9% away (11/13 NAV).",
-        "Fidelity Japan Value (LU0997587083) tier 5 at 41.75 is 15% away (11/13 NAV).",
-        "Allianz Taiwan Technology and Cathay Taiwan High Dividend have used all tiers, so today's drop triggers nothing new."
+        "0050 tier 5 at 81.55 is 15.4% away.",
+        "Allianz Taiwan Technology and Cathay Taiwan High Dividend have used all tiers; further NAV drops trigger nothing new."
       ]
     },
     "macro": {
-      "lead": "No new US data today, and rates remain the second weight on tech: the 10-year yield sits high at 5.15%.",
+      "lead": "Rates and regulation both weigh on tech: the 10-year yield is above 5%, and a Fed governor flagged corporate debt.",
       "points": [
-        "The 10-year Treasury yield is 5.15% (11/13), still high at the long end.",
-        "The high-yield spread is 3.2% (11/12), so credit shows no stress.",
-        "China's October retail sales and industrial output missed forecasts, adding doubt about Asian demand.",
-        "The Taiwan dollar is at 32.94 (11/13), down 0.75 in a month, not yet a sharp drop."
+        "The 10-year Treasury yield is 5.12%, still high at the long end.",
+        "Fed Governor Bowman turned hawkish on corporate debt, a worry for tech giants borrowing to build data centers.",
+        "High-yield spreads are 3.2% (11/13); credit markets are calm.",
+        "Brent fell back to about $92 as Strait of Hormuz shipping recovered.",
+        "The Taiwan dollar is at 32.87 (11/13), 0.7 weaker in a month, not a sharp drop."
       ]
     },
     "sentiment": {
-      "lead": "Taiwan sentiment is in a washout zone but not yet oversold: 3 bottoming signals are on, and RSI 37 is still above the oversold line.",
+      "lead": "US mood has turned to fear, not panic: the VIX rose to 22.9 and no bottoming signals are on.",
       "points": [
-        "172 stocks hit new lows and only 6 hit new highs, so the new-lows light came on today.",
-        "Only 14% of stocks are above their 50-day line, and about one in five are above the 200-day line.",
-        "Yuanta Taiwan 50 Inverse (00632R) rose about 5% intraday as hedging demand poured in.",
-        "US VIX is 19.3 (11/13), so US sentiment has not joined the panic."
+        "The VIX rose 3.6 in a day, around the 90th percentile for the year.",
+        "The VIX term structure is nearly flat at 0.995, not inverted.",
+        "The CNN Fear & Greed Index is 31, fear, but above 18 a month ago.",
+        "7 of 11 sectors are still above their 200-day lines; this is not broad weakness."
       ]
     },
     "sectors": {
-      "lead": "There was no safe haven today, only smaller and bigger losses: electronic components fell 9.4%, and only IT services, home living and food edged up.",
+      "lead": "Selling was concentrated in tech: semiconductors fell 5.1% and tech 3.2%, while defensives edged up.",
       "points": [
-        "Electronic components fell 9.42% and lost a third of their value in a month.",
-        "Optoelectronics fell 8.4% and glass and ceramics fell 9.7%, as last week's leaders gave back gains together.",
-        "Copper-clad laminate, ABF substrate and high-end PCB stocks hit limit-down; the Vera Rubin delay rumor hit the top of the AI supply chain.",
-        "4 cybersecurity stocks hit limit-up against the tide, among the few pockets of buying."
+        "The semiconductor ETF (SMH) is down 14% in a month and about 30% from its high.",
+        "Software (IGV) fell 2.2%; the AI selloff spread from hardware to software.",
+        "Dell (DELL) fell 7%; servers were also hit by industry debt worries.",
+        "Staples rose 0.3% and utilities 0.2% as money hid in defensives."
       ]
     },
     "taiwan": {
-      "lead": "Institutions pulled back across the board: the three groups sold NT$114B, and even steady investment trusts ended a 24-day buying streak.",
+      "lead": "Taiwan opens today facing another round of US chip selling, but night futures did not crash: they rose 154 points.",
       "points": [
-        "Foreign investors sold NT$70.2B, flipping to selling one day after Friday's buying.",
-        "Investment trusts sold NT$18B, ending 24 straight days of buying since 10/8.",
-        "Dealers sold NT$25.9B, mostly in hedging accounts.",
-        "Foreign net short TAIEX futures stand at 96,787 contracts, down about 5,000 over five days, so futures did not add shorts.",
-        "Margin data only runs to 11/13, down 17.6% over 20 days; today's forced selling will show tomorrow.",
-        "Listed turnover was NT$845.1B, heavy-volume selling."
+        "TSMC's ADR fell 6.3% with a premium of about 11%; the local shares will open under pressure.",
+        "The SOX fell 5.3%; PCB and substrate names that hit limit-down Monday face another test today.",
+        "Foreign investors sold NT$70.2B Monday; their net short futures are 96,787 contracts and did not grow.",
+        "Margin loans fell NT$12.1B in a day and about 20% in 20 days; deleveraging continues.",
+        "The Taiwan dollar is near 32.9; more foreign selling would push it weaker."
       ]
     },
     "watch": {
-      "lead": "Watch three things next: whether the TAIEX regains its 200-day line within 5 days, US retail sales tomorrow night, and Nvidia earnings early Wednesday.",
+      "lead": "Three hurdles in the next 72 hours: retail sales tonight, Nvidia earnings early Wednesday, and Anthropic's listing Thursday.",
       "points": [
-        "The TAIEX 200-day line is 41,382; today it closed 0.8% below.",
-        "A break of 39,858 is 20% off the high, a bear market by definition.",
-        "US October retail sales come out 11/17 21:30 Taipei time.",
-        "Nvidia reports 11/17 after the US close, 11/18 early morning Taipei, its first talk on orders and shipments since the CEO change.",
-        "Minutes of the October FOMC come out early 11/19 Taipei time."
+        "US October retail sales come out 11/17 21:30 Taipei; a strong print would push yields up again.",
+        "Nvidia reports after the US close 11/17 (early 11/18 Taipei); last quarter's revenue guidance was about $108B.",
+        "FOMC October minutes come out early 11/19 Taipei.",
+        "Anthropic is set to list 11/19 at up to $1.4T in value, which may pull money from tech stocks.",
+        "QQQ tier 3 is 645.71, 2.4% away."
       ]
     },
     "regime": {
-      "lead": "By the rules, Taiwan is still in a pullback, not a turn to bear: the call is still \"correction in an uptrend\", it is only day 1 below the 200-day line, and only 1 risk light is on.",
+      "lead": "By the rules, the broad US market is still in an uptrend and Taiwan is still a pullback: the S&P 500 is above its 200-day line, with 0 global systemic lights on.",
       "points": [
-        "Trend: the TAIEX closed 0.8% below its 200-day line, which is still rising; it turns weak after 5 closes below and a flat line.",
-        "The S&P 500 is still 3% above its 200-day line (11/13), an ongoing uptrend.",
-        "Systemic risk lights: 0 globally; credit, the economy and financial conditions show no problem yet.",
-        "The closest to turning on is the high-yield spread at 3.2%, still far from 5%.",
-        "Taiwan has only 1 light on, breadth collapse, with about one in five stocks above the 200-day line.",
-        "Bottoming signals: 3 on in Taiwan, deleveraging, breadth washout and a surge in new lows; the extreme foreign selling light switched off.",
-        "History: from here Taiwan usually fell further; 10 of all 11 episodes went past −20%.",
-        "3 of the 4 fast episodes went past −20%; too few samples, for reference only.",
-        "What would flip the call: 5 closes below 41,382 with a flat line means weak.",
-        "A break of 39,858 (−20% from high) means a bear market by definition."
+        "Trend: all four S&P 500 trend checks pass; it is 1% above its 200-day line.",
+        "The Nasdaq 100 closed 3% below its 200-day line; the regime table still shows 11/13, and this is the second day below.",
+        "The TAIEX closed 0.8% below its 200-day line, only day 1 below, and the line is still rising.",
+        "Systemic lights: 0 global; credit, the economy and financial conditions show no stress.",
+        "The closest to turning on is the S&P 500 breaking its 200-day line, just 1% away.",
+        "Bottoming signals: none on in the US, 3 on in Taiwan.",
+        "History: S&P 500 dips like this are common; only 19 of 357 became 20%+ bear markets.",
+        "Taiwan usually fell further from here: 10 of 11 past cases broke −20%; the fast cases are too few to rely on.",
+        "What would change the call: 5 S&P 500 closes below 7,343 with a flat line means weak.",
+        "A TAIEX break below 39,858 (−20% from high) is a bear market by definition."
       ]
     }
   },
   "news": [
     {
       "time": "2026-11-16",
-      "cat": "Taiwan",
+      "cat": "US stocks",
       "impact": "bear",
       "weight": 3,
-      "title": "TAIEX plunges 2,635.04 points, or 6.03%, to 41,040.08, the 2nd-biggest point drop ever; TSMC (2330) falls NT$135 to NT$2,215",
-      "source": "Storm Media, 2026-11-16",
-      "url": "https://www.storm.mg/article/11181762",
-      "read": "It closed at the low and broke the 200-day line, the heaviest day of this correction; all three tracked Taiwan names will feel it.",
+      "title": "US stocks fall across the board: S&P 500 −1.92% to 7,416.59, Nasdaq −2.49% into correction, Dow −1.41%; QQQ −2.67%",
+      "source": "The Motley Fool, 2026-11-16",
+      "url": "https://www.fool.com/coverage/stock-market-today/2026/11/16/stock-market-today-nov-16-tech-selloff-deepens-as-ai-leadership-crisis-rattles-nasdaq/",
+      "read": "The index fell on tech weight and the S&P 500 stays above its 200-day line; QQQ, tracked here, is 2.4% from tier 3.",
       "module": "overview"
     },
     {
-      "time": "2026-11-16",
-      "cat": "Taiwan",
+      "time": "2026-11-17",
+      "cat": "Semis",
       "impact": "bear",
       "weight": 3,
-      "title": "Institutions sell NT$114.06B: foreign investors sell NT$70.19B, investment trusts sell NT$17.96B and end a 24-day buying streak",
-      "source": "Storm Media, 2026-11-16",
-      "url": "https://www.storm.mg/article/11181925",
-      "read": "Investment trusts were the steadiest buyers of this run, so their selling means local money is trimming too; foreign futures shorts did not grow, the one item that did not worsen.",
+      "title": "SOX plunges 5.28% to 9,610.65, TSMC ADR −6.34%, Micron −7.62%; Taiwan night futures up 154 points",
+      "source": "SETN, 2026-11-17",
+      "url": "https://www.setn.com/news/1940083",
+      "read": "US chips fell again, but night futures did not follow; at today's open, watch whether heavyweights stop falling.",
       "module": "taiwan"
     },
     {
       "time": "2026-11-16",
-      "cat": "Semis",
+      "cat": "Policy",
       "impact": "bear",
       "weight": 2,
-      "title": "Rumor says Nvidia (NVDA) Vera Rubin volume may slip to 1H 2027 on an HBM4 supply bottleneck, unconfirmed; copper-clad laminate, ABF substrate and high-end PCB stocks hit limit-down",
-      "source": "Storm Media, 2026-11-16",
-      "url": "https://www.storm.mg/article/11181762",
-      "read": "The rumor is unconfirmed but hit Taiwan's hottest AI supply-chain groups; Nvidia earnings on Wednesday will be the first explanation.",
+      "title": "US Commerce (BIS) rule: advanced AI chip shipments to data centers in Indonesia, Malaysia, Singapore, Thailand and Brazil need licenses, and Chinese firms' remote compute access is limited",
+      "source": "Tech Times, 2026-11-16",
+      "url": "https://www.techtimes.com/articles/330858/20261116/ai-chip-export-rule-sets-cloud-license-line-roughly-750-nvidia-h100s-china-linked-tenants.htm",
+      "read": "Southeast Asia is a major destination for AI servers; the rule adds shipment uncertainty for Nvidia and Taiwan's supply chain.",
       "module": "sectors"
-    },
-    {
-      "time": "2026-11-16",
-      "cat": "Taiwan",
-      "impact": "bear",
-      "weight": 2,
-      "title": "2,137 listed and OTC stocks fall and 304 rise; the OTC index drops 6.8% to 319.12",
-      "source": "Mirror Media (SETN), 2026-11-16",
-      "url": "https://www.mirrormedia.mg/external/setn_1939837",
-      "read": "Selling went beyond heavyweights and small caps fell harder, which turned on the new-lows bottoming light.",
-      "module": "sentiment"
     },
     {
       "time": "2026-11-16",
       "cat": "Tech",
       "impact": "bear",
       "weight": 2,
-      "title": "Asian stocks fall Monday as the Nvidia fallout lingers; SK Hynix and Tokyo Electron slump, US futures lower; Nvidia reports Tuesday",
-      "source": "AP, 2026-11-16",
-      "url": "https://www.wral.com/news/ap/35786-stocks-decline-in-asia-as-investor-concerns-over-nvidia-fallout-extend-into-another-week/",
-      "read": "The selling covers all Asian chip stocks, not only Taiwan; whether US stocks steady tonight is Taiwan's first signal for tomorrow.",
+      "title": "Nvidia (NVDA) falls 4.12% to $156.14 before Tuesday's first report since the CEO change; AMD (AMD) −5.58%",
+      "source": "The Motley Fool, 2026-11-16",
+      "url": "https://www.fool.com/coverage/stock-market-today/2026/11/16/stock-market-today-nov-16-tech-selloff-deepens-as-ai-leadership-crisis-rattles-nasdaq/",
+      "read": "Selling did not stop before earnings; the call's orders and shipments will set the next move for tech-heavy AB International Technology and QQQ.",
+      "module": "watch"
+    },
+    {
+      "time": "2026-11-16",
+      "cat": "Macro",
+      "impact": "bear",
+      "weight": 1,
+      "title": "Fed Governor Bowman turns hawkish on corporate debt; 10-year yield rises to 5.15%, Dell (DELL) −6.96%",
+      "source": "The Motley Fool, 2026-11-16",
+      "url": "https://www.fool.com/coverage/stock-market-today/2026/11/16/stock-market-today-nov-16-tech-selloff-deepens-as-ai-leadership-crisis-rattles-nasdaq/",
+      "read": "Tech giants borrowing to build data centers face added pressure; rates remain tech's second hurdle.",
+      "module": "macro"
+    },
+    {
+      "time": "2026-11-16",
+      "cat": "US stocks",
+      "impact": "neutral",
+      "weight": 1,
+      "title": "Anthropic set to list Thursday (11/19) at about $1.4T, possibly the biggest IPO ever; Brent falls back to about $92",
+      "source": "Yahoo Finance, 2026-11-16",
+      "url": "https://sg.finance.yahoo.com/news/live/stock-market-today-monday-november-16-dow-sp-500-nasdaq-nvidia-oil-091631084.html",
+      "read": "A giant IPO can pull money from existing tech stocks; lower oil eases inflation pressure a little.",
       "module": "watch"
     },
     {
       "time": "2026-11-16",
       "cat": "Taiwan",
       "impact": "bear",
-      "weight": 1,
-      "title": "Yuanta Taiwan 50 (0050) trades over 250,000 lots intraday and falls below 100; Yuanta Taiwan 50 Inverse (00632R) rises about 5%",
-      "source": "SETN, 2026-11-16",
-      "url": "https://tw.news.yahoo.com/%E5%A4%96%E8%B3%87%E9%A4%8A%E8%82%A5%E5%86%8D%E6%AE%BA-0050%E6%88%90%E4%BA%A4%E9%87%8F%E7%88%8625%E8%90%AC%E5%BC%B5-%E8%82%A1%E5%83%B9%E9%87%8D%E6%8C%AB%E5%8F%88%E5%A4%B1%E5%AE%88%E7%99%BE%E5%85%83%E5%A4%A7%E9%97%9C-051700650.html",
-      "read": "Hedging demand rushed into inverse ETFs and sentiment leans to panic; 0050 still closed above its 200-day line.",
-      "module": "focus"
-    },
-    {
-      "time": "2026-11-16",
-      "cat": "Macro",
-      "impact": "bear",
-      "weight": 1,
-      "title": "China's October retail sales and industrial output miss forecasts; the Shanghai Composite closes lower",
-      "source": "AP, 2026-11-16",
-      "url": "https://www.wral.com/news/ap/35786-stocks-decline-in-asia-as-investor-concerns-over-nvidia-fallout-extend-into-another-week/",
-      "read": "Weak Chinese demand adds pressure on Taiwan's old-economy and materials groups.",
-      "module": "macro"
-    },
-    {
-      "time": "2026-11-13",
-      "cat": "Macro",
-      "impact": "neutral",
-      "weight": 1,
-      "title": "This week (11/16–20) in the US: 11/17 retail sales and industrial production, 11/18 FOMC minutes",
-      "source": "Newsquawk, 2026-11-13",
-      "url": "https://www.newsquawk.com/headlines/week-in-focus--16-20th-november-2026-highlights-include-us-retail-sales-fomc-minutes-chinese-activity-data-pboc-lpr-rba-minutes-uk-inflation-and-uk-jobs",
-      "read": "Strong retail sales would push rates up again, bad for tech stocks that have already fallen hard.",
-      "module": "watch"
+      "weight": 2,
+      "title": "TAIEX plunges 2,635.04 points, −6.03% to 41,040.08, its 2nd-biggest point drop; TSMC (2330) −NT$135 to NT$2,215",
+      "source": "Storm Media, 2026-11-16",
+      "url": "https://www.storm.mg/article/11181762",
+      "read": "Taiwan already fell hard Monday, so part of last night's US chip drop is priced in.",
+      "module": "taiwan"
     }
   ],
   "events": [
@@ -225,11 +213,15 @@
     },
     {
       "date": "2026-11-18",
-      "label": "Nvidia earnings (11/17 after US close, early 11/18 Taipei)"
+      "label": "Nvidia earnings (after US close 11/17, early 11/18 Taipei)"
     },
     {
       "date": "2026-11-19",
-      "label": "October FOMC minutes (11/18 US Eastern, early 11/19 Taipei)"
+      "label": "FOMC October minutes (11/18 ET, early 11/19 Taipei)"
+    },
+    {
+      "date": "2026-11-19",
+      "label": "Anthropic expected to list in the US (11/19 ET)"
     },
     {
       "date": "2026-12-10",
@@ -244,268 +236,240 @@
     {
       "kind": "do",
       "head": "Keep regular investing on plan.",
-      "text": "No new add tier was hit today, so the framework needs no extra action."
+      "text": "No new tier was hit last night; the framework needs no extra action."
     },
     {
       "kind": "dont",
-      "head": "Don't break the plan over one 6% drop.",
-      "text": "The framework only uses closing prices and NAVs; 0050 is still 15% from tier 5, and the two Taiwan funds have used all tiers."
+      "head": "Don't break the plan over chip losses before earnings.",
+      "text": "The framework only reads closes and NAVs; QQQ is 2.4% from tier 3, and only a touch is a rule reading."
     },
     {
       "kind": "watch",
-      "head": "Watch whether the TAIEX regains its 200-day line within 5 days and whether foreign investors return after Nvidia earnings.",
-      "text": "Five closes below 41,382 with a flat line would change the call from pullback to weak."
+      "head": "Watch whether Taiwan stops falling today and whether the SOX steadies after Nvidia reports.",
+      "text": "If the TAIEX regains 41,382 within 5 days, the call stays a pullback; 5 closes below with a flat line means weak."
     },
     {
       "kind": "flip",
-      "head": "Only a break of 39,858 or 3 risk lights would change the call to bear market or possible bear turn.",
-      "text": "Now 0 lights globally, 1 in Taiwan."
+      "head": "Only an S&P 500 break of its 200-day line or 3 risk lights would turn the US call weak.",
+      "text": "Global risk lights are 0 now, and the S&P 500 is 1% above its 200-day line."
     }
   ],
   "changes": [
     {
       "dir": "down",
-      "title": "TAIEX",
-      "fig": "−6.03%",
-      "say": "2nd-biggest point drop ever, below the 200-day line."
+      "title": "Philadelphia Semiconductor Index",
+      "fig": "−5.28%",
+      "say": "About a third below its June high."
     },
     {
       "dir": "down",
-      "title": "Three institutional groups",
-      "fig": "−NT$114B",
-      "say": "All three sold; investment trusts ended a 24-day buying streak."
+      "title": "TSMC ADR",
+      "fig": "−6.34%",
+      "say": "Fell more than the SOX; premium about 11%."
     },
     {
       "dir": "down",
-      "title": "TSMC",
-      "fig": "−5.74%",
-      "say": "Closed NT$2,215, back below the 200-day line."
+      "title": "Nasdaq",
+      "fig": "−2.49%",
+      "say": "More than 10% off the high, a correction."
     },
     {
       "dir": "up",
-      "title": "New lows",
-      "fig": "172",
-      "say": "Only 6 new highs; one more bottoming light came on."
+      "title": "VIX",
+      "fig": "22.91",
+      "say": "Up 3.6 in a day; fear, not yet panic."
     },
     {
-      "dir": "down",
-      "title": "Foreign net short TAIEX futures",
-      "fig": "96,787 contracts",
-      "say": "Down about 5,000 in five days; futures did not add shorts."
+      "dir": "up",
+      "title": "Taiwan night futures",
+      "fig": "+154 pts",
+      "say": "Night futures rose despite the US chip rout."
     }
   ],
   "focus_items": {
     "SPY": {
-      "tag": "Uptrend · data to 11/13",
-      "tone": "pos",
-      "view": "The uptrend call is unchanged and data is still at 11/13; tonight, watch whether Asian chip selling spreads to the broad US market.",
+      "tag": "Uptrend · above 200-day",
+      "tone": "neu",
+      "view": "SPY fell 1.9% but is still above its 200-day line, so the uptrend call holds; selling was in tech, and the equal-weight version fell about half as much.",
       "points": [
-        "Closed 754.37, −3.2% from the high.",
-        "3.1% above the 200-day line.",
-        "Tier 2 at 701.18 is 7.1% away."
+        "Closed 739.95, −5% from the high.",
+        "1.1% above its 200-day line.",
+        "Tier 2 at 701.18 is 5.2% away."
       ],
       "news": [
         {
           "date": "2026-11-16",
-          "title": "Asian stocks fall Monday as the Nvidia fallout lingers; SK Hynix and Tokyo Electron slump, US futures lower; Nvidia reports Tuesday",
-          "source": "AP, 2026-11-16",
-          "url": "https://www.wral.com/news/ap/35786-stocks-decline-in-asia-as-investor-concerns-over-nvidia-fallout-extend-into-another-week/",
-          "read": "Futures are lower, but the S&P 500 only slipped on Friday and is still 3% above its 200-day line."
-        },
-        {
-          "date": "2026-11-13",
-          "title": "US stocks close lower 11/13: S&P 500 −0.4% to 7,561.67, Nasdaq −0.91%; all three indexes still post their best week since August",
-          "source": "CNBC, 2026-11-13",
-          "url": "https://www.cnbc.com/2026/11/12/stock-market-today-live-updates.html",
-          "read": "The broad market only dipped and money rotated to defensives and financials; SPY's uptrend position is unchanged."
+          "title": "US stocks fall across the board: S&P 500 −1.92% to 7,416.59, Nasdaq −2.49% into correction, Dow −1.41%",
+          "source": "The Motley Fool, 2026-11-16",
+          "url": "https://www.fool.com/coverage/stock-market-today/2026/11/16/stock-market-today-nov-16-tech-selloff-deepens-as-ai-leadership-crisis-rattles-nasdaq/",
+          "read": "The index fell less than half as much as chips; SPY is 1% above its 200-day line."
         }
       ]
     },
     "QQQ": {
-      "tag": "Below line · nearest next tier",
+      "tag": "Closest to tier 3",
       "tone": "warn",
-      "view": "QQQ is still the closest of the nine to its next tier, and Nvidia earnings early Wednesday decide whether it can regain its 200-day line (11/13 close).",
+      "view": "QQQ is the closest of the nine to its next tier, with tier 3 only 2.4% away; it closed 3% below its 200-day line, and Nvidia's report is the key to steadying.",
       "points": [
-        "Closed 679.89, −10.5% from the high.",
-        "0.3% below the 200-day line.",
-        "Two tiers hit; tier 3 at 645.71 is 5% away."
+        "Closed 661.75, −12.9% from the high.",
+        "3% below its 200-day line.",
+        "Two tiers hit; tier 3 at 645.71 is 2.4% away."
       ],
       "news": [
         {
           "date": "2026-11-16",
-          "title": "Asian stocks fall Monday as the Nvidia fallout lingers; SK Hynix and Tokyo Electron slump, US futures lower; Nvidia reports Tuesday",
-          "source": "AP, 2026-11-16",
-          "url": "https://www.wral.com/news/ap/35786-stocks-decline-in-asia-as-investor-concerns-over-nvidia-fallout-extend-into-another-week/",
-          "read": "Asian chip stocks kept falling, so QQQ will open under pressure tonight; regaining the line before earnings is unlikely."
+          "title": "Nvidia (NVDA) falls 4.12% to $156.14 before Tuesday's first report since the CEO change; AMD (AMD) −5.58%",
+          "source": "The Motley Fool, 2026-11-16",
+          "url": "https://www.fool.com/coverage/stock-market-today/2026/11/16/stock-market-today-nov-16-tech-selloff-deepens-as-ai-leadership-crisis-rattles-nasdaq/",
+          "read": "Chip weight is QQQ's main drag; earnings will decide whether it holds above tier 3."
         },
         {
-          "date": "2026-11-12",
-          "title": "Nvidia (NVDA) says Jensen Huang resigned as CEO and director; CFO Colette Kress becomes interim CEO",
-          "source": "Nvidia 8-K filing, 2026-11-12",
-          "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000082/nvidiaannouncesceotransiti.htm",
-          "read": "Uncertainty from the CEO change will only fade after the earnings explanation."
+          "date": "2026-11-16",
+          "title": "US Commerce (BIS) rule: advanced AI chip shipments to data centers in five countries need licenses",
+          "source": "Tech Times, 2026-11-16",
+          "url": "https://www.techtimes.com/articles/330858/20261116/ai-chip-export-rule-sets-cloud-license-line-roughly-750-nvidia-h100s-china-linked-tenants.htm",
+          "read": "Wider export limits add uncertainty to chipmakers' overseas revenue."
         }
       ]
     },
     "TW_0050": {
-      "tag": "Sharp drop · still above line",
+      "tag": "Sharp drop · above 200-day",
       "tone": "warn",
-      "view": "0050 fell 5.9% today and dropped below 100, but it still holds its 200-day line and beat the TAIEX; the call is still a pullback, tier 5 is 15% away, and the framework has no action.",
+      "view": "0050 fell 5.9% Monday but held its 200-day line; with TSMC's ADR down another 6.3%, it will open under pressure. Tier 5 is still 15% away; the framework has no action.",
       "points": [
-        "Closed 96.45, −17.2% from the high.",
-        "0.8% above the 200-day line.",
+        "Closed 96.45 on 11/16, −17.2% from the high.",
+        "0.8% above its 200-day line.",
         "Four tiers used; tier 5 at 81.55 is 15.4% away."
       ],
       "news": [
         {
-          "date": "2026-11-16",
-          "title": "TAIEX plunges 2,635.04 points, or 6.03%, to 41,040.08, the 2nd-biggest point drop ever; TSMC (2330) falls NT$135 to NT$2,215",
-          "source": "Storm Media, 2026-11-16",
-          "url": "https://www.storm.mg/article/11181762",
-          "read": "The top weight TSMC fell back below its 200-day line, the main drag on 0050 today."
-        },
-        {
-          "date": "2026-11-16",
-          "title": "Yuanta Taiwan 50 (0050) trades over 250,000 lots intraday and falls below 100; Yuanta Taiwan 50 Inverse (00632R) rises about 5%",
-          "source": "SETN, 2026-11-16",
-          "url": "https://tw.news.yahoo.com/%E5%A4%96%E8%B3%87%E9%A4%8A%E8%82%A5%E5%86%8D%E6%AE%BA-0050%E6%88%90%E4%BA%A4%E9%87%8F%E7%88%8625%E8%90%AC%E5%BC%B5-%E8%82%A1%E5%83%B9%E9%87%8D%E6%8C%AB%E5%8F%88%E5%A4%B1%E5%AE%88%E7%99%BE%E5%85%83%E5%A4%A7%E9%97%9C-051700650.html",
-          "read": "Heavy-volume selling and a rush into inverse ETFs: short-term sentiment leans to panic."
+          "date": "2026-11-17",
+          "title": "SOX plunges 5.28%, TSMC ADR −6.34%; Taiwan night futures up 154 points",
+          "source": "SETN, 2026-11-17",
+          "url": "https://www.setn.com/news/1940083",
+          "read": "The top weight's ADR plunged but night futures rose; today, whether it holds the 200-day line matters."
         }
       ]
     },
     "FUND_FJV": {
       "tag": "Tier 4 · weak below line",
       "tone": "warn",
-      "view": "Of the nine, it is least tied to Taiwan and AI chips, and Japan's fall today was concentrated in tech; NAV only runs to 11/13, and tier 5 is still 15% away.",
+      "view": "The least chip-linked of the nine; Japan's selling is in semiconductors, and banks are hit less. NAV is only at 11/13, and tier 5 is 15% away.",
       "points": [
         "11/13 NAV 49.09, −17.7% from the high.",
-        "6.7% below the 200-day line.",
+        "6.7% below its 200-day line.",
         "Tier 5 at 41.75 is 15% away."
       ],
       "news": [
         {
           "date": "2026-11-16",
-          "title": "Asian stocks fall Monday as the Nvidia fallout lingers; SK Hynix and Tokyo Electron slump, US futures lower; Nvidia reports Tuesday",
+          "title": "Asian stocks fall Monday as Nvidia fallout extends; SK Hynix and Tokyo Electron slide, US futures lower; Nvidia reports Tuesday",
           "source": "AP, 2026-11-16",
           "url": "https://www.wral.com/news/ap/35786-stocks-decline-in-asia-as-investor-concerns-over-nvidia-fallout-extend-into-another-week/",
-          "read": "Japan's losses were in chips and SoftBank; banks like top-three holding Mizuho (8411.T) were hit less."
+          "read": "Japan's losses were in chips; top holdings such as Mizuho (8411.T) and other banks were hit less."
         }
       ]
     },
     "FUND_NBTJ": {
       "tag": "Tier 4 · NAV lagging",
       "tone": "warn",
-      "view": "NAV only runs to 11/12 and reflects neither Friday's Taiwan rally nor today's crash; the cooling and PCB stocks on its Taiwan side are in the hardest-hit group.",
+      "view": "NAV is only at 11/13, before Monday's Taiwan crash and last night's US chip drop; its Taiwan half holds cooling and PCB names in the hardest-hit group.",
       "points": [
-        "11/12 NAV 17.41, −13.9% from the high.",
-        "0.5% below the 200-day line.",
-        "Tier 5 at 14.16 is 18.7% away."
+        "11/13 NAV 17.48, −13.6% from the high.",
+        "0.2% below its 200-day line.",
+        "Tier 5 at 14.16 is 19% away."
       ],
       "news": [
         {
           "date": "2026-11-16",
-          "title": "Rumor says Nvidia (NVDA) Vera Rubin volume may slip to 1H 2027 on an HBM4 supply bottleneck, unconfirmed; copper-clad laminate, ABF substrate and high-end PCB stocks hit limit-down",
+          "title": "Reports say Nvidia (NVDA) Vera Rubin volume may slip to 1H 2027, unconfirmed; copper-clad laminate, ABF substrate and high-end PCB names hit limit-down",
           "source": "Storm Media, 2026-11-16",
           "url": "https://www.storm.mg/article/11181762",
-          "read": "The AI server supply chain is the main theme on its Taiwan side; the next NAV will show today's fall."
+          "read": "Top holding Jentech (3653) is in the cooling group that plunged Monday; the next NAV will show it."
         }
       ]
     },
     "FUND_ABIT": {
-      "tag": "Tier 5 is 11% away",
+      "tag": "11% from tier 5",
       "tone": "neg",
-      "view": "The 11/13 NAV already reflects AMD's slump and sits 5.8% below the 200-day line; Asian chips fell again today and Nvidia reports soon, with tier 5 still about 10% away.",
+      "view": "The 11/13 NAV does not yet show this week's chip drop, and Nvidia and AMD are top-three holdings; pressure is highest before earnings, and tier 5 is about 10% away.",
       "points": [
         "11/13 NAV 1,367.89, −21.4% from the high.",
-        "5.8% below the 200-day line.",
+        "5.8% below its 200-day line.",
         "Tier 5 at 1,219 is 10.9% away."
       ],
       "news": [
         {
           "date": "2026-11-16",
-          "title": "Asian stocks fall Monday as the Nvidia fallout lingers; SK Hynix and Tokyo Electron slump, US futures lower; Nvidia reports Tuesday",
-          "source": "AP, 2026-11-16",
-          "url": "https://www.wral.com/news/ap/35786-stocks-decline-in-asia-as-investor-concerns-over-nvidia-fallout-extend-into-another-week/",
-          "read": "Nvidia is a top-three holding, so its earnings are this fund's biggest swing factor."
+          "title": "Nvidia (NVDA) falls 4.12% to $156.14 before Tuesday's first report since the CEO change; AMD (AMD) −5.58%",
+          "source": "The Motley Fool, 2026-11-16",
+          "url": "https://www.fool.com/coverage/stock-market-today/2026/11/16/stock-market-today-nov-16-tech-selloff-deepens-as-ai-leadership-crisis-rattles-nasdaq/",
+          "read": "Two of the top three fell hard last night; the next NAV will move toward tier 5."
         },
         {
-          "date": "2026-11-13",
-          "title": "HSBC downgrades Nvidia; Goldman Sachs says big partner deals get harder after the CEO change",
-          "source": "CNBC, 2026-11-13",
-          "url": "https://www.cnbc.com/2026/11/12/stock-market-today-live-updates.html",
-          "read": "Analysts are cutting Nvidia expectations, a weight on this fund's tech exposure."
+          "date": "2026-11-16",
+          "title": "US Commerce (BIS) rule: advanced AI chip shipments to data centers in five countries need licenses",
+          "source": "Tech Times, 2026-11-16",
+          "url": "https://www.techtimes.com/articles/330858/20261116/ai-chip-export-rule-sets-cloud-license-line-roughly-750-nvidia-h100s-china-linked-tenants.htm",
+          "read": "The rule hits the chip supply chain this fund is heaviest in."
         }
       ]
     },
     "FUND_ABUS": {
       "tag": "Tier 1 · lowest volatility",
       "tone": "neu",
-      "view": "Well diversified and tracks SPY closely; about 3% from the high, uptrend position unchanged (11/13 NAV).",
+      "view": "Well diversified and close to SPY, about 3% from its high, still in an uptrend; but Nvidia is its top holding, so the next NAV will show this week's chip drop (11/13 NAV).",
       "points": [
         "11/13 NAV 91.7, −3% from the high.",
         "Tier 2 at 85.08 is 7.2% away.",
-        "Shares 7 top-ten names with AB International Technology, about 24% overlapping weight."
+        "Shares 7 top-10 names with AB International Technology, about 24% of weight."
       ],
       "news": [
         {
-          "date": "2026-11-13",
-          "title": "US stocks close lower 11/13: S&P 500 −0.4% to 7,561.67, Nasdaq −0.91%; all three indexes still post their best week since August",
-          "source": "CNBC, 2026-11-13",
-          "url": "https://www.cnbc.com/2026/11/12/stock-market-today-live-updates.html",
-          "read": "The broad market only dipped and money rotated to defensives and financials; diversification cushions Nvidia's fall."
+          "date": "2026-11-16",
+          "title": "US stocks fall across the board: S&P 500 −1.92% to 7,416.59, Nasdaq −2.49% into correction, Dow −1.41%",
+          "source": "The Motley Fool, 2026-11-16",
+          "url": "https://www.fool.com/coverage/stock-market-today/2026/11/16/stock-market-today-nov-16-tech-selloff-deepens-as-ai-leadership-crisis-rattles-nasdaq/",
+          "read": "The index fell far less than chips; this fund's diversification cushions Nvidia's drop."
         }
       ]
     },
     "FUND_AZTT": {
-      "tag": "All tiers used · NAV to fall",
+      "tag": "All tiers used · NAV plunges",
       "tone": "neg",
-      "view": "The 11/13 NAV does not yet reflect today's crash, and key holdings Unimicron and TSMC are in the hardest-hit group, so the next NAV will sit further below the 200-day line; all tiers are used, so the framework has no new action.",
+      "view": "The 11/16 NAV fell 8.4%, showing the Taiwan crash; it is about 30% below its high, the deepest of the nine. With US chips down again, NAV pressure is not over; all tiers are used, so the framework has no new action.",
       "points": [
-        "11/13 NAV 677.37, −23.1% from the high.",
-        "0.5% below the 200-day line.",
-        "One-year volatility 47%, highest of the nine.",
-        "Shares 6 top-ten names with Cathay Taiwan High Dividend, about 27% overlapping weight."
+        "11/16 NAV 620.76, −29.5% from the high.",
+        "9% below its 200-day line.",
+        "1-year volatility 48%, the highest of the nine.",
+        "Shares 6 top-10 names with Cathay Taiwan High Dividend, about 27% of weight."
       ],
       "news": [
         {
-          "date": "2026-11-16",
-          "title": "Rumor says Nvidia (NVDA) Vera Rubin volume may slip to 1H 2027 on an HBM4 supply bottleneck, unconfirmed; copper-clad laminate, ABF substrate and high-end PCB stocks hit limit-down",
-          "source": "Storm Media, 2026-11-16",
-          "url": "https://www.storm.mg/article/11181762",
-          "read": "ABF substrates are the core business of No. 2 holding Unimicron, so whether the rumor holds hits the NAV directly."
-        },
-        {
-          "date": "2026-11-16",
-          "title": "TAIEX plunges 2,635.04 points, or 6.03%, to 41,040.08, the 2nd-biggest point drop ever; TSMC (2330) falls NT$135 to NT$2,215",
-          "source": "Storm Media, 2026-11-16",
-          "url": "https://www.storm.mg/article/11181762",
-          "read": "Electronics fell across the board; this is the most volatile of the nine, so its next NAV may fall more than the index."
+          "date": "2026-11-17",
+          "title": "SOX plunges 5.28%, TSMC ADR −6.34%; Taiwan night futures up 154 points",
+          "source": "SETN, 2026-11-17",
+          "url": "https://www.setn.com/news/1940083",
+          "read": "Top-three TSMC and Unimicron (3037) are both chip-chain names; whether Taiwan steadies today decides the next NAV."
         }
       ]
     },
     "FUND_CTHD": {
-      "tag": "All tiers used · NAV to fall",
+      "tag": "All tiers used · below 200-day",
       "tone": "neg",
-      "view": "High dividend in name, tech in practice: top two TSMC and MediaTek fell 5.7% and 7.9% today, so the 200-day line the 11/13 NAV just regained will likely not hold.",
+      "view": "High dividend in name, tech in fact: the 11/16 NAV fell 7.8% to 6% below its 200-day line; all tiers are used, so the framework has no new action.",
       "points": [
-        "11/13 NAV 74.05, −21.3% from the high.",
-        "1.6% above the 200-day line.",
-        "All tiers used; today's drop triggers nothing new."
+        "11/16 NAV 68.3, −27.4% from the high.",
+        "6.4% below its 200-day line.",
+        "Top two, TSMC and MediaTek (2454), are about 14% of weight."
       ],
       "news": [
         {
           "date": "2026-11-16",
-          "title": "TAIEX plunges 2,635.04 points, or 6.03%, to 41,040.08, the 2nd-biggest point drop ever; TSMC (2330) falls NT$135 to NT$2,215",
+          "title": "TAIEX plunges 2,635.04 points, −6.03% to 41,040.08, its 2nd-biggest point drop; TSMC (2330) −NT$135 to NT$2,215",
           "source": "Storm Media, 2026-11-16",
           "url": "https://www.storm.mg/article/11181762",
-          "read": "TSMC and MediaTek are about 14% of the fund combined, so today's fall goes straight into the next NAV."
-        },
-        {
-          "date": "2026-11-16",
-          "title": "Institutions sell NT$114.06B: foreign investors sell NT$70.19B, investment trusts sell NT$17.96B and end a 24-day buying streak",
-          "source": "Storm Media, 2026-11-16",
-          "url": "https://www.storm.mg/article/11181925",
-          "read": "With investment trusts selling, Taiwan lost the steadiest buyer of this run."
+          "read": "TSMC and MediaTek both plunged, already in the 11/16 NAV."
         }
       ]
     }
