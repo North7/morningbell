@@ -1,138 +1,138 @@
 {
  "date": "2026-11-27",
- "slot": "tw",
- "edition": 63,
- "written_utc": "2026-11-27T08:17:07Z",
+ "slot": "us",
+ "edition": 64,
+ "written_utc": "2026-11-27T23:19:23Z",
  "stance": {
-  "label": "Taiwan bear-market bounce · DCA on plan",
+  "label": "Strong bounce within a US pullback; stay on plan",
   "tone": "cold",
-  "short": "Big week, no foreigners"
+  "short": "Chips rebound, foreigners not back"
  },
- "headline": "Taiwan gains 3,274 points on the week, TSMC closes at its 2,180 high; foreigners sell 10th day",
- "summary": "Taiwan staged a strong bear-market bounce this week with TSMC taking the lead, but foreigners sold stocks for a 10th day and their net futures short hit a record; by the rules it is still a bear market with rising risk. The TAIEX is still below the −20% line at 39,858. US markets close early tonight on thin volume; next week, watch whether foreigners stop selling and the 12/4 payrolls.",
+ "headline": "SOX jumps 4.7%, TSMC ADR up 3.2%; US stocks rally on Black Friday, S&P 500 nears its 200-day line",
+ "summary": "This was a strong bounce inside a US pullback: chips led and China's market support lit the spark, but volume was thin and Nvidia barely rose. The S&P 500 is still 0.8% below its 200-day line, so the rules still read pullback. Taiwan opens Monday with an ADR premium behind it; the key is whether foreigners end their 10-day selling streak.",
  "watch": [
   {
-   "label": "TAIEX bear line (−20% from peak)",
-   "sym": "TW_TAIEX",
-   "value": 39858.04,
-   "note": "Closed 39,308.08 on 11/27, about 1.4% below; retake it and hold the 200-day line 5 days to return to a pullback"
+   "label": "S&P 500 200-day line",
+   "sym": "SPX",
+   "value": 7354.27,
+   "note": "Closed 7,297.49 on 11/27, still 0.8% below; the line is rising, and a close back above ends the break"
   },
   {
-   "label": "TAIEX 200-day line",
-   "sym": "TW_TAIEX",
-   "value": 41698.61,
-   "note": "5.7% below on 11/27, 10 days running; the line still rises (+2.47%); flattening would mean the long-term trend turns down"
-  },
-  {
-   "label": "QQQ tier 4 (−20% from peak)",
+   "label": "QQQ tier 4 (−20% from high)",
    "sym": "QQQ",
    "value": 607.73,
-   "note": "Closed 633.93 on 11/25, 4.1% away; US closes early tonight, still the nearest tier of the nine"
+   "note": "Closed 650.99 on 11/27, 6.6% away; the bounce pushed the tier further off"
+  },
+  {
+   "label": "TAIEX bear line (−20% from high)",
+   "sym": "TW_TAIEX",
+   "value": 39858.04,
+   "note": "Closed 39,308.08 on 11/27, about 1.4% below; first see if Monday reclaims it"
   }
  ],
  "modules": {
   "overview": {
-   "lead": "Taiwan's bounce passed to TSMC today, but foreigners are still selling and still adding futures shorts; this is a bounce inside a bear market.",
+   "lead": "US stocks bounced hard after Thanksgiving, led by chips, but it was a thin half-day session and not enough to change the pullback call.",
    "points": [
-    "The TAIEX closed at 39,308, up 9% on the week.",
-    "TSMC (2330) closed at its 2,180 high, adding about 262 points to the index.",
-    "Foreigners sold NT$29.6B, a 10th straight day, the smallest in several days.",
-    "Foreign net TAIEX futures short reached 107,503 contracts, a record for a third day.",
-    "US markets close early tonight; US figures stay at 11/25."
+    "The S&P 500 rose 1.6% to 7,297.",
+    "The Nasdaq Composite rose 2.31% and the Dow gained 592 points.",
+    "The Philadelphia Semiconductor Index rose 4.69%, the strongest corner of the market.",
+    "Nvidia (NVDA) rose only 0.8% and spent most of the session in the red.",
+    "US trading ended at 13:00 ET; thin volume can exaggerate moves."
    ]
   },
   "focus": {
-   "lead": "Both Taiwan funds' 11/26 NAVs recovered sharply while 0050 slipped today; the nearest tier is still QQQ.",
+   "lead": "Among the nine tracked names, the two US ETFs bounced and QQQ gained most; QQQ is still the closest to a tier, but the gap widened to 6.6%.",
    "points": [
-    "Allianz Taiwan Technology (TW000T3604Y3) NAV rose 5.68% on 11/26, Cathay Taiwan High Dividend (TW000T3786A8) 5.6%.",
-    "Yuanta Taiwan 50 (0050) fell 0.48% today; TSMC rose but MediaTek (2454) closed lower.",
-    "0050 is −20.7% from its peak, 11.7% from tier 5.",
-    "QQQ is 4.1% from tier 4; US volume is thin tonight.",
-    "Neuberger Berman Taiwan Japan (TW000T5011A9) and the two AllianceBernstein funds have NAVs only to 11/25."
+    "QQQ rose 2.69% and SPY 1.62%, data as of 11/27.",
+    "0050 stays at its 11/27 close of 92.40 and reflects the US session on Monday.",
+    "Fidelity Japan Value (LU0997587083) NAV rose 1.86% on 11/27.",
+    "AB International Technology (LU0060230025) and AB American Growth (LU0683600562) NAVs are only as of 11/25 and miss the chip rally.",
+    "Allianz Taiwan Technology (TW000T3604Y3) and Cathay Taiwan High Dividend (TW000T3786A8) share 6 top-ten names, about 27% by weight."
    ]
   },
   "position": {
-   "lead": "No new trigger under the framework today; the nearest of the nine is still QQQ tier 4.",
+   "lead": "No new trigger under the framework today; the US bounce moved every name further from its next tier.",
    "points": [
-    "QQQ has used 45% of reserved cash; tier 4 is 4.1% away.",
-    "SPY has used 25% of reserved cash; tier 3 is 7.6% away.",
-    "0050 has used 70% of reserved cash; tier 5 is 11.7% away.",
-    "Fidelity Japan Value (LU0997587083) is 10.6% from tier 5 (11/26 NAV).",
-    "Neuberger Berman Taiwan Japan is 9.6% from tier 5 (11/25 NAV).",
-    "AB Select US Equity (LU0683600562) is 8.0% from tier 3 (11/25 NAV).",
-    "Allianz Taiwan Technology, Cathay Taiwan High Dividend and AB International Technology (LU0060230025) have used all tiers."
+    "QQQ has used 45% of its reserve; tier 4 is 6.6% away.",
+    "SPY has used 25% of its reserve; tier 3 is 9.1% away.",
+    "0050 has used 70% of its reserve; tier 5 is 11.7% away.",
+    "AB American Growth tier 3 is 8.0% away (11/25 NAV).",
+    "Neuberger Berman Taiwan-Japan (TW000T5011A9) tier 5 is 11.0% away (11/26 NAV).",
+    "Fidelity Japan Value tier 5 is 12.3% away (11/27 NAV).",
+    "Allianz Taiwan Technology, Cathay Taiwan High Dividend and AB International Technology have used all tiers."
    ]
   },
   "macro": {
-   "lead": "No more US data this week; rate-hike expectations still weigh on richly valued stocks, but credit markets are fine.",
+   "lead": "Stocks recovered but bonds did not relax; rate-hike expectations remain, while credit markets stay calm.",
    "points": [
-    "Core PCE rose 3.3% year on year (released 11/25); a December hike is nearly certain.",
-    "The 10-year Treasury yield is 4.85% (11/25).",
-    "High-yield spread is 3.72% (11/24), far from the 5% alarm line.",
+    "The 10-year Treasury yield rose to 4.94%, up from 4.85% on 11/25.",
+    "The 20+ year Treasury ETF (TLT) fell 1.18% as money moved from safety back into stocks.",
+    "High-yield spreads are 3.77% (11/26), far from the 5% warning line.",
     "USD/TWD is 33.189 (11/26); the Taiwan dollar is weak but not plunging."
    ]
   },
   "sentiment": {
-   "lead": "The index bounced for a week but breadth barely improved; the rally is concentrated in a few heavyweights.",
+   "lead": "Fear is easing but still in extreme fear, where bounces often chop back and forth.",
    "points": [
-    "Only 13% of Taiwan stocks are above their 200-day line; the breadth-collapse light stays on.",
-    "Only 8% are above the 50-day line, with 15 new lows.",
-    "CNN Fear & Greed is at 15, still extreme fear in US stocks.",
-    "VIX is 26.8 (11/26), down from the prior day."
+    "The VIX fell to 23.81, down about 3 points in a day.",
+    "The CNN Fear & Greed Index is 24.9, up from 18.6 a week ago.",
+    "The VIX term structure is still flat; short-dated vol is not below longer-dated.",
+    "7 of 11 sectors are above their 200-day lines; breadth has not collapsed."
    ]
   },
   "sectors": {
-   "lead": "Heavyweights held up the market today while yesterday's electronic small caps gave back gains; rotation is fast.",
+   "lead": "The groups cut hardest earlier in the week bounced; tech and chips led while defensives lagged.",
    "points": [
-    "Optoelectronics fell 2.17%; yesterday's leaders took a break.",
-    "Networking fell 1.39%, with Accton (2345) down 4%.",
-    "Building and construction rose 1.39%, among today's best sectors.",
-    "Electronic components are still down 29% over a month, the deepest drop."
+    "The semiconductor ETF (SMH) rose 4.17% and AMD (AMD) 4.56%.",
+    "Tech rose 2.8% and software 2.64%.",
+    "Tesla (TSLA) rose 5.22% and Amazon (AMZN) 3.96%.",
+    "Health care and utilities rose only 0.28%; money rotated back to offense."
    ]
   },
   "taiwan": {
-   "lead": "Flows have not stabilized, but foreign selling is shrinking: a 10th straight day of selling at the lowest amount in days, while futures shorts keep growing.",
+   "lead": "Taiwan opens Monday with tailwinds from the SOX surge and a wider TSMC ADR premium, but foreign flows decide whether the bounce lasts.",
    "points": [
-    "Foreigners sold NT$29.6B; the 10-day streak totals about NT$500.5B.",
-    "Investment trusts bought NT$8.5B, a 3rd straight day; the three institutions sold NT$21.3B net.",
-    "Foreign net TAIEX futures short reached 107,503 contracts, a record for a third day.",
-    "Margin debt is NT$434.5B (11/26), down about a third in 20 days; deleveraging is deep.",
-    "Foreigners' top sells were financials such as SinoPac, First Financial and Mega."
+    "The TSMC ADR (TSM) rose 3.21%, an implied premium of 7.6%.",
+    "Foreigners sold NT$29.6B on 11/27, a 10th straight day.",
+    "Foreign net TAIEX futures short is 107,503 contracts, a record for a third day.",
+    "TAIEX night futures were down 289 points around Taipei midnight, before US stocks hit their highs.",
+    "TWD is 33.189 (11/26); if foreigners stop selling, the currency should stop weakening first."
    ]
   },
   "watch": {
-   "lead": "US trades only half a day tonight; the real test is next week: when foreigners stop selling, and December payrolls, FOMC and CPI.",
+   "lead": "Next week's test is data: the 12/4 payrolls report sets rate-hike odds, and Taiwan watches when foreigners stop selling.",
    "points": [
-    "11/27 US early close (Taipei 11/28 02:00), thin volume and no major data.",
-    "12/1 Jensen Huang faces a closed-door US House committee hearing.",
-    "12/4 US November payrolls (Taipei 21:30).",
+    "11/30 Taiwan opens; see if TSMC prices in the ADR premium.",
+    "12/1 Jensen Huang faces a closed-door US House committee interview.",
+    "12/4 US November nonfarm payrolls (Taipei 21:30).",
     "12/10 early morning FOMC decision; November CPI that evening."
    ]
   },
   "regime": {
-   "lead": "By the rules Taiwan is still a bear market with rising risk; a big weekly rally is not enough to change the call. US stocks are still in a pullback.",
+   "lead": "By the rules, the US is still a pullback, not a turn down; Taiwan is still a bear market with rising risk.",
    "points": [
-    "Trend: the TAIEX is 5.7% below its 200-day line, 10 days running, but the line still rises.",
-    "Systemic lights: 2 on for Taiwan, US below its 200-day line and Taiwan breadth collapse.",
-    "Credit, the economy and financial conditions are fine; high-yield spread is 3.72%, far from 5%.",
-    "Capitulation signals: 2 on, margin deleveraging and breadth washout; oversold and extreme foreign selling are not on.",
-    "Drops this deep have always gone past 20%: all 10 episodes since 2000, and 4 past 30%.",
-    "Of the 4 equally fast episodes only 1 went past 30%; the sample is too small, for reference only.",
-    "Flip condition: close back above 39,858, then hold the 200-day line at 41,699 for five days to return to a pullback.",
-    "Three or more risk lights would change the call to a bear driven by the economy or credit."
+    "Trend: the S&P 500 is 0.8% below its 200-day line, which is still rising; a bit more gain puts it back above.",
+    "Systemic lights: only 1 is on in the US, the index below its 200-day line.",
+    "Credit, the economy and financial conditions show no trouble; high-yield spreads are 3.77%, far from 5%.",
+    "Capitulation signals: 2 are on, an inverted vol curve and extreme fear; oversold and VIX panic are off.",
+    "US drops to this level usually stop at a correction: since 1929, only 19 of 169 went past −20%.",
+    "Of the 116 drops as fast as this one, only 8 went past −20%.",
+    "What flips it: 5 closes below the 200-day line at 7,354 with the line going flat means weak.",
+    "Only a break of 6,255 is a bear market; 3+ systemic lights on means it may be turning bearish."
    ]
   }
  },
  "news": [
   {
    "time": "2026-11-27",
-   "cat": "Taiwan",
+   "cat": "US stocks",
    "impact": "bull",
    "weight": 3,
-   "title": "Taiwan rises 156 points to 39,308.08, up 3,274.79 points on the week",
-   "source": "Storm Media, 2026-11-27",
-   "url": "https://storm.mg/article/11185732",
-   "read": "Up 9% on the week but still below the −20% line at 39,858; by the rules still a bear market.",
+   "title": "US stocks close higher across the board in the early Black Friday close; Dow up 592, S&P 500 up 1.6%",
+   "source": "CNBC, 2026-11-27",
+   "url": "https://www.cnbc.com/2026/11/26/stock-market-today-live-updates.html",
+   "read": "The index is back near its 200-day line and the rules still read pullback; volume was thin, so discount the gain.",
    "module": "overview"
   },
   {
@@ -140,21 +140,32 @@
    "cat": "Semis",
    "impact": "bull",
    "weight": 3,
-   "title": "TSMC rises 35 to close at its 2,180 high, adding about 262 index points",
-   "source": "Storm Media, 2026-11-27",
-   "url": "https://storm.mg/article/11185732",
-   "read": "The top heavyweight takes the lead; the largest holding of 0050 and Cathay Taiwan High Dividend recovered, a better-quality bounce than the day before.",
-   "module": "taiwan"
+   "title": "Chip stocks hit earlier in the week rebound about 4.7%; Nvidia red most of the day, ends up 0.8%",
+   "source": "Options Oracle, 2026-11-27",
+   "url": "https://optionsoracle.substack.com/p/the-chips-roar-back-the-dow-jumps",
+   "read": "The chip bounce matters most for TSMC, 0050 and the two Taiwan funds; Nvidia lagging means breadth still needs confirming.",
+   "module": "sectors"
+  },
+  {
+   "time": "2026-11-27",
+   "cat": "Geopolitics",
+   "impact": "bull",
+   "weight": 2,
+   "title": "Beijing pledges a bigger state-fund role; China's chip index jumps a record 17.6%",
+   "source": "CNBC, 2026-11-27",
+   "url": "https://www.cnbc.com/2026/11/27/china-chip-stocks-beijing-market-support.html",
+   "read": "It lit up Asian chip sentiment and started the overnight SOX surge; no size was given for the support.",
+   "module": "sectors"
   },
   {
    "time": "2026-11-27",
    "cat": "Taiwan",
-   "impact": "bear",
-   "weight": 3,
-   "title": "Foreigners sell NT$29.63B, 10th straight day totaling NT$500.47B; trusts buy a 3rd day",
-   "source": "Storm Media, 2026-11-27",
-   "url": "https://storm.mg/article/11185732",
-   "read": "Selling is shrinking but not over; discount any bounce until foreigners turn buyers.",
+   "impact": "neutral",
+   "weight": 2,
+   "title": "TSMC ADR up 2.4% intraday; TAIEX night futures down 289 points around midnight",
+   "source": "Mirror Media (SETN), 2026-11-27",
+   "url": "https://www.mirrormedia.mg/external/setn_1946122",
+   "read": "The ADR closed up 3.21% with the premium widening to 7.6%, supportive for TSMC on Monday; weak night futures reflect pre-weekend hedging.",
    "module": "taiwan"
   },
   {
@@ -162,21 +173,10 @@
    "cat": "Taiwan",
    "impact": "bear",
    "weight": 2,
-   "title": "Foreign net TAIEX futures short at 107,503 contracts, a record for a third day; analyst sees lighter selling next week",
-   "source": "Yahoo Stock, 2026-11-27",
+   "title": "Foreigners sell NT$29.6B, a 10th straight day; net TAIEX futures short hits a record 107,503 contracts",
+   "source": "Yahoo Stock (Taiwan), 2026-11-27",
    "url": "https://tw.stock.yahoo.com/news/%E3%80%90follow%E6%B3%95%E4%BA%BA%E3%80%91%E5%A4%96%E8%B3%87%E5%86%8D%E7%A0%8D296%E5%84%84%E9%80%A310%E5%88%80%E5%B7%B2%E6%8F%90%E6%AC%BE5004%E5%84%84%E5%85%83-%E5%88%86%E6%9E%90%E5%B8%AB%E4%BB%8D%E6%A8%82%E7%9C%8B%EF%BC%9A%E8%B3%A3%E5%A3%93%E9%82%84%E6%9C%83%E6%B8%9B%E8%BC%95-073121333.html",
-   "read": "Spot selling shrinks while futures shorts grow; foreigners remain defensive.",
-   "module": "taiwan"
-  },
-  {
-   "time": "2026-11-26",
-   "cat": "Taiwan",
-   "impact": "bear",
-   "weight": 1,
-   "title": "Foreigners sold TSMC for 10 straight sessions, 121,884 lots in total",
-   "source": "ETtoday, 2026-11-26",
-   "url": "https://finance.ettoday.net/news/3279044",
-   "read": "After today's TSMC rally, watch whether foreigners stop selling it to judge if the heavyweight bounce lasts.",
+   "read": "Until foreigners cover shorts despite the US bounce, discount any Taiwan rally.",
    "module": "taiwan"
   },
   {
@@ -184,269 +184,262 @@
    "cat": "Macro",
    "impact": "bear",
    "weight": 2,
-   "title": "October core PCE up 3.3% year on year, above forecasts; December hike odds about 98%",
+   "title": "October core PCE rises 3.3% year on year, above forecasts; December hike odds about 98%",
    "source": "Yahoo Finance, 2026-11-25",
    "url": "https://finance.yahoo.com/markets/live/stock-market-today-wednesday-november-25-dow-sp-500-nasdaq-pce-inflation-data-091428237.html",
-   "read": "The hike is largely priced in; the next test is 12/4 payrolls.",
-   "module": "macro"
-  },
-  {
-   "time": "2026-11-25",
-   "cat": "Policy",
-   "impact": "bull",
-   "weight": 1,
-   "title": "US proposes Section 301 overcapacity tariffs on 14 economies; Taiwan and Japan stay at the 15% cap",
-   "source": "RTÉ, 2026-11-25",
-   "url": "https://www.rte.ie/news/us/2026/1125/1600630-us-tariffs/",
-   "read": "Taiwan's rate stays within the existing deal, part of the backdrop for this week's rebound.",
+   "read": "The 10-year yield rose to 4.94%, and hike pressure still weighs on richly valued stocks; next test is 12/4 payrolls.",
    "module": "macro"
   }
  ],
  "events": [
   {
-   "date": "2026-11-27",
-   "label": "US early close (Taipei 11/28 02:00)"
+   "date": "2026-11-30",
+   "label": "Taiwan opens Monday, pricing in the US session and ADR"
   },
   {
    "date": "2026-12-01",
-   "label": "Jensen Huang closed-door US House committee hearing (US Eastern)"
+   "label": "Jensen Huang closed-door US House committee interview (ET)"
   },
   {
    "date": "2026-12-04",
-   "label": "US November payrolls (Taipei 21:30)"
+   "label": "US November nonfarm payrolls (Taipei 21:30)"
   },
   {
    "date": "2026-12-10",
-   "label": "FOMC decision (12/8–9, Taipei 12/10 early morning)"
+   "label": "FOMC decision (12/8–9, Taipei early 12/10)"
   },
   {
    "date": "2026-12-10",
    "label": "US November CPI (Taipei 21:30)"
+  },
+  {
+   "date": "2026-12-18",
+   "label": "Quad witching (US quarterly futures and options expire together)"
   }
  ],
  "actions": [
   {
    "kind": "do",
-   "head": "Keep dollar-cost averaging on plan.",
-   "text": "No new trigger under the framework today; the nearest is still QQQ tier 4, 4.1% away."
+   "head": "Keep regular investing on plan.",
+   "text": "No new trigger under the framework today; the closest is still QQQ tier 4, 6.6% away."
   },
   {
    "kind": "dont",
-   "head": "Don't call a Taiwan bottom on one big week.",
-   "text": "Foreigners sold stocks for a 10th day and their net futures short hit a record; the call is still a bear market with rising risk."
+   "head": "Don't call the US pullback over after one strong night.",
+   "text": "It was a thin half-day; the S&P 500 is still below its 200-day line and the 10-year yield rose."
   },
   {
    "kind": "watch",
-   "head": "Watch TAIEX 39,858 and foreign flows.",
-   "text": "Retaking the −20% line with foreigners turning buyers would show price and flows stabilizing together."
+   "head": "Watch TSMC's Monday open and foreign flows.",
+   "text": "The ADR premium is 7.6%; if foreigners keep selling, the bounce gets absorbed."
   },
   {
    "kind": "flip",
-   "head": "Three or more Taiwan risk lights would change the call to a bear driven by the economy or credit.",
-   "text": "2 are on now; a flat or falling 200-day line would also mean the long-term trend turns down."
+   "head": "3+ US systemic lights on would mean it may be turning bearish.",
+   "text": "Only 1 is on now; 5 closes below the 200-day line with the line going flat would also mean weak."
   }
  ],
  "changes": [
   {
    "dir": "up",
-   "title": "Taiwan's big weekly gain",
-   "fig": "+3,274 pts",
-   "say": "Up 9% on the week, still below the bear line."
+   "title": "Chips bounce hard",
+   "fig": "+4.69%",
+   "say": "The SOX led, recovering part of earlier losses."
   },
   {
    "dir": "up",
-   "title": "TSMC takes the lead",
-   "fig": "+1.63%",
-   "say": "Closed at the day's high after slipping the day before."
-  },
-  {
-   "dir": "down",
-   "title": "Foreigners keep selling, less",
-   "fig": "10th day",
-   "say": "Sold NT$29.6B, the smallest in several days."
-  },
-  {
-   "dir": "down",
-   "title": "Futures short at a record",
-   "fig": "107,503 contracts",
-   "say": "Foreigners did not cover shorts on the rally."
+   "title": "TSMC ADR premium widens",
+   "fig": "7.6%",
+   "say": "Support for TSMC at Monday's open."
   },
   {
    "dir": "up",
-   "title": "Taiwan fund NAVs recover",
-   "fig": "+5.68%",
-   "say": "Allianz Taiwan Technology's 11/26 NAV reflects the prior day's rally."
+   "title": "S&P 500 nears its 200-day line",
+   "fig": "−0.8%",
+   "say": "Still below, but the gap is shrinking."
+  },
+  {
+   "dir": "down",
+   "title": "VIX eases",
+   "fig": "23.81",
+   "say": "Fear is fading; mood is still extreme fear."
+  },
+  {
+   "dir": "up",
+   "title": "10-year yield rises",
+   "fig": "4.94%",
+   "say": "Bonds did not relax; hike pressure remains."
   }
  ],
  "focus_items": {
   "SPY": {
-   "tag": "Pullback · thin tonight",
+   "tag": "Pullback, near the line",
    "tone": "warn",
-   "view": "By the rules SPY is still in a pullback; US trades half a day tonight and figures stay at 11/25. The next test is 12/4 payrolls.",
+   "view": "SPY bounced to near its 200-day line and the rules still read pullback; reclaiming the line is the next step, and failing means retesting the low.",
    "points": [
-    "Closed 716.70 on 11/25, −8.0% from peak.",
-    "2.3% below the 200-day line, RSI 40.",
-    "Tier 3 at 662.23, 7.6% away."
-   ],
-   "news": [
-    {
-     "date": "2026-11-25",
-     "title": "Dow drops over 1,000 points intraday, then closes higher; S&P 500 slips 0.25%",
-     "source": "Liberty Times Finance, 2026-11-26",
-     "url": "https://ec.ltn.com.tw/article/breakingnews/5653621",
-     "read": "Dip buyers showed up; SPY held up better than QQQ."
-    }
-   ]
-  },
-  "QQQ": {
-   "tag": "Near tier 4",
-   "tone": "warn",
-   "view": "QQQ is still the closest of the nine to a tier; tonight's thin early close could amplify swings.",
-   "points": [
-    "Closed 633.93 on 11/25, −16.6% from peak.",
-    "Tier 4 at 607.73, 4.1% away.",
-    "7.3% below the 200-day line, RSI 39."
-   ],
-   "news": [
-    {
-     "date": "2026-11-25",
-     "title": "Nvidia falls 8% intraday, closes down about 4%",
-     "source": "Yahoo Finance, 2026-11-25",
-     "url": "https://finance.yahoo.com/markets/live/stock-market-today-wednesday-november-25-dow-sp-500-nasdaq-pce-inflation-data-091428237.html",
-     "read": "QQQ's top weights are chip stocks; AI sentiment is its biggest swing factor."
-    }
-   ]
-  },
-  "TW_0050": {
-   "tag": "Bear bounce · below line",
-   "tone": "neg",
-   "view": "0050 rallied big on the week but slipped today despite TSMC's gain and is still below the bear line; no new trigger under the rules.",
-   "points": [
-    "Closed 92.40 on 11/27, up 9.4% on the week.",
-    "−20.7% from peak, 11.7% from tier 5.",
-    "4.3% below the 200-day line, closer than the TAIEX."
+    "Closed 728.32 on 11/27, up 1.62%.",
+    "−6.5% from the high, 0.7% below the 200-day line.",
+    "Tier 3 at 662.23 is 9.1% away."
    ],
    "news": [
     {
      "date": "2026-11-27",
-     "title": "TSMC rises 35 to close at its 2,180 high; MediaTek falls 25",
-     "source": "Storm Media, 2026-11-27",
-     "url": "https://storm.mg/article/11185732",
-     "read": "0050's top two weights moved in opposite directions, so today's gain did not fully reach 0050."
+     "title": "US stocks close early on Black Friday; S&P 500 up 1.6% at 7,297.49",
+     "source": "CNBC, 2026-11-27",
+     "url": "https://www.cnbc.com/2026/11/26/stock-market-today-live-updates.html",
+     "read": "The index is back near its average, but volume was thin; SPY needs to hold above it."
+    }
+   ]
+  },
+  "QQQ": {
+   "tag": "Above tier 3, bouncing",
+   "tone": "warn",
+   "view": "QQQ gained the most of the nine, pushing tier 4 out to 6.6%; it is still below its 200-day line and the rules read correction.",
+   "points": [
+    "Closed 650.99 on 11/27, up 2.69%.",
+    "−14.3% from the high, 4.8% below the 200-day line.",
+    "Tier 4 at 607.73 is 6.6% away."
+   ],
+   "news": [
+    {
+     "date": "2026-11-27",
+     "title": "Chip stocks rebound about 4.7%; Nvidia only turns up 0.8% late",
+     "source": "Options Oracle, 2026-11-27",
+     "url": "https://optionsoracle.substack.com/p/the-chips-roar-back-the-dow-jumps",
+     "read": "QQQ's top weights are chips; with Nvidia lagging, the quality of the bounce needs watching."
+    }
+   ]
+  },
+  "TW_0050": {
+   "tag": "Bear bounce, awaiting open",
+   "tone": "neg",
+   "view": "0050's price stays at 11/27 and reflects the SOX surge and TSMC ADR premium on Monday; it is still below the bear line.",
+   "points": [
+    "Closed 92.40 on 11/27, up 9.4% on the week.",
+    "−20.7% from the high; tier 5 is 11.7% away.",
+    "The TSMC ADR premium is 7.6%, support for 0050's top weight."
+   ],
+   "news": [
+    {
+     "date": "2026-11-27",
+     "title": "TSMC ADR up 2.4% intraday; TAIEX night futures down 289 points around midnight",
+     "source": "Mirror Media (SETN), 2026-11-27",
+     "url": "https://www.mirrormedia.mg/external/setn_1946122",
+     "read": "The ADR closed up 3.21%, favoring 0050 at Monday's open; weak night futures show institutions still hedging."
     }
    ]
   },
   "FUND_FJV": {
-   "tag": "Tier 4 · NAV rebounds",
+   "tag": "Tier 4, NAV recovering",
    "tone": "warn",
-   "view": "Fidelity Japan Value's 11/26 NAV rebounded, moving further from tier 5; tariff uncertainty has eased. No new trigger under the rules.",
+   "view": "Fidelity Japan Value's 11/27 NAV rose again with Japanese stocks; it moved further from tier 5 and the rules show no new trigger.",
    "points": [
-    "11/26 NAV 46.72, up 2.37%.",
-    "−21.7% from peak, 10.6% from tier 5.",
+    "11/27 NAV 47.59, up 1.86%.",
+    "−20.2% from the high; tier 5 is 12.3% away.",
     "Top three are Mizuho (8411.T), Japan Post Bank (7182.T) and Mitsubishi Electric (6503.T)."
    ],
    "news": [
     {
-     "date": "2026-11-25",
-     "title": "US proposes Section 301 overcapacity tariffs; Japan stays at the 15% cap",
-     "source": "RTÉ, 2026-11-25",
-     "url": "https://www.rte.ie/news/us/2026/1125/1600630-us-tariffs/",
-     "read": "Japan was not hit harder, so this financials-heavy fund is little affected."
+     "date": "2026-11-27",
+     "title": "Nikkei 225 rises 2.11% and Kospi 4.34% as Asia follows China's support",
+     "source": "CNBC, 2026-11-27",
+     "url": "https://www.cnbc.com/2026/11/26/stock-market-today-live-updates.html",
+     "read": "The Japan rebound shows up directly in this fund's 11/27 NAV."
     }
    ]
   },
   "FUND_NBTJ": {
-   "tag": "Tier 4 · NAV lags",
+   "tag": "Tier 4, NAV lagging",
    "tone": "warn",
-   "view": "Neuberger Berman Taiwan Japan's NAV is only to 11/25 and does not yet reflect Taiwan's rebound since 11/26; the next NAV may recover.",
+   "view": "Neuberger Berman Taiwan-Japan's NAV is only as of 11/26; it has started recovering but trails this week's Taiwan rally; the next NAV depends on Japan and Taiwan small-cap tech.",
    "points": [
-    "11/25 NAV 15.67, down 1.69%.",
-    "−22.5% from peak, 9.6% from tier 5.",
+    "11/26 NAV 15.91, up 1.53%.",
+    "−21.4% from the high; tier 5 is 11.0% away.",
     "Top three are Jentech (3653), Mizuho and Resona (8308.T)."
    ],
    "news": [
     {
      "date": "2026-11-26",
-     "title": "PCB and substrates lead; the OTC index rises 5.03%",
-     "source": "SET News, 2026-11-26",
+     "title": "PCB and substrate stocks lead; TPEx index up 5.03%",
+     "source": "SETN, 2026-11-26",
      "url": "https://www.setn.com/news/1945360",
-     "read": "Its Taiwan stocks lean to electronic small caps, which benefit from this bounce."
+     "read": "Its Taiwan sleeve leans to small and mid-cap tech, which this rebound favors."
     }
    ]
   },
   "FUND_ABIT": {
-   "tag": "All tiers used · chips under pressure",
+   "tag": "All tiers used, lagging NAV",
    "tone": "neg",
-   "view": "AB International Technology's NAV is only to 11/25 and fell far less than Nvidia; all tiers are used, so watch chip sentiment next.",
+   "view": "AB International Technology's NAV is only as of 11/25 and misses the 11/27 chip rally; all tiers are used, so watch whether Nvidia catches up.",
    "points": [
-    "11/25 NAV 1,238.67, −28.9% from peak.",
-    "14.8% below the 200-day line.",
-    "Shares 7 top-ten names, about 24% weight, with AB Select US Equity."
-   ],
-   "news": [
-    {
-     "date": "2026-11-25",
-     "title": "Nvidia falls 8% intraday, closes down about 4%; Micron down 4.5%",
-     "source": "Liberty Times Finance, 2026-11-26",
-     "url": "https://ec.ltn.com.tw/article/breakingnews/5653621",
-     "read": "Two of its top three are chip stocks; this fund is the most sensitive to AI sentiment."
-    }
-   ]
-  },
-  "FUND_ABUS": {
-   "tag": "Above tier 2 · resilient",
-   "tone": "warn",
-   "view": "AB Select US Equity is still one of the most resilient funds of the nine and tracks SPY; tier 3 is 8.0% away.",
-   "points": [
-    "11/25 NAV 87.37, −7.6% from peak.",
-    "Tier 3 at 80.35, 8.0% away.",
-    "Top holding Nvidia (NVDA) weighs about 9%."
-   ],
-   "news": [
-    {
-     "date": "2026-11-25",
-     "title": "Dow drops over 1,000 points intraday, then closes up 0.33%",
-     "source": "Liberty Times Finance, 2026-11-26",
-     "url": "https://ec.ltn.com.tw/article/breakingnews/5653621",
-     "read": "Non-tech stocks held up the market, a cushion for broad-market funds."
-    }
-   ]
-  },
-  "FUND_AZTT": {
-   "tag": "All tiers used · NAV recovers",
-   "tone": "neg",
-   "view": "Allianz Taiwan Technology's 11/26 NAV recovered sharply on its top-ten holdings' rally; all tiers are used, so watch when foreigners stop selling.",
-   "points": [
-    "11/26 NAV 558.86, up 5.68%.",
-    "−36.5% from peak; 1-year volatility 50.7%, highest of the nine.",
-    "Top-ten overlap with Cathay Taiwan High Dividend is about 27% by weight."
-   ],
-   "news": [
-    {
-     "date": "2026-11-26",
-     "title": "PCB and ABF substrates lead the rebound; Unimicron hits limit up, EMC up 9.09%",
-     "source": "SET News, 2026-11-26",
-     "url": "https://www.setn.com/news/1945360",
-     "read": "Unimicron and EMC are in its top ten; the big 11/26 NAV gain reflects this rebound."
-    }
-   ]
-  },
-  "FUND_CTHD": {
-   "tag": "All tiers used · heavyweights lead",
-   "tone": "neg",
-   "view": "Cathay Taiwan High Dividend's 11/26 NAV recovered 5.6%; its top holding TSMC rallied today, so the next NAV may extend the gain.",
-   "points": [
-    "11/26 NAV 64.67, −31.3% from peak.",
-    "12.1% below the 200-day line.",
-    "Top three are TSMC, MediaTek and Unimicron (3037)."
+    "11/25 NAV 1,238.67, −28.9% from the high.",
+    "Its top three include AMD, up 4.56% on 11/27.",
+    "Shares 7 top-ten names with AB American Growth, about 24% by weight."
    ],
    "news": [
     {
      "date": "2026-11-27",
-     "title": "TSMC rises 35 to close at its 2,180 high",
+     "title": "Chip stocks rebound about 4.7%; Nvidia ends up 0.8% late",
+     "source": "Options Oracle, 2026-11-27",
+     "url": "https://optionsoracle.substack.com/p/the-chips-roar-back-the-dow-jumps",
+     "read": "Two of its top three are chip stocks, so the next NAV may recover."
+    }
+   ]
+  },
+  "FUND_ABUS": {
+   "tag": "Above tier 2, resilient",
+   "tone": "warn",
+   "view": "AB American Growth remains one of the most resilient funds of the nine and tracks SPY; its NAV is only as of 11/25, and tier 3 is 8.0% away.",
+   "points": [
+    "11/25 NAV 87.37, −7.6% from the high.",
+    "Tier 3 at 80.35 is 8.0% away.",
+    "Top holding Nvidia is about 9% by weight and rose only 0.8% on 11/27."
+   ],
+   "news": [
+    {
+     "date": "2026-11-27",
+     "title": "Meta and Amazon up over 3.6% intraday; Nvidia slips against the trend",
+     "source": "Mirror Media (SETN), 2026-11-27",
+     "url": "https://www.mirrormedia.mg/external/setn_1946122",
+     "read": "Broad large-cap gains favor a core US allocation; the next NAV should rise."
+    }
+   ]
+  },
+  "FUND_AZTT": {
+   "tag": "All tiers used, most volatile",
+   "tone": "neg",
+   "view": "Allianz Taiwan Technology's 11/27 NAV slipped as small-cap tech rested after a big day; all tiers are used, so watch whether the SOX surge reaches Taiwan tech on Monday.",
+   "points": [
+    "11/27 NAV 549.24, down 1.72%.",
+    "−37.6% from the high; 1-year volatility 50.8%, highest of the nine.",
+    "Overlaps about 27% by top-ten weight with Cathay Taiwan High Dividend."
+   ],
+   "news": [
+    {
+     "date": "2026-11-27",
+     "title": "China's chip index jumps a record 17.6%",
+     "source": "CNBC, 2026-11-27",
+     "url": "https://www.cnbc.com/2026/11/27/china-chip-stocks-beijing-market-support.html",
+     "read": "Warmer Asian chip sentiment favors this Taiwan tech fund."
+    }
+   ]
+  },
+  "FUND_CTHD": {
+   "tag": "All tiers used, watch TSMC",
+   "tone": "neg",
+   "view": "Cathay Taiwan High Dividend's 11/27 NAV dipped; its top holding TSMC saw its ADR jump overnight, which could lift the NAV on Monday.",
+   "points": [
+    "11/27 NAV 64.11, down 0.87%.",
+    "−31.9% from the high, 13.0% below the 200-day line.",
+    "Top three are TSMC, MediaTek (2454) and Unimicron (3037)."
+   ],
+   "news": [
+    {
+     "date": "2026-11-27",
+     "title": "TSMC up NT$35, closes at its NT$2,180 high",
      "source": "Storm Media, 2026-11-27",
      "url": "https://storm.mg/article/11185732",
-     "read": "TSMC is its largest holding; its lead helps the NAV recover."
+     "read": "TSMC is the top holding; another ADR gain overnight helps the next NAV."
     }
    ]
   }
